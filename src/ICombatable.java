@@ -37,13 +37,14 @@ public interface ICombatable {
      */
     void heal(float amount);
 
-    // TODO: should provide default impl
     /**
      * Used to determine if the ICombatable is dead.
      * A commond implementation is to check, if the health-value is 0.
      * @return A boolean indicating whether the implementor is dead.
      */
-    boolean isDead();
+    default boolean isDead() {
+        return getHealth() <= 0.f;
+    }
 
     /**
      * Decrese the health-value of the ICombatable by the passed damage-amount.
@@ -75,7 +76,7 @@ public interface ICombatable {
     /**
      * Used to cache an ICombatable as a target in the implementor.
      * A backing field needs to be provided.
-     * @param target
+     * @param target The ICombatable to cache as a target.
      */
     void setTarget(ICombatable target);
 
@@ -103,7 +104,7 @@ public interface ICombatable {
      * @param entities All other entities in the current DungeonWorld for which should be checked, if they are in range for an attack.
      */
     default void attackTargetIfReachable(Point ownPosition, DungeonWorld level, ArrayList<IEntity> entities) {
-        if (!isPassive()) {
+        if (!isPassive() && canAttack()) {
             if (hasTarget()) {
                 if (!isTargetInRange(ownPosition, getTarget(), level)) {
                     setTarget(null);
@@ -131,15 +132,14 @@ public interface ICombatable {
      *              and the ownPosition are located.
      * @return
      */
+    // TODO: improve tracking
     default boolean isTargetInRange(Point ownPosition, ICombatable target, DungeonWorld level) {
         var ownTile = level.getTileAt((int)ownPosition.x, (int)ownPosition.y);
         if (target instanceof IDrawable) {
             Point otherPosition = ((IDrawable)target).getPosition();
 
             var otherTile = level.getTileAt((int)otherPosition.x, (int)otherPosition.y);
-            if (ownTile == otherTile) {
-                return true;
-            }
+            return ownTile == otherTile;
         }
         return false;
     }
@@ -197,17 +197,18 @@ public interface ICombatable {
      * The getDamage()-method of the other ICombatable will be called to effectively subtract the damage-amount of it's health.
      * The hitChance()-method is used to calculate the chance of a successful hit.
      * @param other The ICombatable to attack.
+     * @return If the attack was successful true, otherwise false.
      */
-    default void attack(ICombatable other){
-        // TODO: this should be checked earlier!
-        if (canAttack()) {
-            // calculate hitChance
-            float hitChance = getHitChance() * (1.f - other.getEvasionChance());
+    default boolean attack(ICombatable other){
+        // calculate hitChance
+        float hitChance = getHitChance() * (1.f - other.getEvasionChance());
 
-            float rand = (float)Math.random();
-            if (rand < hitChance) {
-                other.dealDamage(getDamage());
-            }
+        float rand = (float)Math.random();
+        if (rand < hitChance) {
+            other.dealDamage(getDamage());
+            return true;
+        } else {
+            return false;
         }
     }
 }

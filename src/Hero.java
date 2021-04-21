@@ -33,12 +33,12 @@ public class Hero implements IAnimatable, IEntity, ICombatable {
     private boolean lookLeft;
 
     // implementation of ICombatable -----------------------------------------------------------------------------------
-    private Timer attackTimer;
-    private long attackDelay = 1000;
+    private final Timer attackTimer;
+    private final long attackDelay = 1000;
     private boolean canAttack;
 
     // cache a reference to the game to be able to scan all entities for possible attack targets
-    private Game game;
+    private final Game game;
     private ICombatable target;
 
     // combat-characteristics:
@@ -85,11 +85,6 @@ public class Hero implements IAnimatable, IEntity, ICombatable {
     }
 
     @Override
-    public boolean isDead() {
-        return health <= 0;
-    }
-
-    @Override
     public float getHitChance() {
         return baseHitChance * hitChanceModifier;
     }
@@ -105,27 +100,29 @@ public class Hero implements IAnimatable, IEntity, ICombatable {
     }
 
     @Override
-    public void attack(ICombatable other) {
-        ICombatable.super.attack(other);
+    public boolean attack(ICombatable other) {
+        boolean success = ICombatable.super.attack(other);
+        if (success) {
+            l.info("Hit " + other.toString());
+        } else {
+            l.info("Missed " + other.toString());
+        }
 
         if (other.isDead()) {
-            boolean test = true;
+            l.info("Other has been slain!");
             // here would the hero gain experience...
         }
 
         // delay next attack by attackDelay ms
-        if (canAttack()) {
-            this.canAttack = false;
-
-            TimerTask resetCanAttackTask = new TimerTask() {
-                @Override
-                public void run() {
-                    canAttack = true;
-                }
-            };
-
-            attackTimer.schedule(resetCanAttackTask, attackDelay);
-        }
+        this.canAttack = false;
+        TimerTask resetCanAttackTask = new TimerTask() {
+            @Override
+            public void run() {
+                canAttack = true;
+            }
+        };
+        attackTimer.schedule(resetCanAttackTask, attackDelay);
+        return success;
     }
 
     @Override
