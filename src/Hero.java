@@ -101,6 +101,7 @@ public class Hero implements IAnimatable, IEntity {
         switch (animationState) {
             case RUN:
                 this.currentAnimation =  lookLeft ? this.runAnimationLeft : this.runAnimationRight;
+                break;
             case IDLE:
             default:
                 this.currentAnimation =  lookLeft ? this.idleAnimationLeft : this.idleAnimationRight;
