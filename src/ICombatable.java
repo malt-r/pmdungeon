@@ -132,13 +132,16 @@ public interface ICombatable {
      *              and the ownPosition are located.
      * @return
      */
-    // TODO: improve tracking
     default boolean isTargetInRange(Point ownPosition, ICombatable target, DungeonWorld level) {
-        var ownTile = level.getTileAt((int)ownPosition.x, (int)ownPosition.y);
+        int ownX = Math.round(ownPosition.x);
+        int ownY = Math.round(ownPosition.y);
+        var ownTile = level.getTileAt(ownX, ownY);
         if (target instanceof IDrawable) {
             Point otherPosition = ((IDrawable)target).getPosition();
 
-            var otherTile = level.getTileAt((int)otherPosition.x, (int)otherPosition.y);
+            int otherX = Math.round(otherPosition.x);
+            int otherY = Math.round(otherPosition.y);
+            var otherTile = level.getTileAt(otherX, otherY);
             return ownTile == otherTile;
         }
         return false;
