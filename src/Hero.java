@@ -7,9 +7,8 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The controllable player character.
@@ -17,7 +16,8 @@ import java.util.Objects;
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero implements IAnimatable, IEntity {
+public class Hero implements IAnimatable, IEntity, ICombatable {
+    static Logger l = Logger.getLogger(Hero.class.getName());
     private Point position;
     private DungeonWorld level;
 
@@ -32,10 +32,130 @@ public class Hero implements IAnimatable, IEntity {
     // looking direction
     private boolean lookLeft;
 
+    // implementation of ICombatable -----------------------------------------------------------------------------------
+    private Timer attackTimer;
+    private long attackDelay = 1000;
+    private boolean canAttack;
+
+    // cache a reference to the game to be able to scan all entities for possible attack targets
+    private Game game;
+    private ICombatable target;
+
+    // combat-characteristics:
+    float health = 100.f;
+    float maxHealth = 100.f;
+
+    float baseHitChance = 0.6f;
+    float hitChanceModifier = 1.f;
+
+    float baseAttackDamage = 50;
+    float attackDamageModifier = 1.f;
+
+    float baseEvasionChance = 0.15f;
+    float evasionChanceModifier = 1.f;
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float health) {
+        this.health = health;
+    }
+
+    @Override
+    public boolean isPassive() {
+        return false;
+    }
+
+    @Override
+    public boolean hasTarget() {
+        return this.target != null;
+    }
+
+    @Override
+    public ICombatable getTarget() {
+        return this.target;
+    }
+
+    @Override
+    public void setTarget(ICombatable target) {
+        this.target = target;
+    }
+
+    @Override
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    @Override
+    public float getHitChance() {
+        return baseHitChance * hitChanceModifier;
+    }
+
+    @Override
+    public float getEvasionChance() {
+        return this.baseEvasionChance * evasionChanceModifier;
+    }
+
+    @Override
+    public float getDamage() {
+        return this.baseAttackDamage * this.attackDamageModifier;
+    }
+
+    @Override
+    public void attack(ICombatable other) {
+        ICombatable.super.attack(other);
+
+        if (other.isDead()) {
+            boolean test = true;
+            // here would the hero gain experience...
+        }
+
+        // delay next attack by attackDelay ms
+        if (canAttack()) {
+            this.canAttack = false;
+
+            TimerTask resetCanAttackTask = new TimerTask() {
+                @Override
+                public void run() {
+                    canAttack = true;
+                }
+            };
+
+            attackTimer.schedule(resetCanAttackTask, attackDelay);
+        }
+    }
+
+    @Override
+    public boolean canAttack() {
+        return canAttack;
+    }
+
+    @Override
+    public void dealDamage(float damage) {
+        ICombatable.super.dealDamage(damage);
+
+        if (isDead()) {
+            l.info("GAME OVER");
+        }
+    }
+
+    @Override
+    public void heal(float amount) {
+        this.health += amount;
+        if (this.health > maxHealth) {
+            this.health = maxHealth;
+        }
+    }
+
     private enum AnimationState {
         IDLE,
         RUN,
     }
+
+    // end of implementation of ICombatable ----------------------------------------------------------------------------
 
     /**
      * Constructor of the Hero class.
@@ -43,7 +163,9 @@ public class Hero implements IAnimatable, IEntity {
      *     This constructor will instantiate the animations and read all required texture data.
      * </p>
      */
-    public Hero() {
+    public Hero(Game game) {
+        this.game = game;
+
         String[] idleLeftFrames = new String[] {
             "tileset/knight_m_idle_left_anim_f0.png",
             "tileset/knight_m_idle_left_anim_f1.png",
@@ -77,6 +199,8 @@ public class Hero implements IAnimatable, IEntity {
         runAnimationRight = createAnimation(runRightFrames, 4);
 
         lookLeft = false;
+        canAttack = true;
+        attackTimer = new Timer();
     }
 
     private Animation createAnimation(String[] texturePaths, int frameTime)
@@ -178,6 +302,8 @@ public class Hero implements IAnimatable, IEntity {
             this.position.y += normalizedDelta.y;
         }
 
+        attackTargetIfReachable(this.position, level, game.getAllEntities());
+
         setCurrentAnimation(animationState);
 
         this.draw();
@@ -192,10 +318,16 @@ public class Hero implements IAnimatable, IEntity {
         return false;
     }
 
+    private void resetCombatStats() {
+        l.info("resetting combat stats");
+        this.setHealth(maxHealth);
+        this.canAttack = true;
+    }
     /**
      * Set reference to DungeonWorld and spawn player at random position in the level.
      */
     public void setLevel(DungeonWorld level) {
+        this.resetCombatStats();
         this.level = level;
         findRandomPosition();
     }
