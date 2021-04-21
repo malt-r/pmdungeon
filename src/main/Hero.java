@@ -166,34 +166,34 @@ public class Hero implements IAnimatable, IEntity, ICombatable {
         this.game = game;
 
         String[] idleLeftFrames = new String[] {
-            "tileset/knight_m_idle_left_anim_f0.png",
-            "tileset/knight_m_idle_left_anim_f1.png",
-            "tileset/knight_m_idle_left_anim_f2.png",
-            "tileset/knight_m_idle_left_anim_f3.png"
+                "tileset/hero/knight_m_idle_left_anim_f0.png",
+                "tileset/hero/knight_m_idle_left_anim_f1.png",
+                "tileset/hero/knight_m_idle_left_anim_f2.png",
+                "tileset/hero/knight_m_idle_left_anim_f3.png"
         };
         idleAnimationLeft = createAnimation(idleLeftFrames, 6);
 
         String[] idleRightFrames = new String[] {
-            "tileset/knight_m_idle_anim_f0.png",
-            "tileset/knight_m_idle_anim_f1.png",
-            "tileset/knight_m_idle_anim_f2.png",
-            "tileset/knight_m_idle_anim_f3.png"
+                "tileset/hero/knight_m_idle_anim_f0.png",
+                "tileset/hero/knight_m_idle_anim_f1.png",
+                "tileset/hero/knight_m_idle_anim_f2.png",
+                "tileset/hero/knight_m_idle_anim_f3.png"
         };
         idleAnimationRight = createAnimation(idleRightFrames, 6);
 
         String[] runLeftFrames = new String[] {
-            "tileset/knight_m_run_left_anim_f0.png",
-            "tileset/knight_m_run_left_anim_f1.png",
-            "tileset/knight_m_run_left_anim_f2.png",
-            "tileset/knight_m_run_left_anim_f3.png"
+                "tileset/hero/knight_m_run_left_anim_f0.png",
+                "tileset/hero/knight_m_run_left_anim_f1.png",
+                "tileset/hero/knight_m_run_left_anim_f2.png",
+                "tileset/hero/knight_m_run_left_anim_f3.png"
         };
         runAnimationLeft = createAnimation(runLeftFrames, 4);
 
         String[] runRightFrames = new String[] {
-            "tileset/knight_m_run_anim_f0.png",
-            "tileset/knight_m_run_anim_f1.png",
-            "tileset/knight_m_run_anim_f2.png",
-            "tileset/knight_m_run_anim_f3.png"
+                "tileset/hero/knight_m_run_anim_f0.png",
+                "tileset/hero/knight_m_run_anim_f1.png",
+                "tileset/hero/knight_m_run_anim_f2.png",
+                "tileset/hero/knight_m_run_anim_f3.png"
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
 
