@@ -1,9 +1,13 @@
+package main;
+
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
+import main.sample.MockMonster;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
 
 /**
  * The main game class.

@@ -1,3 +1,5 @@
+package main;
+
 import de.fhbielefeld.pmdungeon.desktop.DesktopLauncher;
 
 /**

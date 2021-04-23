@@ -1,9 +1,13 @@
+package main.sample;
+
 import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import main.Game;
+import main.ICombatable;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -43,7 +47,7 @@ public class MockMonster implements IAnimatable, IEntity, ICombatable {
     {
         List<Texture> textureList = new ArrayList<>();
         for (var frame : texturePaths) {
-            textureList.add(new Texture(Objects.requireNonNull(this.getClass().getResource(frame)).getPath()));
+            textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
         }
         return new Animation(textureList, frameTime);
     }
