@@ -1,3 +1,5 @@
+package main;
+
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;

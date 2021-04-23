@@ -1,3 +1,5 @@
+package main;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -204,7 +206,8 @@ public class Hero implements IAnimatable, IEntity, ICombatable {
     {
         List<Texture> textureList = new ArrayList<>();
         for (var frame : texturePaths) {
-            textureList.add(new Texture(Objects.requireNonNull(this.getClass().getResource(frame)).getPath()));
+
+            textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
         }
         return new Animation(textureList, frameTime);
     }
