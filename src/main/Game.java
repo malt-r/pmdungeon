@@ -3,7 +3,6 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
-import main.sample.MockMonster;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
  */
 public class Game extends MainController {
     private Hero hero;
-    private MockMonster monster;
     private DungeonWorld firstLevel;
 
     /**
@@ -31,11 +29,9 @@ public class Game extends MainController {
     @Override
     protected void setup() {
         hero = new Hero(this);
-        monster = new MockMonster(this);
 
         // the entityController will call hero.update each frame
         entityController.addEntity(hero);
-        entityController.addEntity(monster);
         firstLevel = null;
 
         // attach camera to hero
@@ -85,7 +81,6 @@ public class Game extends MainController {
 
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
-        monster.setLevel(levelController.getDungeon());
     }
 
     /**
