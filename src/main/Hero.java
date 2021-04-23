@@ -3,10 +3,7 @@ package main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 import java.util.*;
@@ -20,70 +17,6 @@ import java.util.logging.Logger;
  */
 public class Hero extends Actor {
     static Logger l = Logger.getLogger(Hero.class.getName());
-
-    // implementation of ICombatable -----------------------------------------------------------------------------------
-    private final float movementSpeed = 0.1f;
-    // cache a reference to the game to be able to scan all entities for possible attack targets
-    private ICombatable target;
-
-    // combat-characteristics:
-    float health = 100.f;
-    float maxHealth = 100.f;
-
-    float baseHitChance = 0.6f;
-    float hitChanceModifier = 1.f;
-
-    float baseAttackDamage = 50;
-    float attackDamageModifier = 1.f;
-
-    float baseEvasionChance = 0.15f;
-    float evasionChanceModifier = 1.f;
-
-    @Override
-    public float getHealth() {
-        return this.health;
-    }
-
-    @Override
-    public void setHealth(float health) {
-        this.health = health;
-    }
-
-    @Override
-    public boolean isPassive() {
-        return false;
-    }
-
-    @Override
-    public boolean hasTarget() {
-        return this.target != null;
-    }
-
-    @Override
-    public ICombatable getTarget() {
-        return this.target;
-    }
-
-    @Override
-    public void setTarget(ICombatable target) {
-        this.target = target;
-    }
-
-    @Override
-    public float getHitChance() {
-        return baseHitChance * hitChanceModifier;
-    }
-
-    @Override
-    public float getEvasionChance() {
-        return this.baseEvasionChance * evasionChanceModifier;
-    }
-
-    @Override
-    public float getDamage() {
-        return this.baseAttackDamage * this.attackDamageModifier;
-    }
-
     @Override
     public boolean attack(ICombatable other) {
         boolean success = super.attack(other);
@@ -98,18 +31,13 @@ public class Hero extends Actor {
         }
         return success;
     }
-
-
     @Override
     public void dealDamage(float damage) {
         super.dealDamage(damage);
-
         if (isDead()) {
             l.info("GAME OVER");
         }
     }
-    // end of implementation of ICombatable ----------------------------------------------------------------------------
-
     /**
      * Constructor of the Hero class.
      * <p>
@@ -118,6 +46,20 @@ public class Hero extends Actor {
      */
     public Hero(Game game) {
         super(game);
+        movementSpeed=0.1f;
+        // combat-characteristics:
+        health = 100.f;
+        maxHealth = 100.f;
+
+        baseHitChance = 0.6f;
+        hitChanceModifier = 1.f;
+
+        baseAttackDamage = 50;
+        attackDamageModifier = 1.f;
+
+        baseEvasionChance = 0.15f;
+        evasionChanceModifier = 1.f;
+
     }
     @Override
     protected void generateAnimations(){
@@ -153,18 +95,13 @@ public class Hero extends Actor {
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
     }
-
     private Animation createAnimation(String[] texturePaths, int frameTime) {
         List<Texture> textureList = new ArrayList<>();
         for (var frame : texturePaths) {
-
             textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
         }
         return new Animation(textureList, frameTime);
     }
-
-
-
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
@@ -173,11 +110,11 @@ public class Hero extends Actor {
         super.update();
     }
 
+    @Override
     protected void resetCombatStats() {
-        super.resetCombatStats();
         l.info("Hero: resetting combat stats");
+        super.resetCombatStats();
     }
-
     @Override
     protected Point readMovementInput(){
         var newPosition = new Point(this.position);
@@ -195,5 +132,4 @@ public class Hero extends Actor {
         }
         return newPosition;
     }
-
 }

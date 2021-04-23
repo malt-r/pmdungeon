@@ -1,16 +1,12 @@
 package main;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * The controllable player character.
@@ -19,7 +15,6 @@ import java.util.logging.Logger;
  * </p>
  */
 public abstract class Actor implements IAnimatable, IEntity, ICombatable {
-  static Logger l = Logger.getLogger(Actor.class.getName());
   protected Point position;
   protected DungeonWorld level;
 
@@ -44,6 +39,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   private ICombatable target;
 
   // combat-characteristics:
+  //TODO:acter should only have basic hit chance, attack damge, evasion change
+  //since it is used for the monster as well which doesnt can upgrade it's skills
   protected float health = 100.f;
   protected float maxHealth = 100.f;
 
@@ -60,32 +57,26 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   public float getHealth() {
     return this.health;
   }
-
   @Override
   public void setHealth(float health) {
     this.health = health;
   }
-
   @Override
   public boolean isPassive() {
     return false;
   }
-
   @Override
   public boolean hasTarget() {
     return this.target != null;
   }
-
   @Override
   public ICombatable getTarget() {
     return this.target;
   }
-
   @Override
   public void setTarget(ICombatable target) {
     this.target = target;
   }
-
   @Override
   public float getHitChance() {
     return baseHitChance * hitChanceModifier;
@@ -95,26 +86,13 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   public float getEvasionChance() {
     return this.baseEvasionChance * evasionChanceModifier;
   }
-
   @Override
   public float getDamage() {
     return this.baseAttackDamage * this.attackDamageModifier;
   }
-
   @Override
   public boolean attack(ICombatable other) {
     boolean success = ICombatable.super.attack(other);
-    if (success) {
-      l.info("Hit " + other.toString());
-    } else {
-      l.info("Missed " + other.toString());
-    }
-
-    if (other.isDead()) {
-      l.info("Other has been slain!");
-      // here would the hero gain experience...
-    }
-
     // delay next attack by attackDelay ms
     this.canAttack = false;
     TimerTask resetCanAttackTask = new TimerTask() {
@@ -126,21 +104,14 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     attackTimer.schedule(resetCanAttackTask, attackDelay);
     return success;
   }
-
   @Override
   public boolean canAttack() {
     return canAttack;
   }
-
   @Override
   public void dealDamage(float damage) {
     ICombatable.super.dealDamage(damage);
-
-    if (isDead()) {
-      l.info("GAME OVER");
-    }
   }
-
   @Override
   public void heal(float amount) {
     this.health += amount;
@@ -148,12 +119,10 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       this.health = maxHealth;
     }
   }
-
   private enum AnimationState {
     IDLE,
     RUN,
   }
-
   // end of implementation of ICombatable ----------------------------------------------------------------------------
 
   /**
@@ -196,7 +165,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   private Animation createAnimation(String[] texturePaths, int frameTime) {
     List<Texture> textureList = new ArrayList<>();
     for (var frame : texturePaths) {
-
       textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
     }
     return new Animation(textureList, frameTime);
@@ -289,7 +257,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   /**
-   * Override IEntity.deletable and return false for the hero.
+   * Override IEntity.deletable and return false for the actor.
    *
    * @return false
    */
@@ -299,7 +267,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   protected void resetCombatStats() {
-    l.info("Actor: resetting combat stats");
     this.setHealth(maxHealth);
     this.canAttack = true;
   }
