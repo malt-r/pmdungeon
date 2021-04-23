@@ -21,7 +21,7 @@ public class Game extends MainController {
     private Hero hero;
     private DungeonWorld firstLevel;
     private Monster monster;
-    private Monster[] monsterArray = new Monster[1];
+    private Monster[] monsterArray = new Monster[5];
 
     /**
      * Setup of the game world.
@@ -39,7 +39,7 @@ public class Game extends MainController {
         firstLevel = null;
 
         try{
-            monster = MonsterFactory.createMonster("lizard");
+            monster = MonsterFactory.createMonster("lizard",this);
             //entityController.addEntity(monster);
         }
         catch(Exception e){
@@ -52,7 +52,7 @@ public class Game extends MainController {
 
         for(int i=0;i<monsterArray.length;i++){
             try{
-                var mon = MonsterFactory.createMonster("lizard");
+                var mon = MonsterFactory.createMonster("lizard",this);
                 monsterArray[i]= mon;
                 entityController.addEntity(mon);
             }
