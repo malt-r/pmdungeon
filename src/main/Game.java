@@ -3,9 +3,11 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import monsters.Monster;
+import monsters.MonsterFactory;
+import monsters.MonsterType;
 
 
 /**
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class Game extends MainController {
     private Hero hero;
     private DungeonWorld firstLevel;
+    private Monster[] monsterArray = new Monster[5];
 
     /**
      * Setup of the game world.
@@ -29,11 +32,20 @@ public class Game extends MainController {
     @Override
     protected void setup() {
         hero = new Hero(this);
-
-        // the entityController will call hero.update each frame
-        entityController.addEntity(hero);
         firstLevel = null;
+         // the entityController will call hero.update each frame
+        entityController.addEntity(hero);
 
+        for(int i=0;i<monsterArray.length;i++){
+            try{
+                var mon = MonsterFactory.createMonster(MonsterType.LIZARD,this);
+                monsterArray[i]= mon;
+                entityController.addEntity(mon);
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+        }
         // attach camera to hero
         camera.follow(hero);
     }
@@ -43,9 +55,7 @@ public class Game extends MainController {
      */
     @Override
     protected void beginFrame() {
-
     }
-
     /**
      * Implements logic executed at the end of a frame.
      * <p>
@@ -78,9 +88,12 @@ public class Game extends MainController {
         if (null == firstLevel) {
             firstLevel = levelController.getDungeon();
         }
-
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
+
+        for(int i=0;i<monsterArray.length;i++) {
+            monsterArray[i].setLevel(levelController.getDungeon());
+        }
     }
 
     /**
