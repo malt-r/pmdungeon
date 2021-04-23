@@ -270,7 +270,7 @@ public class Hero implements IAnimatable, IEntity, ICombatable {
         // initialize temporary point with current position
         Point newPosition = new Point(this.position);
 
-        float movementSpeed = 0.12f;
+        float movementSpeed = 0.3f;
         AnimationState animationState = AnimationState.IDLE;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {

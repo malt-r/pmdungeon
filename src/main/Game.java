@@ -6,6 +6,8 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import monsters.Monster;
+import monsters.MonsterFactory;
 
 
 /**
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 public class Game extends MainController {
     private Hero hero;
     private DungeonWorld firstLevel;
+    private Monster monster;
+    private Monster[] monsterArray = new Monster[1];
 
     /**
      * Setup of the game world.
@@ -33,6 +37,30 @@ public class Game extends MainController {
         // the entityController will call hero.update each frame
         entityController.addEntity(hero);
         firstLevel = null;
+
+        try{
+            monster = MonsterFactory.createMonster("lizard");
+            //entityController.addEntity(monster);
+        }
+        catch(Exception e){
+        System.out.println(e);
+        }
+
+        // the entityController will call hero.update each frame
+        entityController.addEntity(hero);
+        //entityController.addEntity(monster);
+
+        for(int i=0;i<monsterArray.length;i++){
+            try{
+                var mon = MonsterFactory.createMonster("lizard");
+                monsterArray[i]= mon;
+                entityController.addEntity(mon);
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+
+        }
 
         // attach camera to hero
         camera.follow(hero);
@@ -81,6 +109,10 @@ public class Game extends MainController {
 
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
+
+        for(int i=0;i<monsterArray.length;i++) {
+            monsterArray[i].setLevel(levelController.getDungeon());
+        }
     }
 
     /**
