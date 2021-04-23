@@ -2,10 +2,14 @@ package monsters;
 
 import main.Game;
 
-public class LizardMonster  extends Monster{
-  public LizardMonster(Game game){
+public class LizardMonster  extends Monster {
+  public LizardMonster(Game game) {
     super(game);
-    String[] idleLeftFrames = new String[] {
+  }
+
+  @Override
+  protected void generateAnimations() {
+    String[] idleLeftFrames = new String[]{
             "tileset/lizard/lizard_m_idle_left_anim_f0.png",
             "tileset/lizard/lizard_m_idle_left_anim_f1.png",
             "tileset/lizard/lizard_m_idle_left_anim_f2.png",
@@ -13,7 +17,7 @@ public class LizardMonster  extends Monster{
     };
     idleAnimationLeft = createAnimation(idleLeftFrames, 6);
 
-    String[] idleRightFrames = new String[] {
+    String[] idleRightFrames = new String[]{
             "tileset/lizard/lizard_m_idle_anim_f0.png",
             "tileset/lizard/lizard_m_idle_anim_f1.png",
             "tileset/lizard/lizard_m_idle_anim_f2.png",
@@ -21,7 +25,7 @@ public class LizardMonster  extends Monster{
     };
     idleAnimationRight = createAnimation(idleRightFrames, 6);
 
-    String[] runLeftFrames = new String[] {
+    String[] runLeftFrames = new String[]{
             "tileset/lizard/lizard_m_run_left_anim_f0.png",
             "tileset/lizard/lizard_m_run_left_anim_f1.png",
             "tileset/lizard/lizard_m_run_left_anim_f2.png",
@@ -29,7 +33,7 @@ public class LizardMonster  extends Monster{
     };
     runAnimationLeft = createAnimation(runLeftFrames, 4);
 
-    String[] runRightFrames = new String[] {
+    String[] runRightFrames = new String[]{
             "tileset/lizard/lizard_m_run_anim_f0.png",
             "tileset/lizard/lizard_m_run_anim_f1.png",
             "tileset/lizard/lizard_m_run_anim_f2.png",

@@ -1,17 +1,13 @@
 package monsters;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
 import main.Game;
 import main.ICombatable;
-import main.sample.MockMonster;
+
 
 import java.util.*;
 import java.util.logging.Logger;

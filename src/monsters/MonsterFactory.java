@@ -2,8 +2,6 @@ package monsters;
 
 import main.Game;
 
-import java.util.Locale;
-
 public class MonsterFactory {
   public static Monster createMonster(String monsterType, Game game) throws Exception {
 
