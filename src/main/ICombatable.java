@@ -56,7 +56,7 @@ public interface ICombatable {
      * This method will be called in the attack-method to deal damage on a successful hit.
      * @param damage The amount to decrease the health by.
      */
-    default void dealDamage(float damage) {
+    default void dealDamage(float damage, ICombatable attacker) {
         setHealth(getHealth() - damage);
         if (getHealth() <= 0) {
             setHealth(0);
@@ -210,7 +210,7 @@ public interface ICombatable {
 
         float rand = (float)Math.random();
         if (rand < hitChance) {
-            other.dealDamage(getDamage());
+            other.dealDamage(getDamage(), this);
             return true;
         } else {
             return false;
