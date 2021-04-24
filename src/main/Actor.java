@@ -16,6 +16,12 @@ import java.util.*;
  * </p>
  */
 public abstract class Actor implements IAnimatable, IEntity, ICombatable {
+  /**
+   * MovementState switches between different movement-characteristics
+   * of the actor.
+   * CAN_MOVE: the actor can move normally.
+   * IS_KNOCKED_BACK: the actor is currently being knocked back and can not be moved by input.
+   */
   protected enum MovementState {
     CAN_MOVE,
     IS_KNOCKED_BACK
@@ -40,13 +46,38 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   // looking direction
   private boolean lookLeft;
 
+  /**
+   * The current MovementState of the actor.
+   * @see MovementState
+   */
   protected MovementState movementState;
+
+  /**
+   * Defines whether the actor can be knocked back or not.
+   */
   protected boolean knockBackAble = false;
+
+  /**
+   * Gets the value of knockBackAble.
+   * @return The value of knockBackAble.
+   */
   protected boolean isKnockBackAble() {
     return knockBackAble;
   }
+
+  /**
+   * The target point for the current knock back.
+   */
   protected Point knockBackTargetPoint;
+  /**
+   * The speed for being knocked back. Gets added to the position of the
+   * actor every update, if it is being knocked back.
+   */
   protected float knockBackSpeed = 0.25f;
+
+  /**
+   * The distance the actor should be knocked back.
+   */
   protected float knockBackDistance = 0.8f;
 
   // implementation of ICombatable -----------------------------------------------------------------------------------
@@ -147,6 +178,12 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
   // end ICombatable implementation ----------------------------------------------------------------
 
+  /**
+   * Starts a knock back and calculates the knockBackTargetPoint.
+   * @param other The attacker, which caused the knock back. Used to calculate the destination
+   *              in which the knock back should be performed (the opposite of the difference vector
+   *              of this.position and other.position). Should implement IDrawable.
+   */
   protected void initiateKnockBack(ICombatable other) {
     if (other instanceof IDrawable) {
       var attackerPosition = ((IDrawable)other).getPosition();
@@ -157,6 +194,14 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     }
   }
 
+  /**
+   * Calculate the target point for the knock back in this frame (should be called in update).
+   * Ends the knock back, if the magnitude of the difference vector is less than the
+   * knockBackSpeed (otherwise the actor may overshoot the knockBackTargetPoint, which can lead
+   * to oscillation around the knockBackTargetPoint).
+   * Ends the knock back, if the calculated target point lies in a tile, which is not accessible.
+   * @return The target point for a knock back in the current frame.
+   */
   protected Point calculateKnockBackTarget() {
     var diffMagnitude =
             Math.sqrt
