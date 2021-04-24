@@ -127,8 +127,8 @@ public abstract class Monster extends Actor {
   return newPosition;
   }
   @Override
-  public void dealDamage(float damage) {
-    super.dealDamage(damage);
+  public void dealDamage(float damage, ICombatable attacker) {
+    super.dealDamage(damage, attacker);
     if (this.isDead()) {
       TimerTask respawnTask = new TimerTask() {
         @Override

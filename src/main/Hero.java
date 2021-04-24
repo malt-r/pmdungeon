@@ -31,10 +31,12 @@ public class Hero extends Actor {
         }
         return damage;
     }
+
     @Override
-    public void dealDamage(float damage) {
-        super.dealDamage(damage);
+    public void dealDamage(float damage, ICombatable attacker) {
+        super.dealDamage(damage, attacker);
         mainLogger.info(this.toString() + ": " + health + " health left");
+
         if (isDead()) {
             mainLogger.info("GAME OVER");
         }
@@ -47,10 +49,10 @@ public class Hero extends Actor {
      */
     public Hero(Game game) {
         super(game);
-        movementSpeed=0.1f;
+        movementSpeed=0.13f;
         // combat-characteristics:
-        health = 100.f;
-        maxHealth = 100.f;
+        health = 200.f;
+        maxHealth = 200.f;
 
         baseHitChance = 0.6f;
         hitChanceModifier = 1.f;
@@ -61,7 +63,9 @@ public class Hero extends Actor {
         baseEvasionChance = 0.15f;
         evasionChanceModifier = 1.f;
 
+        knockBackAble = true;
     }
+
     @Override
     protected void generateAnimations(){
         String[] idleLeftFrames = new String[]{
@@ -116,6 +120,7 @@ public class Hero extends Actor {
         super.resetCombatStats();
         mainLogger.info("Combat stats reset");
     }
+
     @Override
     protected Point readMovementInput(){
         var newPosition = new Point(this.position);

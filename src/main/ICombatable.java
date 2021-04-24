@@ -6,7 +6,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  * This interface implements the basic combat system.
@@ -56,8 +55,9 @@ public interface ICombatable {
      * getHealth are called.
      * This method will be called in the attack-method to deal damage on a successful hit.
      * @param damage The amount to decrease the health by.
+     * @param attacker The ICombatable which deals the damage.
      */
-    default void dealDamage(float damage) {
+    default void dealDamage(float damage, ICombatable attacker) {
         setHealth(getHealth() - damage);
         if (getHealth() <= 0) {
             setHealth(0);
@@ -212,7 +212,7 @@ public interface ICombatable {
         float rand = (float)Math.random();
         if (rand < hitChance) {
             float damage = getDamage();
-            other.dealDamage(damage);
+            other.dealDamage(damage, this);
             return damage;
         } else {
             return 0.0f;
