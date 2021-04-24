@@ -107,13 +107,12 @@ public interface ICombatable {
      * @param entities All other entities in the current DungeonWorld for which should be checked, if they are in range for an attack.
      */
     default void attackTargetIfReachable(Point ownPosition, DungeonWorld level, ArrayList<IEntity> entities) {
+        if (!isTargetInRange(ownPosition, getTarget(), level)) {
+            setTarget(null);
+        }
         if (!isPassive() && canAttack()) {
             if (hasTarget()) {
-                if (!isTargetInRange(ownPosition, getTarget(), level)) {
-                    setTarget(null);
-                } else {
-                    attack(getTarget());
-                }
+                attack(getTarget());
             } else {
                 setTarget(findTarget(ownPosition, entities, level));
                 if (hasTarget()) {
