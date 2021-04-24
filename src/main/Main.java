@@ -20,7 +20,7 @@ public class Main {
         mainLogger.addHandler(console);
 
         try{
-            FileHandler file = new FileHandler("log.txt");
+            FileHandler file = new FileHandler("Dungeon.log");
             file.setFormatter(new DungeonFormatter());
             file.setLevel(Level.ALL);
             mainLogger.addHandler(file);
