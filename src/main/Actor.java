@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import java.util.*;
@@ -17,6 +18,10 @@ import java.util.logging.Logger;
  */
 public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+  protected enum MovementState {
+    CAN_MOVE,
+    IS_KNOCKED_BACK
+  };
 
   protected Point position;
   protected DungeonWorld level;
@@ -26,13 +31,28 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected Animation runAnimationLeft;
   protected Animation runAnimationRight;
   protected Animation currentAnimation;
+  private enum AnimationState {
+    IDLE,
+    RUN,
+    KNOCK_BACK,
+  }
 
   // currently only two looking directions are supported (left and right),
   // therefore a boolean is sufficient to represent the
   // looking direction
   private boolean lookLeft;
 
+  protected MovementState movementState;
+  protected boolean knockBackAble = false;
+  protected boolean isKnockBackAble() {
+    return knockBackAble;
+  }
+  protected Point knockBackTargetPoint;
+  protected float knockBackSpeed = 0.25f;
+  protected float knockBackDistance = 0.8f;
+
   // implementation of ICombatable -----------------------------------------------------------------------------------
+
   private final Timer attackTimer;
   protected long attackDelay = 1000;
   protected boolean canAttack;
@@ -111,9 +131,14 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   public boolean canAttack() {
     return canAttack;
   }
+
   @Override
-  public void dealDamage(float damage) {
-    ICombatable.super.dealDamage(damage);
+  public void dealDamage(float damage, ICombatable attacker) {
+    ICombatable.super.dealDamage(damage, attacker);
+
+    if (isKnockBackAble()) {
+      initiateKnockBack(attacker);
+    }
   }
   @Override
   public void heal(float amount) {
@@ -122,11 +147,40 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       this.health = maxHealth;
     }
   }
-  private enum AnimationState {
-    IDLE,
-    RUN,
+  // end ICombatable implementation ----------------------------------------------------------------
+
+  protected void initiateKnockBack(ICombatable other) {
+    if (other instanceof IDrawable) {
+      var attackerPosition = ((IDrawable)other).getPosition();
+
+      var diff = normalizeDelta(this.position, attackerPosition, knockBackDistance);
+      this.knockBackTargetPoint = new Point(this.position.x - diff.x, this.position.y - diff.y);
+      this.movementState = MovementState.IS_KNOCKED_BACK;
+    }
   }
-  // end of implementation of ICombatable ----------------------------------------------------------------------------
+
+  protected Point calculateKnockBackTarget() {
+    var diffMagnitude =
+            Math.sqrt
+              (
+                (Math.pow((double)this.position.x - (double)this.knockBackTargetPoint.x, 2.f)) +
+                (Math.pow((double)this.position.y - (double)this.knockBackTargetPoint.y, 2.f))
+              );
+    if (diffMagnitude < knockBackSpeed) {
+      movementState = MovementState.CAN_MOVE;
+      return this.position;
+    } else {
+      var normalizedDiff = normalizeDelta(this.position, this.knockBackTargetPoint, knockBackSpeed);
+      var targetPoint = new Point(this.position.x + normalizedDiff.x, this.position.y + normalizedDiff.y);
+
+      if (!level.isTileAccessible(targetPoint)) {
+        movementState = MovementState.CAN_MOVE;
+        return this.position;
+      } else {
+        return targetPoint;
+      }
+    }
+  }
 
   /**
    * Constructor of the Hero class.
@@ -140,6 +194,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     lookLeft = false;
     canAttack = true;
     attackTimer = new Timer();
+    movementState = MovementState.CAN_MOVE;
   }
 
   protected void generateAnimations(){
@@ -162,7 +217,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
             "tileset/default/default_anim.png",
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
-
   }
 
   private Animation createAnimation(String[] texturePaths, int frameTime) {
@@ -184,6 +238,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   private void setCurrentAnimation(AnimationState animationState) {
+    // TODO: play hit animation on knockback
     switch (animationState) {
       case RUN:
         this.currentAnimation = lookLeft ? this.runAnimationLeft : this.runAnimationRight;
@@ -212,7 +267,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * @param normalizationBasis The basis on which the length of the difference-vector should be normalized.
    * @return A Point, of which the x and y members represent the components of the normalized vector.
    */
-  private Point normalizeDelta(Point p1, Point p2, float normalizationBasis) {
+  protected Point normalizeDelta(Point p1, Point p2, float normalizationBasis) {
     float diffX = p2.x - p1.x;
     float diffY = p2.y - p1.y;
     float magnitude = (float) Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
@@ -231,30 +286,36 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    */
   @Override
   public void update() {
-    // initialize temporary point with current position
-    var normalizedDelta = calculateMovementDelta();
     AnimationState animationState = AnimationState.IDLE;
-    var newPosition = new Point(position.x + normalizedDelta.x, this.position.y + normalizedDelta.y);
+    switch (movementState) {
+      case CAN_MOVE:
+        var normalizedDelta = calculateMovementDelta();
+        var newPosition = new Point(position.x + normalizedDelta.x, this.position.y + normalizedDelta.y);
 
-    if (level.isTileAccessible(newPosition)) {
-      this.position.x += normalizedDelta.x;
-      this.position.y += normalizedDelta.y;
-    }
+        if (level.isTileAccessible(newPosition)) {
+          this.position.x += normalizedDelta.x;
+          this.position.y += normalizedDelta.y;
+        }
 
-    // is the actor moving?
-    if (Math.abs(normalizedDelta.x) > 0.0f ||
-            Math.abs(normalizedDelta.y) > 0.0f) {
-      animationState = AnimationState.RUN;
-    }
+        // is the actor moving?
+        if (Math.abs(normalizedDelta.x) > 0.0f ||
+                Math.abs(normalizedDelta.y) > 0.0f) {
+          animationState = AnimationState.RUN;
+        }
 
-    if(normalizedDelta.x<0){
-      lookLeft=true;
+        if(normalizedDelta.x<0){
+          lookLeft=true;
+        }
+        else if(normalizedDelta.x>0){
+          lookLeft=false;
+        }
+        attackTargetIfReachable(this.position, level, game.getAllEntities());
+        break;
+      case IS_KNOCKED_BACK:
+        this.position = calculateKnockBackTarget();
+        animationState = AnimationState.KNOCK_BACK;
+        break;
     }
-    else if(normalizedDelta.x>0){
-      lookLeft=false;
-    }
-
-    attackTargetIfReachable(this.position, level, game.getAllEntities());
     setCurrentAnimation(animationState);
     this.draw();
   }
@@ -271,6 +332,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
 
   protected void resetCombatStats() {
     this.setHealth(maxHealth);
+    this.movementState = MovementState.CAN_MOVE;
     this.canAttack = true;
   }
 

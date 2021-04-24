@@ -143,8 +143,8 @@ public class MockMonster implements IAnimatable, IEntity, ICombatable {
     }
 
     @Override
-    public void dealDamage(float damage) {
-        ICombatable.super.dealDamage(damage);
+    public void dealDamage(float damage, ICombatable attacker) {
+        ICombatable.super.dealDamage(damage, attacker);
 
         if (this.isDead()) {
             l.info("I am dead");
