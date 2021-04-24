@@ -10,6 +10,8 @@ import monsters.MonsterFactory;
 import monsters.MonsterType;
 
 
+import java.util.logging.Logger;
+
 /**
  * The main game class.
  * <p>
@@ -18,6 +20,8 @@ import monsters.MonsterType;
  * </p>
  */
 public class Game extends MainController {
+    private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
     private Hero hero;
     private DungeonWorld firstLevel;
     private Monster[] monsterArray = new Monster[5];
@@ -33,17 +37,20 @@ public class Game extends MainController {
     protected void setup() {
         hero = new Hero(this);
         firstLevel = null;
-         // the entityController will call hero.update each frame
+        // the entityController will call hero.update each frame
         entityController.addEntity(hero);
+        mainLogger.info("Hero created");
 
         for(int i=0;i<monsterArray.length;i++){
             try{
                 var mon = MonsterFactory.createMonster(MonsterType.LIZARD,this);
                 monsterArray[i]= mon;
                 entityController.addEntity(mon);
+                //TODO Add which kind of monster spawned
+                mainLogger.info("Monster(" + (i + 1) + ") created");
             }
             catch(Exception e){
-                System.out.println(e);
+                mainLogger.severe(e.toString());
             }
         }
         // attach camera to hero
@@ -68,12 +75,15 @@ public class Game extends MainController {
         // check, if current position of hero is on the trigger to load a new level
         if (levelController.checkForTrigger(hero.getPosition()) ) {
             levelController.triggerNextStage();
+            mainLogger.info("Next stage loaded");
         }
         if (hero.isDead()) {
             try {
                 levelController.loadDungeon(firstLevel);
             } catch (InvocationTargetException ex) {
+                mainLogger.severe(ex.getMessage());
             } catch (IllegalAccessException ex) {
+                mainLogger.severe(ex.getMessage());
             }
         }
     }

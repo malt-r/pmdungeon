@@ -7,6 +7,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The controllable player character.
@@ -15,6 +16,8 @@ import java.util.*;
  * </p>
  */
 public abstract class Actor implements IAnimatable, IEntity, ICombatable {
+  protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
   protected Point position;
   protected DungeonWorld level;
 
@@ -91,8 +94,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     return this.baseAttackDamage * this.attackDamageModifier;
   }
   @Override
-  public boolean attack(ICombatable other) {
-    boolean success = ICombatable.super.attack(other);
+  public float attack(ICombatable other) {
+    float damage = ICombatable.super.attack(other);
     // delay next attack by attackDelay ms
     this.canAttack = false;
     TimerTask resetCanAttackTask = new TimerTask() {
@@ -102,7 +105,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       }
     };
     attackTimer.schedule(resetCanAttackTask, attackDelay);
-    return success;
+    return damage;
   }
   @Override
   public boolean canAttack() {

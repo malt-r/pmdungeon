@@ -7,7 +7,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * The controllable player character.
@@ -16,26 +15,28 @@ import java.util.logging.Logger;
  * </p>
  */
 public class Hero extends Actor {
-    static Logger l = Logger.getLogger(Hero.class.getName());
+    public boolean[] movementLog = new boolean[4];
+
     @Override
-    public boolean attack(ICombatable other) {
-        boolean success = super.attack(other);
-        if (success) {
-            l.info("Hit " + other.toString());
+    public float attack(ICombatable other) {
+        float damage = super.attack(other);
+        if (damage > 0.0f) {
+            mainLogger.info(damage + " damage dealt to " + other.toString());
         } else {
-            l.info("Missed " + other.toString());
+            mainLogger.info("Missed " + other.toString());
         }
         if (other.isDead()) {
-            l.info("Other has been slain!");
+            mainLogger.info("Other has been slain!");
             // here would the hero gain experience...
         }
-        return success;
+        return damage;
     }
     @Override
     public void dealDamage(float damage) {
         super.dealDamage(damage);
+        mainLogger.info(this.toString() + ": " + health + " health left");
         if (isDead()) {
-            l.info("GAME OVER");
+            mainLogger.info("GAME OVER");
         }
     }
     /**
@@ -112,24 +113,53 @@ public class Hero extends Actor {
 
     @Override
     protected void resetCombatStats() {
-        l.info("Hero: resetting combat stats");
         super.resetCombatStats();
+        mainLogger.info("Combat stats reset");
     }
     @Override
     protected Point readMovementInput(){
         var newPosition = new Point(this.position);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             newPosition.y += movementSpeed;
+        }else{
+            if(movementLog[0]){mainLogger.fine("W press stopped");}
+            movementLog[0] = false;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             newPosition.y -= movementSpeed;
+        }else{
+            if(movementLog[1]){mainLogger.fine("S press stopped");}
+            movementLog[1] = false;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             newPosition.x += movementSpeed;
+        }else{
+            if(movementLog[2]){mainLogger.fine("D press stopped");}
+            movementLog[2] = false;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             newPosition.x -= movementSpeed;
+        }else{
+            if(movementLog[3]){mainLogger.fine("A press stopped");}
+            movementLog[3] = false;
         }
+        if (Gdx.input.isKeyJustPressed((Input.Keys.W))){
+            mainLogger.fine("W press started");
+            movementLog[0] = true;
+        }
+        if (Gdx.input.isKeyJustPressed((Input.Keys.S))){
+            mainLogger.fine("S press started");
+            movementLog[1] = true;
+        }
+        if (Gdx.input.isKeyJustPressed((Input.Keys.D))){
+            mainLogger.fine("D press started");
+            movementLog[2] = true;
+        }
+        if (Gdx.input.isKeyJustPressed((Input.Keys.A))){
+            mainLogger.fine("A press started");
+            movementLog[3] = true;
+        }
+
         return newPosition;
     }
 }
