@@ -55,6 +55,7 @@ public interface ICombatable {
      * getHealth are called.
      * This method will be called in the attack-method to deal damage on a successful hit.
      * @param damage The amount to decrease the health by.
+     * @param attacker The ICombatable which deals the damage.
      */
     default void dealDamage(float damage, ICombatable attacker) {
         setHealth(getHealth() - damage);
