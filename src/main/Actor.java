@@ -178,6 +178,20 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       this.health = maxHealth;
     }
   }
+
+  /**
+   * Set this.lookLeft according to position of target.
+   */
+  protected void lookAtTarget() {
+    if (this.target instanceof IDrawable) {
+      Point targetPosition = ((IDrawable)this.target).getPosition();
+      if (this.position.x > targetPosition.x) {
+        lookLeft = true;
+      } else if (this.position.x < targetPosition.x) {
+        lookLeft = false;
+      }
+    }
+  }
   // end ICombatable implementation ----------------------------------------------------------------
 
   /**
@@ -348,12 +362,15 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
           animationState = AnimationState.RUN;
         }
 
-        if(normalizedDelta.x<0){
+        if (hasTarget()) {
+          lookAtTarget();
+        } else if(normalizedDelta.x<0){
           lookLeft=true;
         }
         else if(normalizedDelta.x>0){
           lookLeft=false;
         }
+
         attackTargetIfReachable(this.position, level, game.getAllEntities());
         break;
       case IS_KNOCKED_BACK:
