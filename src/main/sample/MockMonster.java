@@ -176,8 +176,8 @@ public class MockMonster implements IAnimatable, IEntity, ICombatable {
     }
 
     @Override
-    public boolean attack(ICombatable other) {
-        boolean success = ICombatable.super.attack(other);
+    public float attack(ICombatable other) {
+        float damage = ICombatable.super.attack(other);
 
         this.canAttack = false;
         TimerTask attackResetTask = new TimerTask() {
@@ -187,7 +187,7 @@ public class MockMonster implements IAnimatable, IEntity, ICombatable {
             }
         };
         this.attackTimer.schedule(attackResetTask, this.attackDelay);
-        return success;
+        return damage;
     }
 
     @Override

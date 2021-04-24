@@ -46,9 +46,11 @@ public class Game extends MainController {
                 var mon = MonsterFactory.createMonster(MonsterType.LIZARD,this);
                 monsterArray[i]= mon;
                 entityController.addEntity(mon);
+                //TODO Add which kind of monster spawned
+                mainLogger.info("Monster(" + (i + 1) + ") created");
             }
             catch(Exception e){
-                System.out.println(e);
+                mainLogger.severe(e.toString());
             }
         }
         // attach camera to hero

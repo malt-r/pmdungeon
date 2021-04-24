@@ -1,3 +1,4 @@
+package main;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +13,7 @@ public class DungeonFormatter extends Formatter {
     public String format(LogRecord record) {
         DateTimeFormatter timeFormatter = DateTimeFormatter
                 .ofLocalizedDateTime( FormatStyle.SHORT )
-                .withLocale( Locale.GERMANY )
+                .ofPattern("k:mm:s:S00", Locale.GERMANY )
                 .withZone( ZoneId.systemDefault() );
 
         return timeFormatter.format(record.getInstant()) + ": ("+record.getSourceClassName()+"."+record.getSourceMethodName()+") "+ record.getLevel() + "-" +record.getMessage() + "\n";

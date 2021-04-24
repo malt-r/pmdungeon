@@ -6,6 +6,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * This interface implements the basic combat system.
@@ -204,16 +205,17 @@ public interface ICombatable {
      * @param other The ICombatable to attack.
      * @return If the attack was successful true, otherwise false.
      */
-    default boolean attack(ICombatable other){
+    default float attack(ICombatable other){
         // calculate hitChance
         float hitChance = getHitChance() * (1.f - other.getEvasionChance());
 
         float rand = (float)Math.random();
         if (rand < hitChance) {
-            other.dealDamage(getDamage());
-            return true;
+            float damage = getDamage();
+            other.dealDamage(damage);
+            return damage;
         } else {
-            return false;
+            return 0.0f;
         }
     }
 }
