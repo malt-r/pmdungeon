@@ -27,7 +27,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * of the actor.
    * CAN_MOVE: the actor can move normally.
    * IS_KNOCKED_BACK: the actor is currently being knocked back and can not be moved by input.
-   */
+ */
   protected enum MovementState {
     CAN_MOVE,
     IS_KNOCKED_BACK
@@ -165,7 +165,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
   @Override
   public boolean canAttack() {
-    return canAttack;
+    return ICombatable.super.canAttack() && canAttack;
   }
 
   @Override
