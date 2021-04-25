@@ -10,6 +10,16 @@ import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
  * </p>
  */
 public class Hero extends Actor {
+    private float healOnKillChance = 0.6f;
+    private float healOnKillAmount =  100.f;
+    private void RandomHealOnKill() {
+        float rand = (float)Math.random();
+        if (rand < healOnKillChance) {
+            this.heal(healOnKillAmount);
+            mainLogger.info("Hero got healed, health is now " + this.health);
+        }
+    }
+
     public boolean[] movementLog = new boolean[4];
     /**
      *  Manages attacking of another actor.
@@ -27,6 +37,7 @@ public class Hero extends Actor {
         if (other.isDead()) {
             mainLogger.info("Other has been slain!");
             // here would the hero gain experience...
+            RandomHealOnKill();
         }
         return damage;
     }

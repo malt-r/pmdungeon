@@ -193,7 +193,9 @@ public interface ICombatable {
      * Used to check, if an attack can be performed by the ICombatable.
      * @return A boolean which indicates, whether an attack can be performed or not.
      */
-    boolean canAttack();
+    default boolean canAttack() {
+        return !isDead();
+    };
 
     /**
      * Attack another ICombatable.
