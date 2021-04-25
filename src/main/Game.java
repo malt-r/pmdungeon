@@ -116,7 +116,7 @@ public class Game extends MainController {
     /**
      * Returns all entities from the entityController.
      * This method is used by the combat system to enable ICombatable-instances to scan for attackable targets.
-     * @return
+     * @return List of all entities in the game.
      */
     public ArrayList<IEntity> getAllEntities() {
         return entityController.getList();
