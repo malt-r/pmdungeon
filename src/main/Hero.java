@@ -2,12 +2,8 @@ package main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-
-import java.util.*;
-
+import java.util.logging.Logger;
 /**
  * The controllable player character.
  * <p>
@@ -16,7 +12,11 @@ import java.util.*;
  */
 public class Hero extends Actor {
     public boolean[] movementLog = new boolean[4];
-
+    /**
+     *  Manages attacking of another actor.
+     *  @param other The actor that should be attacked
+     *  @return true if the attack was sucessfull
+     */
     @Override
     public float attack(ICombatable other) {
         float damage = super.attack(other);
@@ -31,7 +31,11 @@ public class Hero extends Actor {
         }
         return damage;
     }
-
+    /**
+     * Manages damage given by other ICombatable instances.
+     *
+     * @param damage  The damage value that should be deducted from health.
+     */
     @Override
     public void dealDamage(float damage, ICombatable attacker) {
         super.dealDamage(damage, attacker);
@@ -46,6 +50,7 @@ public class Hero extends Actor {
      * <p>
      * This constructor will instantiate the animations and read all required texture data.
      * </p>
+     * @param game Game of the monster
      */
     public Hero(Game game) {
         super(game);
@@ -65,7 +70,9 @@ public class Hero extends Actor {
 
         knockBackAble = true;
     }
-
+    /**
+     * Generates the run and idle animation for the hero.
+     */
     @Override
     protected void generateAnimations(){
         String[] idleLeftFrames = new String[]{
@@ -100,13 +107,6 @@ public class Hero extends Actor {
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
     }
-    private Animation createAnimation(String[] texturePaths, int frameTime) {
-        List<Texture> textureList = new ArrayList<>();
-        for (var frame : texturePaths) {
-            textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
-        }
-        return new Animation(textureList, frameTime);
-    }
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
@@ -114,13 +114,17 @@ public class Hero extends Actor {
     public void update() {
         super.update();
     }
-
+    /**
+     * Resets the combat stats of the hero-
+     */
     @Override
     protected void resetCombatStats() {
         super.resetCombatStats();
         mainLogger.info("Combat stats reset");
     }
-
+    /**
+     * Generates Movement Input, depending on the pressed key on the keyboard.
+     */
     @Override
     protected Point readMovementInput(){
         var newPosition = new Point(this.position);
