@@ -136,6 +136,11 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     this.target = target;
   }
   @Override
+  public boolean isOtherFriendly(ICombatable other) {
+    return false;
+  }
+
+  @Override
   public float getHitChance() {
     return baseHitChance * hitChanceModifier;
   }

@@ -84,6 +84,13 @@ public interface ICombatable {
     void setTarget(ICombatable target);
 
     /**
+     * Check, if the other ICombatable should be attacked or is friendly
+     * @param other The other ICombatable.
+     * @return True, if the other ICombatable should not be attacked.
+     */
+    boolean isOtherFriendly(ICombatable other);
+
+    /**
      * Used to determine, if the ICombatable should be able to attack another ICombatable.
      *
      * This differs from canAttack in the way, that attackTargetIfInRange will not scan for attackable target, if
@@ -160,9 +167,11 @@ public interface ICombatable {
         for (IEntity entity : entities) {
             if (!entity.equals(this) && entity instanceof ICombatable) {
                 var combatable = (ICombatable) entity;
-                // is in range/on the same tile?
-                if (isTargetInRange(ownPosition, combatable, level)) {
-                    return combatable;
+                if (!isOtherFriendly(combatable)) {
+                    // is in range/on the same tile?
+                    if (isTargetInRange(ownPosition, combatable, level)) {
+                        return combatable;
+                    }
                 }
             }
         }
