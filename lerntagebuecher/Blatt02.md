@@ -38,12 +38,19 @@ sowie [Praktikumsblatt "Lerntagebuch"](pm_praktikum.html#lerntagebuch).
 Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 -->
 
+Der erste Teil der Aufgabe ist die Implementierung eines Logging-Mechanismus. Es
+sollen alle Exceptions, das Erstellen eines Charakters und der Gegner, das Laden
+eines neuen Spiel-Levels sowie Eingaben geloggt werden. Dabei sollen Meldungen 
+eines bestimmten Log-Levels auf der Konsole ausgegeben und alle Meldungen in 
+einer Log-Datei gespeichert werden. Dabei soll der Zeitstempel, das Log-Level, 
+die Herkunft und die Log-Meldung ersichtlich sein.
+
 tbd
 
 Ein Teil der Aufgabe ist die Implementierung eines simplen Kampfsystems, welches
 automatisch einsetzt, sobald sich ein Monster und der Held auf dem gleichen Feld
 befinden. Der Kampf zwischen dem Monster und dem Helden soll parametrierbar sein,
-sodass z.B. abhängig vom Gegner eine andere Trefferchance berechnnet wird.
+sodass z.B. abhängig vom Gegner eine andere Trefferchance berechnet wird.
 Bei einem Treffer durch einen Gegner soll der Held ein Stück zurückgeschleudert
 werden.
 
@@ -56,6 +63,23 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -   Wie sah Ihre Modellierung aus (UML-Diagramm)?
 -   Worauf müssen Sie konkret achten?
 -->
+
+Logging:
+Grundsätzlich kann eine einzige Logger-Instanz für das Projekt verwendet werden. Diese
+muss vor dem Start des Spiels initialisiert werden. Dazu werden dem Logger zwei 
+Handler übergeben. Ein `ConsoleHandler` ermöglicht die Ausgabe der Log-Nachrichten
+mit weiteren Informationen an die Konsole. In der Konsole sollen Log-Nachrichten ab
+einem Level von `Info` angezeigt werden. Der zweite übergebene Handler ist ein
+`FileHandler` und ermöglicht das Schreiben der Nachrichten in eine Datei. In
+der Log-Datei sollen alle geloggten Nachrichten gespeichert werden. Somit wird
+das Log-Level auf `ALL` gestellt. Zusätzlich wird ein eigener Formatter
+entwickelt und den beiden Handlern übergeben. Dabei muss die Weitergabe von
+Log-Nachrichten an `Parent`-Klassen unterbunden werden, damit Nachrichten einmal
+in der Konsole ausgegeben und in der Datei gespeichert werden.
+
+Die Logging-Instanz wird in der `Main`-Klasse initialisiert. Wenn in einer anderen
+Klasse derselbe Logger verwendet werden soll, muss die Factory-Methode des Loggers
+mit demselben Namen aufgerufen werden.
 
 tbd
 
@@ -93,6 +117,28 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 -   wie lange hat es gedauert,
 -   was war das Ergebnis?
 -->
+
+Um eine einheitliche Logger-Instanz in mehreren Klassen verwenden zu können, wird
+die Factory-Methode zum Erzeugen einer Instanz mit dem Namen `Logger.GLOBAL_LOGGER_NAME`
+aufgerufen. Mit dem Methodenaufruf `mainLogger.setUseParentHandlers(false)` wird 
+die Weitergabe der Nachrichten an `Parent`-Handler unterbunden. Anschließend werden
+Handler erzeugt dem Logger übergeben. Den einzelnen Handlern wird je eine Instanz
+des `DungeonFormatter` übergeben. Das Setup wird in der Funktion `setupLogger` 
+gekapselt und von der `main`-Methode vor Starten des Spiels aufgerufen.
+
+Die Klassen, die den Logger verwenden wollen, müssen eine Logger-Instanz mit dem
+gleichen Namen erzeugen lassen. So können beispielsweise Level-Wechsel, das Laden
+von Helden und Monstern und Lebenspunkte des Helden als Information geloggt werden.
+Eingaben werden mit dem Level `FINE` geloggt und so nur in der Log-Datei ausgegeben.
+Damit nicht zyklisch eine Nachricht gespeichert wird, welche Taste gedrückt ist,
+werden nur das Starten und Stoppen des Drückens einer Taste geloggt.
+
+Die Klasse `DungeonFormatter` formatiert mithilfe der `DateTimeFormatter`-Klasse
+den Zeitstempel und baut eine Log-Nachricht nach folgendem Schema zusammen:
+
+Uhrzeit: (Klassenname.Methodenname) Level-Message 
+
+23.04.2021: 17:00 - 20:00: Basisentwurf Logger mit eigenem Formatter
 
 tbd
 
@@ -164,6 +210,11 @@ kritisch zurück:
 -   Welche Probleme sind bei der Umsetzung Ihres Lösungsansatzes aufgetreten?
 -   Wie haben Sie die Probleme letztlich gelöst?
 -->
+
+Das Verwenden einer einzigen Logger-Instanz erwies sich als möglich, da 
+Nachrichten dennoch mit der richtigen Herkunft geloggt werden. Werden
+verschiedene Logger-Instanzen benötigt, können diese mit dem `Loggermanager`
+verwaltet werden.
 
 tbd
 
