@@ -61,26 +61,28 @@ tbd
 
 Kampfsystem:
 Jedes Monster und der Held müssen das Kampfsystem zu unterstützen. Um die
-Codeduplikation möglichst minimal zu halten wird daher ein gemeinsames Interface
+Codeduplikation möglichst minimal zu halten, wird daher ein gemeinsames Interface
 definiert, welches die Basisfunktion des Kampfsystems beinhaltet.
 Dieses Interface wird `ICombatable` genannt.
+Im folgenden ist das UML-Diagramm des `ICombatable`-Interfaces abgebildet:
+![ICombatable](./Blatt02/ICombatable.png "ICombatable interface")
+
 
 Die Kernmethode `attackTargetIfInRange` soll in der update-Methode der
 implementierenden Klasse aufgerufen werden und automatisch nach potentiell
-angreifbaren anderen `ICombatable`-Instanzen nahe der eigenen Position suchen.
+angreifbaren `ICombatable`-Instanzen nahe der eigenen Position suchen.
 
-Wird ein angreifbares Ziel gefunden, wird es gecached, um in nachfolgenden
+Wird ein angreifbares Ziel gefunden, wird es mit `setTarget` gecached, um in nachfolgenden
 update-Zyklen nicht erneut nach Zielen suchen zu müssen. Falls sich das Ziel aus
-dem Angriffsbereich hinausbewegt, wird das Ziel zurückgesetzt. standardmäßig ist
+dem Angriffsbereich hinausbewegt, wird das Ziel zurückgesetzt. Standardmäßig ist
 dieser Bereich das aktuelle Feld, auf dem die `ICombatable`-Instanz steht.
 
-Bei einem Angriff wird zusammen mit der eigenen `hitChance` und er
+In `attack` wird zusammen mit der eigenen `hitChance` und er
 `evasionChance` der angegriffenen `ICombatable`-Instanz die Erfolgschance eines
 Angriffs berechnet. Bei einem erfolgreichen Angriff wird der angegriffenen
 `ICombatable`-Instanz mit `dealDamage` Gesundheit abgezogen. Falls die
 Gesundheit eines `ICombatable` auf Null sinkt, stirbt es (dies kann über die
 Methode `isDead` abgefragt werden).
-//TODO: UML
 
 # Umsetzung
 
@@ -94,20 +96,30 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 
 tbd
 
-Zur Identifikation eines potentiellen Ziels für einen Angriff wird zunächst der naive
-Ansatz gewählt, über alle `IEntity`-Instanzen im Spiel zu iterieren und die
+Kampfsystem:
+Zur Identifikation eines potentiellen Ziels für einen Angriff durch eine `ICombatable`-Instanz
+wird zunächst der naive Ansatz gewählt, über alle `IEntity`-Instanzen im Spiel zu iterieren und die
 erste Instanz zurückzugeben, welche ebenefalls eine Instanz von `ICombatable`
 ist. Dies kann mit dem `instanceof`-Keyword überprüft werden. Falls die
 `ICombatable`-Instanz zusätzlich das `IDrawable`-Interface implementiert, wird
 über diese Interface die aktuelle Position des potentiellen Ziels ausgelesen.
-Über die `getTileAt`-Methode des `DungeonLevels` wird ermittelt, ob das
-potentielle Ziel auf dem gleichen Feld steht, wie die `ICombatable`-Instanz,
-welche aktuell nach einem Ziel sucht.
+Mit der `getTileAt`-Methode des `DungeonLevel`s wird ermittelt, ob das
+potentielle Ziel auf dem gleichen Feld steht und somit angreifbar ist.
 Dieser Ansatz setzt voraus, dass die `ICombatable`-Instanz eine Referenz auf die
 `Game`-Instanz hält (um Zugriff auf die `IEntity`-Instanzen des
-`EntityControllers` zu erlangen). Daher muss die Hero-Klasse eine Referenz auf
+`EntityControllers` zu erlangen). Daher muss die `Actor`-Klasse eine Referenz auf
 das `Game`-Objekt halten, welches um die Methode `getAllEntities` erweitert
 wird.
+
+Der Spielcharakter soll eine gewisse Distanz zurückgeschleudert werden, falls er
+schaden erleidet. In der `dealDamage`-Implementierung der `Hero`-Klasse wird
+durch die Position des Angreifers und einer definierten `knockBackDistance` der
+Zielpunkt des Rückstoßes ermittelt. Da der Spielcharakter nicht einfach
+innerhalb eines Frames an diese Position teleportiert werden soll, wird die
+`update`-Methode des `Actor`s erweitert. Es wird zwischen zwei `MotionStates`
+unterschieden (CAN_MOVE und IS_KNOCKED_BACK), ist der aktuelle `MotionState`
+`CAN_MOVE`, kann der Spielcharakter wie gewohnt bewegt werde. Im Fall von
+`IS_KNOCKED_BACK` wird in
 
 20.04.2021: 17:00 - 20:00: Basisentwurf Kampfsystem gemeinsam erarbeiten.
 21.04.2021: 17:00 - 20:00: Kampfsystem ausimplementieren und testen.
@@ -130,7 +142,11 @@ Optimierungsbedarf. Dies ist insbesondere der Fall, da jede
 `ICombatable`-Instanz diese Iteration durchführt. Daher darf der aktuelle
 Zustand des Kampfsystems nur als erster Startpunkt betrachtet werden. Eine
 effizientere Lösung wäre beispielsweise eine
-[spacial hashmap](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/spatial-hashing-r2697/).
+[spatial hashmap](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/spatial-hashing-r2697/).
 mit der gehashten Koordinaten eines Feldes als Schlüsselwert und den `IEntity`-Instanzen auf
 diesem Feld als Wert. So müsste nur am Anfang jedes Frames einmal über alle
-`IEntity`-Instanzen iteriert werden.
+`IEntity`-Instanzen iteriert werden, um die Hashmap mit den aktuellen Position
+der Instanzen zu aktualisieren. Mit solche einer Hashmap könnte eine
+`ICombatable`-Instanz genau die Felder nach potentiellen Zielen durchsuchen, die
+auch in dem möglichen Angriffsradius liegen. Aus zeitlichen Gründen wird diese
+Umsetzung allerdings auf einen späteren Zeitpunkt verschoben.
