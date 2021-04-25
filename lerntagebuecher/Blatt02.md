@@ -189,7 +189,7 @@ derselben Bewegungsrichtung zu bleiben am höchsten ist, gefolgt vom stehen blei
 bewegen sich die Monster fließend und bleiben zwischendurch stehen.
 
 Aufwand:
-- 20.04.2021: 17:00 - 20:00: Basisentwurf für die Monster, Monsterfactory.
+- 20.04.2021: 17:00 - 20:00: Basisentwurf für die Monster und Monsterfactory.
 - 23.04.2021: 12:00 - 16:00: Spezifikation und Implementierung vom Actor.
 - 24.04.2021: 16:00 - 18:00: Finalisierung Monster, Hero und Actor.
 
