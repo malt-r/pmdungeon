@@ -7,8 +7,12 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import util.math.Vec;
+
 import java.util.*;
 import java.util.logging.Logger;
+
+import static util.math.Convenience.scaleDelta;
 
 /**
  * The controllable player character.
@@ -147,6 +151,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   @Override
   public float attack(ICombatable other) {
     float damage = ICombatable.super.attack(other);
+
     // delay next attack by attackDelay ms
     this.canAttack = false;
     TimerTask resetCanAttackTask = new TimerTask() {
@@ -204,8 +209,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     if (other instanceof IDrawable) {
       var attackerPosition = ((IDrawable)other).getPosition();
 
-      var diff = normalizeDelta(this.position, attackerPosition, knockBackDistance);
-      this.knockBackTargetPoint = new Point(this.position.x - diff.x, this.position.y - diff.y);
+      var diff = scaleDelta(this.position, attackerPosition, knockBackDistance);
+      this.knockBackTargetPoint = (new Vec(this.position)).subtract(diff).toPoint();
       this.movementState = MovementState.IS_KNOCKED_BACK;
     }
   }
@@ -219,18 +224,16 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * @return The target point for a knock back in the current frame.
    */
   protected Point calculateKnockBackTarget() {
-    var diffMagnitude =
-            Math.sqrt
-              (
-                (Math.pow((double)this.position.x - (double)this.knockBackTargetPoint.x, 2.f)) +
-                (Math.pow((double)this.position.y - (double)this.knockBackTargetPoint.y, 2.f))
-              );
+    var positionVec = new Vec(this.position);
+    var knockBackTargetVec = new Vec(this.knockBackTargetPoint);
+
+    var diffMagnitude = positionVec.subtract(knockBackTargetVec).magnitude();
     if (diffMagnitude < knockBackSpeed) {
       movementState = MovementState.CAN_MOVE;
       return this.position;
     } else {
-      var normalizedDiff = normalizeDelta(this.position, this.knockBackTargetPoint, knockBackSpeed);
-      var targetPoint = new Point(this.position.x + normalizedDiff.x, this.position.y + normalizedDiff.y);
+      var normalizedDiff = scaleDelta(this.position, this.knockBackTargetPoint, knockBackSpeed);
+      var targetPoint = positionVec.add(normalizedDiff).toPoint();
 
       if (!level.isTileAccessible(targetPoint)) {
         movementState = MovementState.CAN_MOVE;
@@ -318,27 +321,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     return position;
   }
 
-  /**
-   * Normalize the difference-vector between two Points on a defined basis.
-   *
-   * @param p1                 The origin of the vector
-   * @param p2                 The tip of the vector
-   * @param normalizationBasis The basis on which the length of the difference-vector should be normalized.
-   * @return A Point, of which the x and y members represent the components of the normalized vector.
-   */
-  protected Point normalizeDelta(Point p1, Point p2, float normalizationBasis) {
-    float diffX = p2.x - p1.x;
-    float diffY = p2.y - p1.y;
-    float magnitude = (float) Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
-
-    if (magnitude != 0.0f) {
-      var diffXNorm = diffX / magnitude * normalizationBasis;
-      var diffYNorm = diffY / magnitude * normalizationBasis;
-      return new Point(diffXNorm, diffYNorm);
-    } else {
-      return new Point(diffX, diffY);
-    }
-  }
 
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
@@ -348,26 +330,25 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     AnimationState animationState = AnimationState.IDLE;
     switch (movementState) {
       case CAN_MOVE:
-        var normalizedDelta = calculateMovementDelta();
-        var newPosition = new Point(position.x + normalizedDelta.x, this.position.y + normalizedDelta.y);
+        var movementDelta = calculateMovementDelta();
+        var newPosition = (movementDelta.add(new Vec(this.position))).toPoint();
 
         if (level.isTileAccessible(newPosition)) {
-          this.position.x += normalizedDelta.x;
-          this.position.y += normalizedDelta.y;
+          this.position = newPosition;
+
+          // is the actor moving?
+          if (movementDelta.magnitude() > 0.0f) {
+            animationState = AnimationState.RUN;
+          }
         }
 
-        // is the actor moving?
-        if (Math.abs(normalizedDelta.x) > 0.0f ||
-                Math.abs(normalizedDelta.y) > 0.0f) {
-          animationState = AnimationState.RUN;
-        }
-
+        // set look direction
         if (hasTarget()) {
           lookAtTarget();
-        } else if(normalizedDelta.x<0){
+        } else if(movementDelta.x()<0){
           lookLeft=true;
         }
-        else if(normalizedDelta.x>0){
+        else if(movementDelta.x()>0){
           lookLeft=false;
         }
 
@@ -414,11 +395,11 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     this.position = new Point(level.getRandomPointInDungeon());
   }
 
-  private Point calculateMovementDelta() {
+  private Vec calculateMovementDelta() {
     Point newPosition = readMovementInput();
     // calculate normalized delta of this.position and the calculated
     // new position to avoid increased diagonal movement speed
-    return normalizeDelta(this.position, newPosition, movementSpeed);
+    return scaleDelta(this.position, newPosition, movementSpeed);
   }
 
   protected abstract Point readMovementInput();
