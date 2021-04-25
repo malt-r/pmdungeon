@@ -3,6 +3,8 @@ package monsters;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
 import main.Game;
+import main.ICombatable;
+
 import java.util.*;
 
 /**

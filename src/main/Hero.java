@@ -3,7 +3,6 @@ package main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import java.util.logging.Logger;
 /**
  * The controllable player character.
  * <p>
