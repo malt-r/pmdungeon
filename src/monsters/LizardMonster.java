@@ -8,6 +8,13 @@ import main.Game;
  * </p>
  */
 public class LizardMonster  extends Monster {
+  /**
+   * Constructor of the Lizardmonster class.
+   * <p>
+   *     This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   *  @param game Game of the demonmonster
+   */
   public LizardMonster(Game game) {
     super(game);
   }
