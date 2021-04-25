@@ -1,12 +1,19 @@
 package monsters;
 
 import main.Game;
-
+/**
+ * Lizard Monster.
+ * <p>
+ *   Contains all animations, the current position in the DungeonWorld and movement logic.
+ * </p>
+ */
 public class LizardMonster  extends Monster {
   public LizardMonster(Game game) {
     super(game);
   }
-
+  /**
+   * Generates the run and idle animation for the Lizard monster.
+   */
   @Override
   protected void generateAnimations() {
     String[] idleLeftFrames = new String[]{
