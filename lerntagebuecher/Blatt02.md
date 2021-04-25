@@ -112,12 +112,12 @@ möglichen Monstertypen definiert.
 Jedes Monster und der Held müssen das Kampfsystem unterstützen. Um die
 Codeduplikation minimal zu halten, wird daher ein gemeinsames Interface
 `ICombatable` definiert, welches die Basisfunktion des Kampfsystems beinhaltet.
-Im folgenden ist das UML-Diagramm des `ICombatable`-Interfaces dargestellt:
+Im Folgenden ist das UML-Diagramm des `ICombatable`-Interfaces dargestellt:
 ![ICombatable](./Blatt02/ICombatable.png "ICombatable interface")
 
 
 Die Kernmethode `attackTargetIfInRange` soll in der update-Methode der
-implementierenden Klasse aufgerufen werden und automatisch nach potentiell
+implementierenden Klasse aufgerufen werden und automatisch nach potenziell
 angreifbaren `ICombatable`-Instanzen nahe der eigenen Position suchen.
 
 Findet diese Methode ein angreifbares Ziel, wird dieses mit `setTarget` gecached, um in nachfolgenden
@@ -185,7 +185,7 @@ wird die im Folgenden dargestellte Matrix verwendet.
 Dabei steht jede Spalte für eine Bewegungsrichtung (hoch, runter, links, rechts, stehen).
 In den jeweiligen Spalten stehen die Wahrscheinlichkeiten für den Übergang in die
 entsprechende Bewegungsrichtung. Dabei ist anzumerken, dass die Wahrscheinlichkeit in
-der selben Bewegungsrichtung zu bleiben am höchsten ist, gefolgt vom stehen bleiben. Dadurch
+derselben Bewegungsrichtung zu bleiben am höchsten ist, gefolgt vom stehen bleiben. Dadurch
 bewegen sich die Monster fließend und bleiben zwischendurch stehen.
 
 Aufwand:
@@ -277,7 +277,7 @@ und der Monster erheblich. Die Implementierung der Basisklasse Actor wurde
 allerdings erst gegen Ende vorgenommen, wodurch davor viel doppelter Code
 geschrieben werden musste. Eine Basisklasse sollte beim nächsten Mal daher früher
 implementiert werden. Die Verwendung einer Matrix für die Berechnung der
-nächsten Bewegungsrichtung des Monster erwies sich als sehr hilfreich und flexibel,
+nächsten Bewegungsrichtung des Monsters erwies sich als sehr hilfreich und flexibel,
 da ohne Codeduplizierung weitere Richtungen (diagonal) implementiert werden
 könnten.
 
@@ -291,9 +291,9 @@ effizientere Lösung wäre beispielsweise eine
 [spatial hashmap](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/spatial-hashing-r2697/).
 mit der gehashten Koordinaten eines Feldes als Schlüsselwert und den `IEntity`-Instanzen auf
 diesem Feld als Wert. So müsste nur am Anfang jedes Frames __einmal__ über alle
-`IEntity`-Instanzen iteriert werden, um die Hashmap mit den aktuellen Position
+`IEntity`-Instanzen iteriert werden, um die Hashmap mit den aktuellen Positionen
 der Instanzen zu aktualisieren. Mit solch einer Hashmap könnte eine
-`ICombatable`-Instanz genau die Felder nach potentiellen Zielen durchsuchen, die
+`ICombatable`-Instanz genau die Felder nach potenziellen Zielen durchsuchen, die
 auch in dem möglichen Angriffsradius liegen. Aus zeitlichen Gründen wird diese
 Umsetzung allerdings auf einen späteren Zeitpunkt verschoben.
 
