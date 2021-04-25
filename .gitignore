@@ -3,6 +3,7 @@
 
 # Log file
 *.log
+*.log.lck
 
 # BlueJ files
 *.ctxt
@@ -24,6 +25,7 @@ hs_err_pid*
 
 # intelliJ config directory
 .idea/workspace.xml
+.idea/uiDesigner.xml
 /shelf/
 out/
 

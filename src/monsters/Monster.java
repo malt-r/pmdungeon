@@ -1,36 +1,33 @@
 package monsters;
 
-import com.badlogic.gdx.graphics.Texture;
-import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
-import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
 import main.Game;
 import main.ICombatable;
+
 import java.util.*;
 
-
+/**
+ * The base class for any monster.
+ * <p>
+ *     Contains all animations, the current position in the DungeonWorld and movement logic.
+ * </p>
+ */
 public abstract class Monster extends Actor {
   private final Timer respawnTimer;
   private final long respawnDelay;
+  //Saves the direction of the last movement
   private Integer directionState=0;
-
-  // currently only two looking directions are supported (left and right),
-  // therefore a boolean is sufficient to represent the
-  // looking direction
-  private boolean lookLeft;
+  //Wether the direction of the moving monster should be updated
   private boolean updateDirectionState;
   private final Timer updateDirectionStateTimer;
-  private enum AnimationState {
-    IDLE,
-    RUN,
-  }
 
   /**
-   * Constructor of the Hero class.
+   * Constructor of the Monster class.
    * <p>
    *     This constructor will instantiate the animations and read all required texture data.
    * </p>
+   *  @param game Game of the monster
    */
   public Monster(Game game) {
     super(game);
@@ -53,23 +50,6 @@ public abstract class Monster extends Actor {
     baseEvasionChance = 0.15f;
     evasionChanceModifier = 1.f;
   }
-
-  protected Animation createAnimation(String[] texturePaths, int frameTime)
-  {
-    List<Texture> textureList = new ArrayList<>();
-    for (var frame : texturePaths) {
-      textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
-    }
-    return new Animation(textureList, frameTime);
-  }
-  /**
-   * Determine the active animation which should be played.
-   * @return The active animation.
-   */
-  @Override
-  public Animation getActiveAnimation() {
-    return this.currentAnimation;
-  }
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
@@ -77,6 +57,9 @@ public abstract class Monster extends Actor {
   public void update() {
     super.update();
   }
+  /**
+   * Generates random Movement Inputs for natural moving of the monster
+   */
   @Override
   protected Point readMovementInput(){
     if(hasTarget()){return new Point(this.position.x,this.position.y);}
@@ -126,6 +109,11 @@ public abstract class Monster extends Actor {
     }
   return newPosition;
   }
+  /**
+   * Manages damage given by other actors. Also starts a timer for respawning, when the monster has been slain.
+   *
+   * @param damage  The damage value that should be deducted from health.
+   */
   @Override
   public void dealDamage(float damage, ICombatable attacker) {
     super.dealDamage(damage, attacker);

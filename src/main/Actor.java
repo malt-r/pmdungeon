@@ -281,7 +281,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     runAnimationRight = createAnimation(runRightFrames, 4);
   }
 
-  private Animation createAnimation(String[] texturePaths, int frameTime) {
+  protected Animation createAnimation(String[] texturePaths, int frameTime) {
     List<Texture> textureList = new ArrayList<>();
     for (var frame : texturePaths) {
       textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));

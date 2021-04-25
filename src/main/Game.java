@@ -24,7 +24,7 @@ public class Game extends MainController {
 
     private Hero hero;
     private DungeonWorld firstLevel;
-    private Monster[] monsterArray = new Monster[5];
+    private final Monster[] monsterArray = new Monster[5];
 
     /**
      * Setup of the game world.
@@ -42,8 +42,15 @@ public class Game extends MainController {
         mainLogger.info("Hero created");
 
         for(int i=0;i<monsterArray.length;i++){
+            MonsterType monsterType;
+            if(i%2==0){
+                monsterType = MonsterType.LIZARD;
+            }
+            else{
+                monsterType = MonsterType.DEMON;
+            }
             try{
-                var mon = MonsterFactory.createMonster(MonsterType.LIZARD,this);
+                var mon = MonsterFactory.createMonster(monsterType,this);
                 monsterArray[i]= mon;
                 entityController.addEntity(mon);
                 //TODO Add which kind of monster spawned
@@ -101,15 +108,15 @@ public class Game extends MainController {
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
 
-        for(int i=0;i<monsterArray.length;i++) {
-            monsterArray[i].setLevel(levelController.getDungeon());
+        for (Monster monster : monsterArray) {
+            monster.setLevel(levelController.getDungeon());
         }
     }
 
     /**
      * Returns all entities from the entityController.
      * This method is used by the combat system to enable ICombatable-instances to scan for attackable targets.
-     * @return
+     * @return List of all entities in the game.
      */
     public ArrayList<IEntity> getAllEntities() {
         return entityController.getList();
