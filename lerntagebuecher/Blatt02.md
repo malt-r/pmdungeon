@@ -45,8 +45,8 @@ eines bestimmten Log-Levels auf der Konsole ausgegeben und alle Meldungen in
 einer Log-Datei gespeichert werden. Dabei soll der Zeitstempel, das Log-Level,
 die Herkunft und die Log-Meldung ersichtlich sein.
 
-Der zweite Teil der Aufgabe ist die Implementierung von Monstern für das Dungeon.
-Für die Monster sollen geignere Eigenschaften wie zum Beispiel Gesundheit oder 
+Der zweite Teil der Aufgabe ist die Implementierung von Monstern für den Dungeon.
+Für die Monster sollen geeignete Eigenschaften, wie z.B. Gesundheit oder
 Geschwindigkeit festgelegt werden. Die Monster sollen sich zufällig im Dungeon bewegen.
 
 Es soll außerdem ein simples Kampfsystem implementiert werden, welches
@@ -71,7 +71,7 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 Grundsätzlich kann eine einzige Logger-Instanz für das Projekt verwendet werden. Diese
 muss vor dem Start des Spiels initialisiert werden. Dazu werden dem Logger zwei
 Handler übergeben. Ein `ConsoleHandler` ermöglicht die Ausgabe der Log-Nachrichten
-mit weiteren Informationen an die Konsole. In der Konsole sollen Log-Nachrichten ab
+mit weiteren Informationen über die Konsole. In der Konsole sollen Log-Nachrichten ab
 einem Level von `Info` angezeigt werden. Der zweite übergebene Handler ist ein
 `FileHandler` und ermöglicht das Schreiben der Nachrichten in eine Datei. In
 der Log-Datei sollen alle geloggten Nachrichten gespeichert werden. Somit wird
@@ -87,24 +87,24 @@ mit demselben Namen aufgerufen werden.
 ## Einfache Monster ##
 
 Der Held und die Monster teilen viele Eigenschaften und Funktionen. Zur Reduzierung
-von Codedublikation wird eine abstrakte Basisklasse `Actor` definiert, die die 
-geteilten Eigenschaften und Funktionen implementiert. Die Basisklasse bündelt die 
-Gemeinsamkeiten zwischen Helden und Monster und soll daher auch nicht instanziiert werden können. 
+von Codeduplikation wird eine abstrakte Basisklasse `Actor` definiert, die die
+geteilten Eigenschaften und Funktionen implementiert. Die Basisklasse bündelt die
+Gemeinsamkeiten zwischen Helden und Monster und soll daher auch nicht instanziiert werden können.
 Nachfolgend ist das UML-Diagramm der Basisklasse `Actor` dargestellt.
 
 ![ICombatable](./Blatt02/Actor.png "Actor base class")
 
-Zu den Gemeinsamkeiten gehören neben dem Handling der Animationen auch das Kampfsystem.
-Klassenspezifische Unterschiede können mit einem `@Override` hinzugefügt werden. Angewendet wird dies zum Beispiel
+Zu den Gemeinsamkeiten gehört neben dem Handling der Animationen auch das Kampfsystem.
+Klassenspezifische Unterschiede können mit einem `@Override` hinzugefügt werden. Angewendet wird dies z.B.
 bei der Steuerung. Während der Held über die Tastatur gesteuert wird, sollen sich die Monster zufällig im Dungeon
 bewegen. Zur Implementierung der zufälligen Bewegung soll eine Matrix eingesetzt werden, die für jede Bewegungsrichtung
 die Wahrscheinlichkeiten für die nächste Bewegungsrichtung enthält.
 
 
-Da es verschiedene  Monstertypen gibt, werden die Monster über die Factory 
-`MonsterFactory` erzeugt. Dadurch wird die Erstellung von  Monsterarten vereinfacht. 
+Da es verschiedene  Monstertypen gibt, werden die Monster über die
+`MonsterFactory` erzeugt. Dadurch wird die Erstellung von  Monsterarten vereinfacht.
 Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern bei der
-Implementierung geben kann, wird zusätzlich ein `MonsterType` Enum definiert, welches die 
+Implementierung geben kann, wird zusätzlich ein `MonsterType` Enum definiert, welches die
 möglichen Monstertypen definiert.
 
 ## Kampfsystem ##
@@ -112,12 +112,12 @@ möglichen Monstertypen definiert.
 Jedes Monster und der Held müssen das Kampfsystem unterstützen. Um die
 Codeduplikation minimal zu halten, wird daher ein gemeinsames Interface
 `ICombatable` definiert, welches die Basisfunktion des Kampfsystems beinhaltet.
-Im folgenden ist das UML-Diagramm des `ICombatable`-Interfaces dargestellt:
+Im Folgenden ist das UML-Diagramm des `ICombatable`-Interfaces dargestellt:
 ![ICombatable](./Blatt02/ICombatable.png "ICombatable interface")
 
 
 Die Kernmethode `attackTargetIfInRange` soll in der update-Methode der
-implementierenden Klasse aufgerufen werden und automatisch nach potentiell
+implementierenden Klasse aufgerufen werden und automatisch nach potenziell
 angreifbaren `ICombatable`-Instanzen nahe der eigenen Position suchen.
 
 Findet diese Methode ein angreifbares Ziel, wird dieses mit `setTarget` gecached, um in nachfolgenden
@@ -125,7 +125,7 @@ Findet diese Methode ein angreifbares Ziel, wird dieses mit `setTarget` gecached
 dem Angriffsbereich hinausbewegt, wird der Ziel-Cache zurückgesetzt. Standardmäßig ist
 der Angriffsbereich das aktuelle Feld, auf dem die `ICombatable`-Instanz steht.
 
-In `attack` wird zusammen mit der eigenen `hitChance` und er
+In `attack` wird zusammen mit der eigenen `hitChance` und der
 `evasionChance` der angegriffenen `ICombatable`-Instanz die Erfolgschance eines
 Angriffs berechnet. Bei einem erfolgreichen Angriff wird der angegriffenen
 `ICombatable`-Instanz mit `dealDamage` Gesundheit abgezogen. Falls die
@@ -148,48 +148,50 @@ Um eine einheitliche Logger-Instanz in mehreren Klassen verwenden zu können, wi
 die Factory-Methode zum Erzeugen einer Instanz mit dem Namen `Logger.GLOBAL_LOGGER_NAME`
 aufgerufen. Mit dem Methodenaufruf `mainLogger.setUseParentHandlers(false)` wird
 die Weitergabe der Nachrichten an `Parent`-Handler unterbunden. Anschließend werden
-Handler erzeugt dem Logger übergeben. Den einzelnen Handlern wird je eine Instanz
+Handler erzeugt und dem Logger übergeben. Den einzelnen Handlern wird je eine Instanz
 des `DungeonFormatter` übergeben. Das Setup wird in der Funktion `setupLogger`
-gekapselt und von der `main`-Methode vor Starten des Spiels aufgerufen.
+gekapselt und von der `main`-Methode vor dem Start des Spiels aufgerufen.
 
-Die Klassen, die den Logger verwenden wollen, müssen eine Logger-Instanz mit dem
+Die Klassen, die den Logger verwenden, müssen eine Logger-Instanz mit dem
 gleichen Namen erzeugen lassen. So können beispielsweise Level-Wechsel, das Laden
 von Helden und Monstern und Lebenspunkte des Helden als Information geloggt werden.
 Eingaben werden mit dem Level `FINE` geloggt und so nur in der Log-Datei ausgegeben.
 Damit nicht zyklisch eine Nachricht gespeichert wird, welche Taste gedrückt ist,
-werden nur das Starten und Stoppen des Drückens einer Taste geloggt.
+werden nur das Starten und Stoppen eines Tastendrucks gespeichert.
 
 Die Klasse `DungeonFormatter` formatiert mithilfe der `DateTimeFormatter`-Klasse
 den Zeitstempel und baut eine Log-Nachricht nach folgendem Schema zusammen:
 
 Uhrzeit: (Klassenname.Methodenname) Level-Message
 
-23.04.2021: 17:00 - 20:00: Basisentwurf Logger mit eigenem Formatter
+Aufwand:
+- 23.04.2021: 17:00 - 20:00: Basisentwurf Logger mit eigenem Formatter
 
 ## Einfache Monster ##
 
-Die Basisklasse wird als `abstract` definiert, da diese nur die Basiseingenschaften 
+Die Basisklasse wird als `abstract` definiert, da diese nur die Basiseingenschaften
 und -funktionen enthält und keine Entität im Spiel repräsentiert. Zur Bereitstellung
 der genannten Basisfunktionen muss die `Actor` Basisklasse die Interfaces `IAnimatable`
 , `IEntity` und `ICombatable` implementieren. Während die Bewegung und Animation von `Hero` und `Monster`
 identisch sind, wird der Held vom Spieler gesteuert, während sich die Monster zufällig durch das Dungeon bewegen sollen.
 
-Damit die beiden Klassen das nicht unterschiedlich implementieren müssen besitzt der `Actor` die abstrakte Methode
-`readMovementInput` die als Quelle für die Bewegung eines Actors verwendet wird. Im `Hero` ist erfolgt die Steuerung
-über Tastatureingaben während die Monster sich zufällig im Dungeon bewegen sollen. Für die Steuerung der Monster
-wird die im folgendem dargestellte Matrix verwendet.
+Damit die beiden Klassen die Bewegungslogik nicht unterschiedlich implementieren müssen, besitzt der `Actor` die abstrakte Methode
+`readMovementInput`, welche als Quelle für die Bewegung eines Actors verwendet wird. Im `Hero` erfolgt die Steuerung
+über Tastatureingaben, während die Monster sich zufällig im Dungeon bewegen sollen. Für die Steuerung der Monster
+wird die im Folgenden dargestellte Matrix verwendet.
 
 ![ICombatable](./Blatt02/directionMatrix.png "Directionstate matrix")
 
 Dabei steht jede Spalte für eine Bewegungsrichtung (hoch, runter, links, rechts, stehen).
-In der jeweiligen Spalten stehen die Wahrscheinlichkeiten für den Übergang in die
-entsprechende Bewegungsrichtung. Dabei ist anzumerken, dass die Wahrscheinlichkeit in 
-der selben Bewegungsrichtung zu bleiben am höchsten ist, gefolgt vom stehen bleiben. Dadurch
+In den jeweiligen Spalten stehen die Wahrscheinlichkeiten für den Übergang in die
+entsprechende Bewegungsrichtung. Dabei ist anzumerken, dass die Wahrscheinlichkeit in
+derselben Bewegungsrichtung zu bleiben am höchsten ist, gefolgt vom stehen bleiben. Dadurch
 bewegen sich die Monster fließend und bleiben zwischendurch stehen.
 
-20.04.2021: 17:00 - 20:00: Basisentwurf für die Monster, Monsterfactory.
-23.04.2021: 12:00 - 16:00: Spezifikation und Implementierung vom Actor. 
-24.04.2021: 16:00 - 18:00: Finalisierung Monster, Hero und Actor.
+Aufwand:
+- 20.04.2021: 17:00 - 20:00: Basisentwurf für die Monster und Monsterfactory.
+- 23.04.2021: 12:00 - 16:00: Spezifikation und Implementierung vom Actor.
+- 24.04.2021: 16:00 - 18:00: Finalisierung Monster, Hero und Actor.
 
 ## Kampfsystem ##
 
@@ -230,6 +232,7 @@ Der Spielcharakter soll eine gewisse Distanz zurückgeschleudert werden, falls e
 Schaden erleidet. Die Implementierung hierfür wird in der `Actor`-Klasse vorgenommen,
 sodass auch Monster theoretisch zurückgestoßen werden können (evtl. durch eine
 Fähigkeit des Spielcharakters).
+
 In der `dealDamage`-Implementierung wird durch die Position des Angreifers und
 einer definierten `knockBackDistance` der Zielpunkt des Rückstoßes ermittelt.
 Da der Spielcharakter nicht einfach innerhalb eines Frames an diese Position teleportiert
@@ -238,16 +241,17 @@ Hier wird zwischen zwei `MovementState`s
 unterschieden (CAN_MOVE und IS_KNOCKED_BACK). Ist der aktuelle `MovementState`
 `CAN_MOVE`, kann der Spielcharakter wie gewohnt bewegt werden. Im Fall von
 `IS_KNOCKED_BACK` berechnet `calculateKnockBackTarget` mit `knockBackSpeed` die
-neue Position für den aktuellen Frame. Hierzu wird der Differenzvektor der
+neue Position für den aktuellen Frame. Hierzu wird der Differenzvektor zwischen der
 aktuellen Position und des Zielpunktes auf `knockBackSpeed` skaliert und zur
 aktuellen Position addiert.
 Falls die neue Position nicht erreichbar ist (durch `getTileAt` abgefragt) oder
 der Zielpunkt für das Zurückstoßen
 erreicht wurde, wird der `MovementState` zurück auf `CAN_MOVE`-gesetzt.
 
-20.04.2021: 17:00 - 20:00: Basisentwurf Kampfsystem gemeinsam erarbeiten.
-21.04.2021: 17:00 - 20:00: Kampfsystem ausimplementieren und testen.
-24.04.2021: 12:00 - 15:00: Rückstoß implementieren und testen.
+Aufwand:
+- 20.04.2021: 17:00 - 20:00: Basisentwurf Kampfsystem gemeinsam erarbeiten.
+- 21.04.2021: 17:00 - 20:00: Kampfsystem ausimplementieren und testen.
+- 24.04.2021: 12:00 - 15:00: Rückstoß implementieren und testen.
 
 # Postmortem
 
@@ -269,13 +273,14 @@ verwaltet werden.
 ## Einfache Monster ##
 
 Das Verwenden einer Basisklasse vereinfacht die Implementierung des Helden
-und der Monster erheblich. Die Implementierung der Basisklasse Actor wurde 
-allerdings erst gegen Ende vorgenommen, wodurch davor viel doppelter Code 
+und der Monster erheblich. Die Implementierung der Basisklasse Actor wurde
+allerdings erst gegen Ende vorgenommen, wodurch davor viel doppelter Code
 geschrieben werden musste. Eine Basisklasse sollte beim nächsten Mal daher früher
 implementiert werden. Die Verwendung einer Matrix für die Berechnung der
-nächsten Bewegungsrichtung des Monster erwies sich als sehr hilfreich und flexibel,
-da ohne Codedublizierung weitere Richtungen (diagonal) implementiert werden
-könnte.
+nächsten Bewegungsrichtung des Monsters erwies sich als sehr hilfreich und flexibel,
+da ohne Codeduplizierung weitere Richtungen (diagonal) implementiert werden
+könnten.
+
 ## Kampfsystem ##
 
 Der naive Ansatz, zur Erkennung von angreifbaren `IEntity`-Instanzen über alle
@@ -286,9 +291,9 @@ effizientere Lösung wäre beispielsweise eine
 [spatial hashmap](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/spatial-hashing-r2697/).
 mit der gehashten Koordinaten eines Feldes als Schlüsselwert und den `IEntity`-Instanzen auf
 diesem Feld als Wert. So müsste nur am Anfang jedes Frames __einmal__ über alle
-`IEntity`-Instanzen iteriert werden, um die Hashmap mit den aktuellen Position
+`IEntity`-Instanzen iteriert werden, um die Hashmap mit den aktuellen Positionen
 der Instanzen zu aktualisieren. Mit solch einer Hashmap könnte eine
-`ICombatable`-Instanz genau die Felder nach potentiellen Zielen durchsuchen, die
+`ICombatable`-Instanz genau die Felder nach potenziellen Zielen durchsuchen, die
 auch in dem möglichen Angriffsradius liegen. Aus zeitlichen Gründen wird diese
 Umsetzung allerdings auf einen späteren Zeitpunkt verschoben.
 
