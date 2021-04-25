@@ -1,5 +1,5 @@
 ---
-title:  'Lerntagebuch zur Bearbeitung von Blatt 01'
+title:  'Lerntagebuch zur Bearbeitung von Blatt 02'
 author:
 - MALTE REINSCH (malte.reinsch1@fh-bielefeld.de)
 - DENNIS ELLER (dennis.eller@fh-bielefeld.de)
@@ -45,7 +45,9 @@ eines bestimmten Log-Levels auf der Konsole ausgegeben und alle Meldungen in
 einer Log-Datei gespeichert werden. Dabei soll der Zeitstempel, das Log-Level,
 die Herkunft und die Log-Meldung ersichtlich sein.
 
-tbd
+Der zweite Teil der Aufgabe ist die Implementierung von Monstern für das Dungeon.
+Für die Monster sollen geignere Eigenschaften wie zum Beispiel Gesundheit oder 
+Geschwindigkeit festgelegt werden. Die Monster sollen sich zufällig im Dungeon bewegen.
 
 Es soll außerdem ein simples Kampfsystem implementiert werden, welches
 automatisch einsetzt, sobald sich ein Monster und der Held auf dem gleichen Feld
@@ -82,7 +84,28 @@ Die Logging-Instanz wird in der `Main`-Klasse initialisiert. Wenn in einer ander
 Klasse derselbe Logger verwendet werden soll, muss die Factory-Methode des Loggers
 mit demselben Namen aufgerufen werden.
 
-tbd
+## Einfache Monster ##
+
+Der Held und die Monster teilen viele Eigenschaften und Funktionen. Zur Reduzierung
+von Codedublikation wird eine abstrakte Basisklasse `Actor` definiert, die die 
+geteilten Eigenschaften und Funktionen implementiert. Die Basisklasse bündelt die 
+Gemeinsamkeiten zwischen Helden und Monster und soll daher auch nicht instanziiert werden können. 
+Nachfolgend ist das UML-Diagramm der Basisklasse `Actor` dargestellt.
+
+![ICombatable](./Blatt02/Actor.png "Actor base class")
+
+Zu den Gemeinsamkeiten gehören neben dem Handling der Animationen auch das Kampfsystem.
+Klassenspezifische Unterschiede können mit einem `@Override` hinzugefügt werden. Angewendet wird dies zum Beispiel
+bei der Steuerung. Während der Held über die Tastatur gesteuert wird, sollen sich die Monster zufällig im Dungeon
+bewegen. Zur Implementierung der zufälligen Bewegung soll eine Matrix eingesetzt werden, die für jede Bewegungsrichtung
+die Wahrscheinlichkeiten für die nächste Bewegungsrichtung enthält.
+
+
+Da es verschiedene  Monstertypen gibt, werden die Monster über die Factory 
+`MonsterFactory` erzeugt. Dadurch wird die Erstellung von  Monsterarten vereinfacht. 
+Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern bei der
+Implementierung geben kann, wird zusätzlich ein `MonsterType` Enum definiert, welches die 
+möglichen Monstertypen definiert.
 
 ## Kampfsystem ##
 
@@ -143,7 +166,30 @@ Uhrzeit: (Klassenname.Methodenname) Level-Message
 
 23.04.2021: 17:00 - 20:00: Basisentwurf Logger mit eigenem Formatter
 
-tbd
+## Einfache Monster ##
+
+Die Basisklasse wird als `abstract` definiert, da diese nur die Basiseingenschaften 
+und -funktionen enthält und keine Entität im Spiel repräsentiert. Zur Bereitstellung
+der genannten Basisfunktionen muss die `Actor` Basisklasse die Interfaces `IAnimatable`
+, `IEntity` und `ICombatable` implementieren. Während die Bewegung und Animation von `Hero` und `Monster`
+identisch sind, wird der Held vom Spieler gesteuert, während sich die Monster zufällig durch das Dungeon bewegen sollen.
+
+Damit die beiden Klassen das nicht unterschiedlich implementieren müssen besitzt der `Actor` die abstrakte Methode
+`readMovementInput` die als Quelle für die Bewegung eines Actors verwendet wird. Im `Hero` ist erfolgt die Steuerung
+über Tastatureingaben während die Monster sich zufällig im Dungeon bewegen sollen. Für die Steuerung der Monster
+wird die im folgendem dargestellte Matrix verwendet.
+
+![ICombatable](./Blatt02/directionMatrix.png "Directionstate matrix")
+
+Dabei steht jede Spalte für eine Bewegungsrichtung (hoch, runter, links, rechts, stehen).
+In der jeweiligen Spalten stehen die Wahrscheinlichkeiten für den Übergang in die
+entsprechende Bewegungsrichtung. Dabei ist anzumerken, dass die Wahrscheinlichkeit in 
+der selben Bewegungsrichtung zu bleiben am höchsten ist, gefolgt vom stehen bleiben. Dadurch
+bewegen sich die Monster fließend und bleiben zwischendurch stehen.
+
+20.04.2021: 17:00 - 20:00: Basisentwurf für die Monster, Monsterfactory.
+23.04.2021: 12:00 - 16:00: Spezifikation und Implementierung vom Actor. 
+24.04.2021: 16:00 - 18:00: Finalisierung Monster, Hero und Actor.
 
 ## Kampfsystem ##
 
@@ -220,8 +266,16 @@ Nachrichten dennoch mit der richtigen Herkunft geloggt werden. Werden
 verschiedene Logger-Instanzen benötigt, können diese mit dem `Loggermanager`
 verwaltet werden.
 
-tbd
+## Einfache Monster ##
 
+Das Verwenden einer Basisklasse vereinfacht die Implementierung des Helden
+und der Monster erheblich. Die Implementierung der Basisklasse Actor wurde 
+allerdings erst gegen Ende vorgenommen, wodurch davor viel doppelter Code 
+geschrieben werden musste. Eine Basisklasse sollte beim nächsten Mal daher früher
+implementiert werden. Die Verwendung einer Matrix für die Berechnung der
+nächsten Bewegungsrichtung des Monster erwies sich als sehr hilfreich und flexibel,
+da ohne Codedublizierung weitere Richtungen (diagonal) implementiert werden
+könnte.
 ## Kampfsystem ##
 
 Der naive Ansatz, zur Erkennung von angreifbaren `IEntity`-Instanzen über alle
