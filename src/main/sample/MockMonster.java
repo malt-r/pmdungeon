@@ -58,6 +58,11 @@ public class MockMonster implements IAnimatable, IEntity, ICombatable {
     }
 
     @Override
+    public boolean isOtherFriendly(ICombatable other) {
+        return false;
+    }
+
+    @Override
     public Point getPosition() {
         return position;
     }

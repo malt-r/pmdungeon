@@ -57,6 +57,15 @@ public abstract class Monster extends Actor {
   public void update() {
     super.update();
   }
+
+  @Override
+  public boolean isOtherFriendly(ICombatable other) {
+    if (other instanceof Monster) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Generates random Movement Inputs for natural moving of the monster
    */
