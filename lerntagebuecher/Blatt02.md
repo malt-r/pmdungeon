@@ -40,14 +40,14 @@ Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 
 Der erste Teil der Aufgabe ist die Implementierung eines Logging-Mechanismus. Es
 sollen alle Exceptions, das Erstellen eines Charakters und der Gegner, das Laden
-eines neuen Spiel-Levels sowie Eingaben geloggt werden. Dabei sollen Meldungen 
-eines bestimmten Log-Levels auf der Konsole ausgegeben und alle Meldungen in 
-einer Log-Datei gespeichert werden. Dabei soll der Zeitstempel, das Log-Level, 
+eines neuen Spiel-Levels sowie Eingaben geloggt werden. Dabei sollen Meldungen
+eines bestimmten Log-Levels auf der Konsole ausgegeben und alle Meldungen in
+einer Log-Datei gespeichert werden. Dabei soll der Zeitstempel, das Log-Level,
 die Herkunft und die Log-Meldung ersichtlich sein.
 
 tbd
 
-Ein Teil der Aufgabe ist die Implementierung eines simplen Kampfsystems, welches
+Es soll außerdem ein simples Kampfsystem implementiert werden, welches
 automatisch einsetzt, sobald sich ein Monster und der Held auf dem gleichen Feld
 befinden. Der Kampf zwischen dem Monster und dem Helden soll parametrierbar sein,
 sodass z.B. abhängig vom Gegner eine andere Trefferchance berechnet wird.
@@ -67,7 +67,7 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 ## Logging ##
 
 Grundsätzlich kann eine einzige Logger-Instanz für das Projekt verwendet werden. Diese
-muss vor dem Start des Spiels initialisiert werden. Dazu werden dem Logger zwei 
+muss vor dem Start des Spiels initialisiert werden. Dazu werden dem Logger zwei
 Handler übergeben. Ein `ConsoleHandler` ermöglicht die Ausgabe der Log-Nachrichten
 mit weiteren Informationen an die Konsole. In der Konsole sollen Log-Nachrichten ab
 einem Level von `Info` angezeigt werden. Der zweite übergebene Handler ist ein
@@ -123,10 +123,10 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 
 Um eine einheitliche Logger-Instanz in mehreren Klassen verwenden zu können, wird
 die Factory-Methode zum Erzeugen einer Instanz mit dem Namen `Logger.GLOBAL_LOGGER_NAME`
-aufgerufen. Mit dem Methodenaufruf `mainLogger.setUseParentHandlers(false)` wird 
+aufgerufen. Mit dem Methodenaufruf `mainLogger.setUseParentHandlers(false)` wird
 die Weitergabe der Nachrichten an `Parent`-Handler unterbunden. Anschließend werden
 Handler erzeugt dem Logger übergeben. Den einzelnen Handlern wird je eine Instanz
-des `DungeonFormatter` übergeben. Das Setup wird in der Funktion `setupLogger` 
+des `DungeonFormatter` übergeben. Das Setup wird in der Funktion `setupLogger`
 gekapselt und von der `main`-Methode vor Starten des Spiels aufgerufen.
 
 Die Klassen, die den Logger verwenden wollen, müssen eine Logger-Instanz mit dem
@@ -139,7 +139,7 @@ werden nur das Starten und Stoppen des Drückens einer Taste geloggt.
 Die Klasse `DungeonFormatter` formatiert mithilfe der `DateTimeFormatter`-Klasse
 den Zeitstempel und baut eine Log-Nachricht nach folgendem Schema zusammen:
 
-Uhrzeit: (Klassenname.Methodenname) Level-Message 
+Uhrzeit: (Klassenname.Methodenname) Level-Message
 
 23.04.2021: 17:00 - 20:00: Basisentwurf Logger mit eigenem Formatter
 
@@ -153,15 +153,14 @@ Implementierungsdetails eingegangen.
 
 ### Zielfindung ###
 
-Zur Identifikation eines potentiellen Ziels für einen Angriff
-wird zunächst der naive Ansatz gewählt, über alle `IEntity`-Instanzen im Spiel zu iterieren und die
-erste Instanz zurückzugeben, welche ebenfalls `ICombatable` implementiert.
-Dies kann mit dem `instanceof`-Keyword überprüft werden. Implementiert die
-`ICombatable`-Instanz zusätzlich das `IDrawable`-Interface, wird
-über dieses Interface die aktuelle Position des potentiellen Ziels ausgelesen.
+Zur Zielidentifikation für einen Angriff iteriert `ICombatable` über
+alle `IEntity`-Instanzen im Spiel.
+Mit dem `instanceof`-Keyword wird überprüft, ob eine `IEntity`-Instanz ebenfalls
+`ICombatable` und `IDrawable` implementiert. Über das `IDrawable`-Interface wird
+die Position des potentiellen Ziels ausgelesen.
 
 Mit der `getTileAt`-Methode des `DungeonLevel`s wird ermittelt, ob das
-potentielle Ziel auf dem gleichen Feld steht und somit angreifbar ist.
+potentielle Ziel auf dem gleichen Feld steht (und somit angreifbar ist).
 Dieser Ansatz setzt voraus, dass die `ICombatable`-Instanz eine Referenz auf die
 `Game`-Instanz hält (um Zugriff auf die `IEntity`-Instanzen des
 `EntityControllers` zu haben). Daher muss die `Actor`-Klasse eine Referenz auf
@@ -172,10 +171,10 @@ wird.
 
 Da `attackTargetIfInRange` in jedem Durchlauf der
 `update`-Methode aufgerufen wird, muss eine maximale Frequenz festgelegt werden,
-in der die `ICombatable`-Instanz angreifen kann. Hierzu wird innerhalb der
-default-Implementierung von `attackTargetIfInRange` die Methode `canAttack`
-aufgerufen, welche von der konkreten `ICombatable`-Instanz implementiert werden
-muss. Die `Actor`-Klasse gibt hier eine interne boolesche Variable zurück,
+in der die `ICombatable`-Instanz angreifen kann. Dies wird durch die Überprüfung von
+`canAttack` in der default-Implementierung von `attackTargetIfInRange`
+realisiert. `canAttack` muss von der konkreten `ICombatable`-Instanz
+implementiert werden. Die `Actor`-Klasse gibt hier eine interne boolesche Variable zurück,
 welche nach einem Angriff `false` ist und erst nach der Zeit `attackDelay`
 mithilfe eines `Timer`s wieder auf `true` gesetzt wird.
 
@@ -184,13 +183,13 @@ mithilfe eines `Timer`s wieder auf `true` gesetzt wird.
 Der Spielcharakter soll eine gewisse Distanz zurückgeschleudert werden, falls er
 Schaden erleidet. Die Implementierung hierfür wird in der `Actor`-Klasse vorgenommen,
 sodass auch Monster theoretisch zurückgestoßen werden können (evtl. durch eine
-Fähigkeit des Helden).
+Fähigkeit des Spielcharakters).
 In der `dealDamage`-Implementierung wird durch die Position des Angreifers und
 einer definierten `knockBackDistance` der Zielpunkt des Rückstoßes ermittelt.
 Da der Spielcharakter nicht einfach innerhalb eines Frames an diese Position teleportiert
 werden soll, wird die `update`-Methode des `Actor`s erweitert.
-Hier wird zwischen zwei `MotionStates`
-unterschieden (CAN_MOVE und IS_KNOCKED_BACK). Ist der aktuelle `MotionState`
+Hier wird zwischen zwei `MovementState`s
+unterschieden (CAN_MOVE und IS_KNOCKED_BACK). Ist der aktuelle `MovementState`
 `CAN_MOVE`, kann der Spielcharakter wie gewohnt bewegt werden. Im Fall von
 `IS_KNOCKED_BACK` berechnet `calculateKnockBackTarget` mit `knockBackSpeed` die
 neue Position für den aktuellen Frame. Hierzu wird der Differenzvektor der
@@ -198,7 +197,7 @@ aktuellen Position und des Zielpunktes auf `knockBackSpeed` skaliert und zur
 aktuellen Position addiert.
 Falls die neue Position nicht erreichbar ist (durch `getTileAt` abgefragt) oder
 der Zielpunkt für das Zurückstoßen
-erreicht wurde, wird der `MotionState` zurück auf `CAN_MOVE`-gesetzt.
+erreicht wurde, wird der `MovementState` zurück auf `CAN_MOVE`-gesetzt.
 
 20.04.2021: 17:00 - 20:00: Basisentwurf Kampfsystem gemeinsam erarbeiten.
 21.04.2021: 17:00 - 20:00: Kampfsystem ausimplementieren und testen.
@@ -216,7 +215,7 @@ kritisch zurück:
 
 ## Logging ##
 
-Das Verwenden einer einzigen Logger-Instanz erwies sich als möglich, da 
+Das Verwenden einer einzigen Logger-Instanz erwies sich als möglich, da
 Nachrichten dennoch mit der richtigen Herkunft geloggt werden. Werden
 verschiedene Logger-Instanzen benötigt, können diese mit dem `Loggermanager`
 verwaltet werden.
@@ -226,28 +225,31 @@ tbd
 ## Kampfsystem ##
 
 Der naive Ansatz, zur Erkennung von angreifbaren `IEntity`-Instanzen über alle
-im Level befindlichen `IEntity`-Instanzen zu iterieren hat noch
-Optimierungsbedarf. Dies ist insbesondere der Fall, da jede
-`ICombatable`-Instanz diese Iteration durchführt. Daher darf der aktuelle
-Zustand des Kampfsystems nur als erster Startpunkt betrachtet werden. Eine
+im Level befindlichen `IEntity`-Instanzen zu iterieren hat Optimierungsbedarf, da jede
+`ICombatable`-Instanz diese Iteration durchführt. Der aktuelle
+Zustand des Kampfsystems kann daher nur als erster Startpunkt betrachtet werden. Eine
 effizientere Lösung wäre beispielsweise eine
 [spatial hashmap](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/spatial-hashing-r2697/).
 mit der gehashten Koordinaten eines Feldes als Schlüsselwert und den `IEntity`-Instanzen auf
-diesem Feld als Wert. So müsste nur am Anfang jedes Frames einmal über alle
+diesem Feld als Wert. So müsste nur am Anfang jedes Frames __einmal__ über alle
 `IEntity`-Instanzen iteriert werden, um die Hashmap mit den aktuellen Position
-der Instanzen zu aktualisieren. Mit solche einer Hashmap könnte eine
+der Instanzen zu aktualisieren. Mit solch einer Hashmap könnte eine
 `ICombatable`-Instanz genau die Felder nach potentiellen Zielen durchsuchen, die
 auch in dem möglichen Angriffsradius liegen. Aus zeitlichen Gründen wird diese
 Umsetzung allerdings auf einen späteren Zeitpunkt verschoben.
 
 Bei der Umsetzung des Zurückschleuderns des Helden kam es häufig zu dem Problem,
-dass die Überprüfung, ob der Zeilpunkt bereits erreicht ist, nicht den passenden
-Wert geliefert hat und der Spielcharakter anschließend um den Zielpunkt
-oszillierte. Dies ist darauf zurückzuführen, dass die berechnete Position
+dass die Überprüfung, ob der Zielpunkt bereits erreicht ist, nicht zuverlässig
+war.
+In diesen Fällen oszillierte der Spielcharakter anschließend um den Zielpunkt.
+Dies ist darauf zurückzuführen, dass die berechnete neue Position
 etwas zu weit hinter dem Zielpunkt liegt, falls die Distanz zwischen aktueller
 Position und Zielpunkt kleiner als `knockBackSpeed` ist. Im folgenden Frame
 liegt dann entsprechend die neue berechnete Position wieder etwas zu weit vor
 dem Zielpunkt.
-Daher wurde eine zusätzliche Überprüfung dieses Falls hinzugefügt. Kommt es zu diesem Fall, wird
-die neue Position auf den Zielpunkt gesetzt und `MotionState` auf `CAN_MOVE`
+Als Lösung wurde eine zusätzliche Abfrage dieses Falls hinzugefügt, in der
+überprüft wird, ob der Betrag des Differenzvektors zwischen aktueller Position
+und Zielpunkt kleiner als `knockBackSpeed` ist.
+In diesem Fall wird
+die neue Position auf den Zielpunkt gesetzt und `MovementState` auf `CAN_MOVE`
 gesetzt, um das Zurückschleudern zu beenden.
