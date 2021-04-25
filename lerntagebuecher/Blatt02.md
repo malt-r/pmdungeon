@@ -64,7 +64,8 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -   Worauf müssen Sie konkret achten?
 -->
 
-Logging:
+## Logging ##
+
 Grundsätzlich kann eine einzige Logger-Instanz für das Projekt verwendet werden. Diese
 muss vor dem Start des Spiels initialisiert werden. Dazu werden dem Logger zwei 
 Handler übergeben. Ein `ConsoleHandler` ermöglicht die Ausgabe der Log-Nachrichten
@@ -117,6 +118,8 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 -   wie lange hat es gedauert,
 -   was war das Ergebnis?
 -->
+
+## Logging ##
 
 Um eine einheitliche Logger-Instanz in mehreren Klassen verwenden zu können, wird
 die Factory-Methode zum Erzeugen einer Instanz mit dem Namen `Logger.GLOBAL_LOGGER_NAME`
@@ -210,6 +213,8 @@ kritisch zurück:
 -   Welche Probleme sind bei der Umsetzung Ihres Lösungsansatzes aufgetreten?
 -   Wie haben Sie die Probleme letztlich gelöst?
 -->
+
+## Logging ##
 
 Das Verwenden einer einzigen Logger-Instanz erwies sich als möglich, da 
 Nachrichten dennoch mit der richtigen Herkunft geloggt werden. Werden
