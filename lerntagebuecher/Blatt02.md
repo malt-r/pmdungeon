@@ -125,7 +125,7 @@ Findet diese Methode ein angreifbares Ziel, wird dieses mit `setTarget` gecached
 dem Angriffsbereich hinausbewegt, wird der Ziel-Cache zurückgesetzt. Standardmäßig ist
 der Angriffsbereich das aktuelle Feld, auf dem die `ICombatable`-Instanz steht.
 
-In `attack` wird zusammen mit der eigenen `hitChance` und er
+In `attack` wird zusammen mit der eigenen `hitChance` und der
 `evasionChance` der angegriffenen `ICombatable`-Instanz die Erfolgschance eines
 Angriffs berechnet. Bei einem erfolgreichen Angriff wird der angegriffenen
 `ICombatable`-Instanz mit `dealDamage` Gesundheit abgezogen. Falls die
