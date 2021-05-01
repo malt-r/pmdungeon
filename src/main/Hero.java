@@ -1,17 +1,27 @@
 package main;
 
+import InventorySystem.Inventory;
+import InventorySystem.Potion;
+import InventorySystem.IItemVisitor;
+import InventorySystem.Sword1;
+import InventorySystem.Spear1;
+import InventorySystem.SpecificPotion1;
+import InventorySystem.SpecificPotion2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+
 /**
  * The controllable player character.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor {
+public class Hero extends Actor implements IItemVisitor {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
+    private Inventory inventory;
+
     private void RandomHealOnKill() {
         float rand = (float)Math.random();
         if (rand < healOnKillChance) {
@@ -79,6 +89,8 @@ public class Hero extends Actor {
         evasionChanceModifier = 1.f;
 
         knockBackAble = true;
+
+        this.inventory = new Inventory(this, 10);
     }
     /**
      * Generates the run and idle animation for the hero.
@@ -117,13 +129,59 @@ public class Hero extends Actor {
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
     }
+
+    private void inventoryTest() {
+        this.inventory.addItem(new SpecificPotion1(), 3);
+        this.inventory.addItem(new SpecificPotion2(), 2);
+        this.inventory.addItem(new Spear1(), 1);
+        this.inventory.addItem(new Sword1(), 1);
+        this.inventory.addItem(new Sword1(), 1);
+        this.inventory.addItem(new Sword1(), 1);
+        this.inventory.addItem(new SpecificPotion1(), 3);
+        this.inventory.addItem(new SpecificPotion2(), 10);
+
+        var item = new Sword1();
+        var item1 = new Spear1();
+        var item2 = new SpecificPotion1();
+        var item3 = new SpecificPotion2();
+
+        item.accept(this);
+
+        //var item = this.inventory.getItemStackAt(0);
+
+        //this.inventory.logContent();
+
+    }
+
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
     @Override
     public void update() {
         super.update();
+
+        switch (this.movementState) {
+            case CAN_MOVE:
+                if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+                    inventoryTest();
+
+                    this.inventory.open(this); // TODO: notify the game, that every actor should be suspended
+                    // find chest
+                    //chest.inventory.open(this);
+                }
+                /*if (Gdx.input.isKeyJustPressed(Input.Keys.E)) { // interact with stuff
+                    // Find target for interaction and interact
+                    // if (target instanceof chest) --> chest.inventory.open();
+                    // if (target instanceof item) --> this.inventory.addItem((item)target);
+                }*/
+                break;
+            case IS_KNOCKED_BACK:
+                break;
+            case SUSPENDED:
+                break;
+        }
     }
+
     /**
      * Resets the combat stats of the hero-
      */
@@ -180,5 +238,30 @@ public class Hero extends Actor {
         }
 
         return newPosition;
+    }
+
+    @Override
+    public void visit(Spear1 spear) {
+        mainLogger.info("visit spear");
+        //equip spear
+    }
+
+    @Override
+    public void visit(Sword1 sword) {
+        //this.equipmentSlotRight(sword);
+        //inventory.addItem(oldItem);
+
+        mainLogger.info("visit sword");
+    }
+
+    @Override
+    public void visit(SpecificPotion1 potion) {
+        mainLogger.info("visit potion1");
+        // drink potion and affect stats
+    }
+
+    @Override
+    public void visit(SpecificPotion2 potion) {
+        mainLogger.info("visit potion2");
     }
 }

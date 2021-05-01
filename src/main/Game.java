@@ -3,6 +3,9 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import monsters.Monster;
@@ -10,6 +13,7 @@ import monsters.MonsterFactory;
 import monsters.MonsterType;
 
 
+import java.util.Observer;
 import java.util.logging.Logger;
 
 /**
@@ -19,7 +23,7 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController {
+public class Game extends MainController implements ActionListener {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private Hero hero;
@@ -120,5 +124,10 @@ public class Game extends MainController {
      */
     public ArrayList<IEntity> getAllEntities() {
         return entityController.getList();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 }

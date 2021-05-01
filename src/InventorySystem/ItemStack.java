@@ -1,15 +1,20 @@
-package main;
+package InventorySystem;
+
+import java.lang.reflect.Type;
+import java.util.Stack;
 
 /**
- * 'Stores' an amount of one item type.
+ *
  * @param <T> The type of the item.
  */
 public class ItemStack<T extends Item> {
+    private Stack<T> stack;
     private int count;
     private int capacity;
     private T item;
 
     public ItemStack(T item, int count) {
+
         // init count
         this.count = 0;
 
@@ -50,6 +55,14 @@ public class ItemStack<T extends Item> {
         return this.count <= 0;
     }
 
+    public Type getItemType() {
+        return item.getClass();
+    }
+
+    public <T extends Item> T getItem() {
+        return (T)item;
+    }
+
     /**
      * Returns the effective count of popped items.
      * @param count
@@ -66,5 +79,8 @@ public class ItemStack<T extends Item> {
         return poppedAmount;
     }
 
+    public String getItemName() {
+        return this.item.getName();
+    }
 
 }

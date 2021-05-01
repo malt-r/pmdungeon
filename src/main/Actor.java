@@ -30,7 +30,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
  */
   protected enum MovementState {
     CAN_MOVE,
-    IS_KNOCKED_BACK
+    IS_KNOCKED_BACK,
+    SUSPENDED
   };
 
   protected Point position;
@@ -362,6 +363,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       case IS_KNOCKED_BACK:
         this.position = calculateKnockBackTarget();
         animationState = AnimationState.KNOCK_BACK;
+        break;
+      case SUSPENDED:
         break;
     }
     setCurrentAnimation(animationState);
