@@ -3,13 +3,25 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.Item;
+import items.ItemFactory;
+import items.ItemType;
+import items.potions.HealthPotion;
+import items.scrolls.AttackScroll;
+import items.weapons.RegularSword;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
 
 
+import java.util.Observer;
 import java.util.logging.Logger;
 
 /**
@@ -62,6 +74,8 @@ public class Game extends MainController {
         }
         // attach camera to hero
         camera.follow(hero);
+
+
     }
 
     /**
@@ -84,6 +98,9 @@ public class Game extends MainController {
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
         }
+
+        handleItemPicking();
+
         if (hero.isDead()) {
             try {
                 levelController.loadDungeon(firstLevel);
@@ -111,6 +128,46 @@ public class Game extends MainController {
         for (Monster monster : monsterArray) {
             monster.setLevel(levelController.getDungeon());
         }
+
+
+        try {
+            var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR,this);
+            entityController.addEntity(sword);
+            sword.setLevel(levelController.getDungeon());
+
+            var spear = ItemFactory.CreateItem(ItemType.SPEAR_REGULAR,this);
+            entityController.addEntity(spear);
+            spear.setLevel(levelController.getDungeon());
+
+            var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED,this);
+            entityController.addEntity(scroll);
+            scroll.setLevel(levelController.getDungeon());
+
+            var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK,this);
+            entityController.addEntity(scrollAttack);
+            scrollAttack.setLevel(levelController.getDungeon());
+
+            var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL,this);
+            entityController.addEntity(potion);
+            potion.setLevel(levelController.getDungeon());
+
+            var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON,this);
+            entityController.addEntity(potionPoison);
+            potionPoison.setLevel(levelController.getDungeon());
+
+            var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD,this);
+            entityController.addEntity(shieldWood);
+            shieldWood.setLevel(levelController.getDungeon());
+
+            var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE,this);
+            entityController.addEntity(shieldEagle);
+            shieldEagle.setLevel(levelController.getDungeon());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
     /**
@@ -120,5 +177,32 @@ public class Game extends MainController {
      */
     public ArrayList<IEntity> getAllEntities() {
         return entityController.getList();
+    }
+
+    private void handleItemPicking(){
+        var allEntities = getAllEntities();
+            for (IEntity entity : allEntities) {
+                if (entity instanceof Item) {
+                    var item = (Item) entity;
+                    if(checkForTrigger(item.getPosition())){
+                        //TODO: Add to inventory
+                        System.out.println(item.getName());
+                    }
+                }
+            }
+
+    }
+    public boolean checkForTrigger(Point p) {
+        //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
+        var level = levelController.getDungeon();
+        int ownX = Math.round(hero.position.x);
+        int ownY = Math.round(hero.position.y);
+        var ownTile = level.getTileAt(ownX, ownY);
+
+        int otherX = Math.round(p.x);
+        int otherY = Math.round(p.y);
+        var otherTile = level.getTileAt(otherX, otherY);
+
+        return ownTile == otherTile;
     }
 }

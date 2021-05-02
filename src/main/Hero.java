@@ -3,15 +3,23 @@ package main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+
+import items.inventory.Inventory;
+import items.potions.HealthPotion;
+import items.scrolls.AttackScroll;
+import items.weapons.RegularSword;
+
 /**
  * The controllable player character.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor {
+public class Hero extends Actor implements items.IItemVisitor {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
+    private Inventory inventory;
+
     private void RandomHealOnKill() {
         float rand = (float)Math.random();
         if (rand < healOnKillChance) {
@@ -79,6 +87,8 @@ public class Hero extends Actor {
         evasionChanceModifier = 1.f;
 
         knockBackAble = true;
+
+        this.inventory = new Inventory(this, 10);
     }
     /**
      * Generates the run and idle animation for the hero.
@@ -117,13 +127,37 @@ public class Hero extends Actor {
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
     }
+
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
     @Override
     public void update() {
         super.update();
+
+        switch (this.movementState) {
+            case CAN_MOVE:
+                if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+                    this.inventory.open(this);
+
+                    // find chest
+                    //chest.inventory.open(this);
+                }
+                /*if (Gdx.input.isKeyJustPressed(Input.Keys.E)) { // interact with stuff
+                    // Find target for interaction and interact
+                    // if (target instanceof chest) --> chest.inventory.open();
+                    // if (target instanceof item) --> this.inventory.addItem((item)target);
+                }*/
+                break;
+            case IS_KNOCKED_BACK:
+                break;
+            case SUSPENDED:
+                break;
+        }
+
+        this.inventory.update();
     }
+
     /**
      * Resets the combat stats of the hero-
      */
@@ -180,5 +214,20 @@ public class Hero extends Actor {
         }
 
         return newPosition;
+    }
+
+    @Override
+    public void visit(RegularSword sword) {
+
+    }
+
+    @Override
+    public void visit(HealthPotion potion) {
+
+    }
+
+    @Override
+    public void visit(AttackScroll scroll) {
+
     }
 }
