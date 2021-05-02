@@ -97,9 +97,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected boolean canAttack;
   protected float movementSpeed = 0.1f;
   // cache a reference to the game to be able to scan all entities for possible attack targets
-
-  public final Game game;
-
+  public static Game game;
   private ICombatable target;
 
   // combat-characteristics:
