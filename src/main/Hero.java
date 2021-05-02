@@ -9,13 +9,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
+import items.IItemVisitor;
+import items.potions.HealthPotion;
+import items.scrolls.AttackScroll;
+import items.weapons.RegularSword;
+
 /**
  * The controllable player character.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor implements IItemVisitor {
+public class Hero extends Actor implements InventorySystem.IItemVisitor {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private Inventory inventory;
@@ -228,28 +233,19 @@ public class Hero extends Actor implements IItemVisitor {
         return newPosition;
     }
 
+    /*
     @Override
-    public void visit(Spear1 spear) {
-        mainLogger.info("visit spear");
-        //equip spear
+    public void visit(RegularSword sword) {
+        //this.righthand = sword;
     }
 
     @Override
-    public void visit(Sword1 sword) {
-        //this.equipmentSlotRight(sword);
-        //inventory.addItem(oldItem);
-
-        mainLogger.info("visit sword");
+    public void visit(HealthPotion potion) {
+     // this.heal(potion.healvalue)
     }
 
     @Override
-    public void visit(SpecificPotion1 potion) {
-        mainLogger.info("visit potion1");
-        // drink potion and affect stats
-    }
-
-    @Override
-    public void visit(SpecificPotion2 potion) {
-        mainLogger.info("visit potion2");
-    }
+    public void visit(AttackScroll scroll) {
+        //this.attackvalue + 10%
+    }*/
 }
