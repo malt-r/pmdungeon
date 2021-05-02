@@ -150,6 +150,14 @@ public class Game extends MainController {
             var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON,this);
             entityController.addEntity(potionPoison);
             potionPoison.setLevel(levelController.getDungeon());
+
+            var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD,this);
+            entityController.addEntity(shieldWood);
+            shieldWood.setLevel(levelController.getDungeon());
+
+            var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE,this);
+            entityController.addEntity(shieldEagle);
+            shieldEagle.setLevel(levelController.getDungeon());
         } catch (Exception e) {
             e.printStackTrace();
         }
