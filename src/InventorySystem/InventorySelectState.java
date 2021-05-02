@@ -1,5 +1,6 @@
 package InventorySystem;
 
+import InventorySystem.TestItems.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -14,39 +15,64 @@ public class InventorySelectState implements IInventoryControlState {
     }
 
     @Override
+    public void enter(Inventory inventory) {
+        logSelectedItem(inventory);
+        printUsage();
+    }
+
+    @Override
     public IInventoryControlState handleInput(Inventory inventory) {
         IInventoryControlState nextState = null;
         if (Gdx.input.isKeyJustPressed((Input.Keys.ESCAPE))) {
             nextState = new InventoryOpenState(this.selectorIdx);
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.D))) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.Q))) {
             dropItem(inventory);
+            nextState = new InventoryOpenState(this.selectorIdx);
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
-            // equip, use item
-            //inventory.Opener.visit(inventory.getItemStackAt(this.selectorIdx));
-            //inventory.getItemStackAt(this.selectorIdx).pop(1);
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
+            useItem(inventory);
+            nextState = new InventoryOpenState(this.selectorIdx);
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.I))) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.I))) {
             // inspect?
-            var stack = inventory.getItemStackAt(this.selectorIdx);
-            inventory.itemLogger.visit(stack.getItem());
+            var item = inventory.getItemAt(this.selectorIdx);
+            item.accept(inventory.itemLogger);
+        }
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.M))) {
+            // swap item positions or put item in bag
         }
         return nextState;
     }
 
-    // TODO: this should drop the items into the world.. not just the void that is the garbage collector
-    private void dropItem(Inventory inventory) {
-        // drop number of items (one of stack or all), check, if selectorIdx needs to be
-        // decremented
-
-        var stack = inventory.getItemStackAt(this.selectorIdx);
-        int poppedItems = stack.pop(1);
-
-        mainLogger.info("Dropped " + poppedItems + " times " + stack.getItemName() + " from inventory");
-        if (stack.getCount() <= 0) {
-            inventory.removeStackAt(this.selectorIdx);
+    private void useItem(Inventory inventory) {
+        if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {
+            var item = inventory.removeAt(this.selectorIdx);
             this.selectorIdx -= 1;
+
+            mainLogger.info("using item:");
+            item.accept(inventory.itemLogger);
+            item.accept(inventory.getOpener());
+        }
+    }
+
+    private void logSelectedItem(Inventory inventory) {
+        Item item = inventory.getItemAt(this.selectorIdx);
+        mainLogger.info("Selected item: " + item.getName());
+    }
+
+    private void printUsage() {
+        mainLogger.info("Options: ESC (unselect item); Q (drop); I (inspect item); E (use)");
+    }
+
+    private void dropItem(Inventory inventory) {
+
+        if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {
+            var item = inventory.removeAt(this.selectorIdx);
+            this.selectorIdx -= 1;
+
+            mainLogger.info("Dropped " + item.getName() + " from inventory");
+            // TODO: drop back into world
         }
     }
 }

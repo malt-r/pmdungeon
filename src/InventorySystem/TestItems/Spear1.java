@@ -1,4 +1,7 @@
-package InventorySystem;
+package InventorySystem.TestItems;
+
+import InventorySystem.IItemVisitor;
+import InventorySystem.TestItems.Weapon;
 
 public class Spear1 extends Weapon {
     @Override

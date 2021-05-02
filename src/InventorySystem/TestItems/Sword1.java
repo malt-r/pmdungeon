@@ -1,6 +1,9 @@
-package InventorySystem;
+package InventorySystem.TestItems;
 
-public class Sword1 extends Weapon{
+import InventorySystem.IItemVisitor;
+import InventorySystem.TestItems.Weapon;
+
+public class Sword1 extends Weapon {
     @Override
     public String getName() {
         return "Sword1";

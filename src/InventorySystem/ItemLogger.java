@@ -1,5 +1,10 @@
 package InventorySystem;
 
+import InventorySystem.TestItems.Spear1;
+import InventorySystem.TestItems.SpecificPotion1;
+import InventorySystem.TestItems.SpecificPotion2;
+import InventorySystem.TestItems.Sword1;
+
 import java.util.logging.Logger;
 
 public class ItemLogger implements IItemVisitor {

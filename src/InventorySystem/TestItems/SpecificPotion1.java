@@ -1,4 +1,6 @@
-package InventorySystem;
+package InventorySystem.TestItems;
+
+import InventorySystem.IItemVisitor;
 
 public class SpecificPotion1 extends Potion {
     @Override

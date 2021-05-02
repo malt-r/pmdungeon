@@ -24,37 +24,48 @@ public class InventoryOpenState implements IInventoryControlState{
     public IInventoryControlState handleInput(Inventory inventory) {
         IInventoryControlState nextState = null;
 
-        if (Gdx.input.isKeyJustPressed((Input.Keys.W))){
-            if (this.selectorIdx >= gridWidth) {
+        int prevIdx = this.selectorIdx;
+        if (Gdx.input.isKeyJustPressed((Input.Keys.UP))){
+            if (this.selectorIdx > gridWidth) {
                 this.selectorIdx -= gridWidth;
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             if (this.selectorIdx > 0) {
                 this.selectorIdx -= 1;
             }
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.S))) {
-            if (inventory.getCount() >= this.selectorIdx + gridWidth) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.DOWN))) {
+            if (inventory.getCount() > this.selectorIdx + gridWidth) {
                 this.selectorIdx += gridWidth;
             }
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.D))) {
-            if (this.selectorIdx - 1 < inventory.getCount()) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.RIGHT))) {
+            if ((this.selectorIdx + 1) < inventory.getCount()) {
                 this.selectorIdx += 1;
             }
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
             nextState = new InventorySelectState(this.selectorIdx);
         }
-        if (Gdx.input.isKeyJustPressed((Input.Keys.ESCAPE))) {
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.ESCAPE))) {
             nextState = new InventoryClosedState();
         }
+        else if (Gdx.input.isKeyJustPressed((Input.Keys.L))) {
+            mainLogger.info("Logging inventory");
+            inventory.logContent();
+        }
+        if (prevIdx != this.selectorIdx) {
+            logCurrentSelection(inventory);
+        }
+
         return nextState;
     }
 
     @Override
     public void enter(Inventory inventory) {
+        mainLogger.info("OPENED INVENTORY");
+        printUsage();
         int inventoryCount = inventory.getCount();
         if (inventoryCount == 0) {
             this.selectorIdx = -1;
@@ -62,15 +73,16 @@ public class InventoryOpenState implements IInventoryControlState{
             this.selectorIdx = 0;
         }
 
-        mainLogger.info("Opened Inventory, printing contents:");
-        // TODO: this could use an inventory formatter
-        inventory.logContent();
+        logCurrentSelection(inventory);
     };
 
+    private void logCurrentSelection(Inventory inventory) {
+        mainLogger.info("Selected item at index " + this.selectorIdx + " :");
+        inventory.getItemAt(this.selectorIdx).accept(inventory.itemLogger);
+    }
+
     private void printUsage() {
-        mainLogger.info("Currently in open mode.");
-        mainLogger.info("Move selection with WASD");
-        mainLogger.info("Select item with E");
+        mainLogger.info("Usage: Arrow Keys (Move Selection), E (Select), L (Log Content), ESC (Exit)");
     }
 
     public void exit(Inventory inventory) {

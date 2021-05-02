@@ -1,12 +1,10 @@
 package main;
 
-import InventorySystem.Inventory;
-import InventorySystem.Potion;
-import InventorySystem.IItemVisitor;
-import InventorySystem.Sword1;
-import InventorySystem.Spear1;
-import InventorySystem.SpecificPotion1;
-import InventorySystem.SpecificPotion2;
+import InventorySystem.*;
+import InventorySystem.TestItems.Spear1;
+import InventorySystem.TestItems.SpecificPotion1;
+import InventorySystem.TestItems.SpecificPotion2;
+import InventorySystem.TestItems.Sword1;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
@@ -131,26 +129,14 @@ public class Hero extends Actor implements IItemVisitor {
     }
 
     private void inventoryTest() {
-        this.inventory.addItem(new SpecificPotion1(), 3);
-        this.inventory.addItem(new SpecificPotion2(), 2);
-        this.inventory.addItem(new Spear1(), 1);
-        this.inventory.addItem(new Sword1(), 1);
-        this.inventory.addItem(new Sword1(), 1);
-        this.inventory.addItem(new Sword1(), 1);
-        this.inventory.addItem(new SpecificPotion1(), 3);
-        this.inventory.addItem(new SpecificPotion2(), 10);
-
-        var item = new Sword1();
-        var item1 = new Spear1();
-        var item2 = new SpecificPotion1();
-        var item3 = new SpecificPotion2();
-
-        item.accept(this);
-
-        //var item = this.inventory.getItemStackAt(0);
-
-        //this.inventory.logContent();
-
+        this.inventory.addItem(new SpecificPotion1());
+        this.inventory.addItem(new SpecificPotion2());
+        this.inventory.addItem(new Spear1());
+        this.inventory.addItem(new Sword1());
+        this.inventory.addItem(new Sword1());
+        this.inventory.addItem(new Sword1());
+        this.inventory.addItem(new SpecificPotion1());
+        this.inventory.addItem(new SpecificPotion2());
     }
 
     /**
@@ -164,8 +150,8 @@ public class Hero extends Actor implements IItemVisitor {
             case CAN_MOVE:
                 if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
                     inventoryTest();
+                    this.inventory.open(this);
 
-                    this.inventory.open(this); // TODO: notify the game, that every actor should be suspended
                     // find chest
                     //chest.inventory.open(this);
                 }
@@ -180,6 +166,8 @@ public class Hero extends Actor implements IItemVisitor {
             case SUSPENDED:
                 break;
         }
+
+        this.inventory.update();
     }
 
     /**
