@@ -28,7 +28,7 @@ public class Spear extends Weapon{
 
   @Override
   public void update(){
-    drawWithScaling(0.5f,1.0f);
+    drawWithScaling(0.25f,1.0f);
   }
   @Override
   public void accept(IItemVisitor visitor){
