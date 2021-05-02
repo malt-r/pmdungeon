@@ -46,7 +46,11 @@ public class InventoryOpenState implements IInventoryControlState{
             }
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
-            nextState = new InventorySelectState(this.selectorIdx);
+            if (this.selectorIdx >= 0) {
+                nextState = new InventorySelectState(this.selectorIdx);
+            } else {
+                mainLogger.info("can not select anything, inventory is empty");
+            }
         }
         else if (Gdx.input.isKeyJustPressed((Input.Keys.ESCAPE))) {
             nextState = new InventoryClosedState();
@@ -77,8 +81,12 @@ public class InventoryOpenState implements IInventoryControlState{
     };
 
     private void logCurrentSelection(Inventory inventory) {
-        mainLogger.info("Selected item at index " + this.selectorIdx + " :");
-        inventory.getItemAt(this.selectorIdx).accept(inventory.itemLogger);
+        if (this.selectorIdx >= 0) {
+            mainLogger.info("Selected item at index " + this.selectorIdx + " :");
+            inventory.getItemAt(this.selectorIdx).accept(inventory.itemLogger);
+        } else {
+            mainLogger.info("Inventory is empty");
+        }
     }
 
     private void printUsage() {
