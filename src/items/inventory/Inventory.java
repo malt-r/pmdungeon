@@ -1,6 +1,6 @@
-package InventorySystem;
+package items.inventory;
 
-import InventorySystem.TestItems.Item;
+import items.*;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 
 import java.util.ArrayList;
@@ -9,11 +9,11 @@ import java.util.logging.Logger;
 public class Inventory<T extends Item> {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    protected ItemLogger itemLogger;
+    protected items.ItemLogger itemLogger;
     protected IDrawable parent;
 
-    protected IItemVisitor inventoryOpener;
-    public IItemVisitor getOpener() {
+    protected items.IItemVisitor inventoryOpener;
+    public items.IItemVisitor getOpener() {
         return inventoryOpener;
     }
 
@@ -32,7 +32,7 @@ public class Inventory<T extends Item> {
         this.parent = parent;
         this.capacity = capacity;
         this.currentState = new InventoryClosedState();
-        this.itemLogger = new ItemLogger();
+        this.itemLogger = new items.ItemLogger();
     }
 
     public  boolean addItem(T item) {

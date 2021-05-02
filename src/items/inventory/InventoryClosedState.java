@@ -1,7 +1,4 @@
-package InventorySystem;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+package items.inventory;
 
 public class InventoryClosedState implements IInventoryControlState {
 

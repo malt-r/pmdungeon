@@ -1,6 +1,7 @@
-package InventorySystem;
+package items.inventory;
 
-import InventorySystem.TestItems.Item;
+//import InventorySystem.TestItems.Item;
+import items.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 

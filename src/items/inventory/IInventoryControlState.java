@@ -1,4 +1,4 @@
-package InventorySystem;
+package items.inventory;
 
 public interface IInventoryControlState {
     IInventoryControlState handleInput(Inventory inventory);

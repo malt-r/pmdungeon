@@ -1,4 +1,4 @@
-package InventorySystem;
+package items.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

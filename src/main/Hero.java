@@ -1,15 +1,10 @@
 package main;
 
-import InventorySystem.*;
-import InventorySystem.TestItems.Spear1;
-import InventorySystem.TestItems.SpecificPotion1;
-import InventorySystem.TestItems.SpecificPotion2;
-import InventorySystem.TestItems.Sword1;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
-import items.IItemVisitor;
+import items.inventory.Inventory;
 import items.potions.HealthPotion;
 import items.scrolls.AttackScroll;
 import items.weapons.RegularSword;
@@ -20,7 +15,7 @@ import items.weapons.RegularSword;
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor implements InventorySystem.IItemVisitor {
+public class Hero extends Actor implements items.IItemVisitor {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private Inventory inventory;
@@ -133,17 +128,6 @@ public class Hero extends Actor implements InventorySystem.IItemVisitor {
         runAnimationRight = createAnimation(runRightFrames, 4);
     }
 
-    private void inventoryTest() {
-        this.inventory.addItem(new SpecificPotion1());
-        this.inventory.addItem(new SpecificPotion2());
-        this.inventory.addItem(new Spear1());
-        this.inventory.addItem(new Sword1());
-        this.inventory.addItem(new Sword1());
-        this.inventory.addItem(new Sword1());
-        this.inventory.addItem(new SpecificPotion1());
-        this.inventory.addItem(new SpecificPotion2());
-    }
-
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
@@ -154,7 +138,6 @@ public class Hero extends Actor implements InventorySystem.IItemVisitor {
         switch (this.movementState) {
             case CAN_MOVE:
                 if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                    inventoryTest();
                     this.inventory.open(this);
 
                     // find chest
@@ -233,19 +216,18 @@ public class Hero extends Actor implements InventorySystem.IItemVisitor {
         return newPosition;
     }
 
-    /*
     @Override
     public void visit(RegularSword sword) {
-        //this.righthand = sword;
+
     }
 
     @Override
     public void visit(HealthPotion potion) {
-     // this.heal(potion.healvalue)
+
     }
 
     @Override
     public void visit(AttackScroll scroll) {
-        //this.attackvalue + 10%
-    }*/
+
+    }
 }
