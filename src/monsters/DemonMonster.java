@@ -54,6 +54,11 @@ public class DemonMonster extends Monster{
             "tileset/demon/big_demon_run_anim_f3.png"
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
+
+    String[] hitAnimationFrames = new String[]{
+            "tileset/default/default_anim.png"
+    };
+    hitAnimation = createAnimation(hitAnimationFrames, 1);
   }
 
   @Override

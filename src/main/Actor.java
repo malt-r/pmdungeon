@@ -7,6 +7,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.Item;
 import util.math.Vec;
 
 import java.util.*;
@@ -41,11 +42,13 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected Animation idleAnimationLeft;
   protected Animation runAnimationLeft;
   protected Animation runAnimationRight;
+  protected Animation hitAnimation;
   protected Animation currentAnimation;
   private enum AnimationState {
     IDLE,
     RUN,
     KNOCK_BACK,
+    HIT
   }
 
   // currently only two looking directions are supported (left and right),
@@ -104,13 +107,16 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected float maxHealth = 100.f;
 
   protected float baseHitChance = 0.6f;
-  protected float hitChanceModifier = 1.f;
+  protected float hitChanceModifierScroll = 1.f;
+  protected float hitChanceModifierWeapon = 1.f;
 
   protected float baseAttackDamage = 50;
-  protected float attackDamageModifier = 1.f;
+  protected float attackDamageModifierScroll = 1.f;
+  protected float attackDamageModifierWeapon= 1.f;
 
-  protected  float baseEvasionChance = 0.15f;
-  protected float evasionChanceModifier = 1.f;
+  protected float baseEvasionChance = 0.15f;
+  protected float evasionChanceModifierScroll = 1.f;
+  protected float evasionChanceModifierWeapon = 1.f;
 
   @Override
   public float getHealth() {
@@ -142,22 +148,16 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   @Override
-  public float getHitChance() {
-    return baseHitChance * hitChanceModifier;
-  }
+  public float getHitChance() { return baseHitChance * hitChanceModifierWeapon * hitChanceModifierScroll; }
 
   @Override
-  public float getEvasionChance() {
-    return this.baseEvasionChance * evasionChanceModifier;
-  }
+  public float getEvasionChance() { return this.baseEvasionChance * evasionChanceModifierWeapon * evasionChanceModifierScroll; }
   @Override
-  public float getDamage() {
-    return this.baseAttackDamage * this.attackDamageModifier;
-  }
+  public float getDamage() { return this.baseAttackDamage * this.attackDamageModifierWeapon * this.attackDamageModifierScroll; }
   @Override
   public float attack(ICombatable other) {
     float damage = ICombatable.super.attack(other);
-
+    animationState = AnimationState.HIT;
     // delay next attack by attackDelay ms
     this.canAttack = false;
     TimerTask resetCanAttackTask = new TimerTask() {
@@ -285,6 +285,11 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
             "tileset/default/default_anim.png",
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
+
+    String[] hitAnimationFrames = new String[]{
+            "tileset/default/default_anim.png"
+    };
+    hitAnimation = createAnimation(hitAnimationFrames, 3);
   }
 
   protected Animation createAnimation(String[] texturePaths, int frameTime) {
@@ -311,6 +316,10 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       case RUN:
         this.currentAnimation = lookLeft ? this.runAnimationLeft : this.runAnimationRight;
         break;
+        //TODO - Animation for left and right
+      case HIT:
+        this.currentAnimation = this.hitAnimation;
+        break;
       case IDLE:
       default:
         this.currentAnimation = lookLeft ? this.idleAnimationLeft : this.idleAnimationRight;
@@ -327,13 +336,14 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     return position;
   }
 
+  AnimationState animationState = AnimationState.IDLE;
 
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
   @Override
   public void update() {
-    AnimationState animationState = AnimationState.IDLE;
+    animationState = AnimationState.IDLE;
     switch (movementState) {
       case CAN_MOVE:
         var movementDelta = calculateMovementDelta();
@@ -358,7 +368,13 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
           lookLeft=false;
         }
 
-        attackTargetIfReachable(this.position, level, game.getAllEntities());
+        if (readCombatInput()) {
+          attackTargetIfReachable(this.position, level, game.getAllEntities());
+        }
+
+        if (readPickupInput()){
+          handleItemPicking();
+        }
         break;
       case IS_KNOCKED_BACK:
         this.position = calculateKnockBackTarget();
@@ -411,4 +427,11 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   protected abstract Point readMovementInput();
+
+  protected boolean readCombatInput() { return true; }
+
+  protected boolean readPickupInput() { return false; }
+
+  protected void handleItemPicking(){}
+
 }

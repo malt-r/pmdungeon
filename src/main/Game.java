@@ -94,8 +94,6 @@ public class Game extends MainController {
             mainLogger.info("Next stage loaded");
         }
 
-        handleItemPicking();
-
         if (hero.isDead()) {
             try {
                 levelController.loadDungeon(firstLevel);
@@ -178,7 +176,7 @@ public class Game extends MainController {
         return entityController.getList();
     }
 
-    private void handleItemPicking(){
+    /*private void handleItemPicking(){
         var allEntities = getAllEntities();
             for (IEntity entity : allEntities) {
                 if (entity instanceof Item) {
@@ -190,7 +188,8 @@ public class Game extends MainController {
                 }
             }
 
-    }
+    }*/
+
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
         var level = levelController.getDungeon();
@@ -209,7 +208,7 @@ public class Game extends MainController {
         this.entityController.addEntity(entity);
     }
 
-    public void deleteEntitiy(IEntity entity){
-        this.entityController.removeEntity(entity);
+    public void deleteEntity(IEntity entity){
+        this.entitiesToRemove.add(entity);
     }
 }

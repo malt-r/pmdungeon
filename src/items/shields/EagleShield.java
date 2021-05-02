@@ -6,7 +6,7 @@ import main.Game;
 public class EagleShield extends Shield{
   public EagleShield(Game game) {
     super(game);
-    this.defenseValue=100;
+    this.defenseValue= 1.3f;
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_red_yellow_eagle.png"
     };

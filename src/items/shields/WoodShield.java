@@ -6,7 +6,7 @@ import main.Game;
 public class WoodShield extends Shield{
   public WoodShield(Game game) {
     super(game);
-    this.defenseValue=10;
+    this.defenseValue= 1.1f;
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_wood.png"
     };

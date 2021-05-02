@@ -42,13 +42,16 @@ public abstract class Monster extends Actor {
     maxHealth = 100.f;
 
     baseHitChance = 0.6f;
-    hitChanceModifier = 1.f;
+    hitChanceModifierWeapon= 1.f;
+    hitChanceModifierScroll= 1.f;
 
     baseAttackDamage = 50;
-    attackDamageModifier = 1.f;
+    attackDamageModifierWeapon = 1.f;
+    attackDamageModifierScroll = 1.f;
 
     baseEvasionChance = 0.15f;
-    evasionChanceModifier = 1.f;
+    evasionChanceModifierWeapon = 1.f;
+    evasionChanceModifierScroll = 1.f;
   }
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
