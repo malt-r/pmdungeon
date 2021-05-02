@@ -99,7 +99,7 @@ public class Game extends MainController {
             mainLogger.info("Next stage loaded");
         }
 
-        handleItemPicking();
+        //handleItemPicking();
 
         if (hero.isDead()) {
             try {
@@ -179,7 +179,7 @@ public class Game extends MainController {
         return entityController.getList();
     }
 
-    private void handleItemPicking(){
+    /*private void handleItemPicking(){
         var allEntities = getAllEntities();
             for (IEntity entity : allEntities) {
                 if (entity instanceof Item) {
@@ -191,7 +191,8 @@ public class Game extends MainController {
                 }
             }
 
-    }
+    }*/
+
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
         var level = levelController.getDungeon();

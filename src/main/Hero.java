@@ -1,13 +1,21 @@
 package main;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
+
 import items.inventory.Inventory;
+
+
+import items.Item;
+
 import items.potions.HealthPotion;
 import items.scrolls.AttackScroll;
 import items.weapons.RegularSword;
+import items.weapons.Weapon;
 
 /**
  * The controllable player character.
@@ -19,6 +27,11 @@ public class Hero extends Actor implements items.IItemVisitor {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private Inventory inventory;
+    private Item leftHandSlot = null; //Defence hand
+    private Weapon rightHandSlot = null; //Offence hand
+    private float itemAddDamage = 0.0f;
+    private float itemAddDefence = 0.0f;
+
 
     private void RandomHealOnKill() {
         float rand = (float)Math.random();
@@ -39,6 +52,14 @@ public class Hero extends Actor implements items.IItemVisitor {
         float damage = super.attack(other);
         if (damage > 0.0f) {
             mainLogger.info(damage + " damage dealt to " + other.toString());
+            if (rightHandSlot != null) {
+                if (!rightHandSlot.reduceCondition(25)) {
+                    mainLogger.info("Das Schwert ist hinüber");
+                    rightHandSlot = null;
+                    attackDamageModifierWeapon = 1.0f;
+                    hitChanceModifierWeapon = 1.0f;
+                }
+            }
         } else {
             mainLogger.info("Missed " + other.toString());
         }
@@ -56,6 +77,8 @@ public class Hero extends Actor implements items.IItemVisitor {
      */
     @Override
     public void dealDamage(float damage, ICombatable attacker) {
+
+        //TODO - Reduce life of shield if equipped
         super.dealDamage(damage, attacker);
         mainLogger.info(this.toString() + ": " + health + " health left");
 
@@ -78,13 +101,16 @@ public class Hero extends Actor implements items.IItemVisitor {
         maxHealth = 200.f;
 
         baseHitChance = 0.6f;
-        hitChanceModifier = 1.f;
+        hitChanceModifierWeapon = 1.f;
+        hitChanceModifierScroll = 1.f;
 
         baseAttackDamage = 50;
-        attackDamageModifier = 1.f;
+        attackDamageModifierWeapon = 1.f;
+        attackDamageModifierScroll = 1.f;
 
         baseEvasionChance = 0.15f;
-        evasionChanceModifier = 1.f;
+        evasionChanceModifierWeapon = 1.f;
+        evasionChanceModifierScroll = 1.f;
 
         knockBackAble = true;
 
@@ -126,6 +152,13 @@ public class Hero extends Actor implements items.IItemVisitor {
                 "tileset/hero/knight_m_run_anim_f3.png"
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
+
+        String[] hitAnimationFrames = new String[]{
+                "tileset/hero/knight_m_hit_anim_f0.png",
+                "tileset/hero/knight_m_hit_anim_f0.png",
+                "tileset/hero/knight_m_hit_anim_f0.png"
+        };
+        hitAnimation = createAnimation(hitAnimationFrames, 3);
     }
 
     /**
@@ -217,17 +250,57 @@ public class Hero extends Actor implements items.IItemVisitor {
     }
 
     @Override
-    public void visit(RegularSword sword) {
+    protected boolean readPickupInput(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            return true;
+        }
+        return false;
+    }
 
+    @Override
+    protected void handleItemPicking(){
+        var allEntities = game.getAllEntities();
+        for (IEntity entity : allEntities) {
+            if (entity instanceof Item) {
+                var item = (Item) entity;
+                if(game.checkForTrigger(item.getPosition())){
+                    inventory.addItem(item);
+                    System.out.println(item.getName());
+                }
+            }
+        }
+    }
+
+    private void updateStats(Weapon weapon){
+        attackDamageModifierWeapon = weapon.getAttackDamageModifier(); //When absolut
+        hitChanceModifierWeapon = weapon.getHitChanceModifier();
+    }
+
+    @Override
+    protected boolean readCombatInput(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void visit(Weapon weapon){
+        //if (rightHandSlot != null) { inventory.addItem(rightHandSlot, 1); }
+        rightHandSlot = weapon;
+        updateStats(weapon);
+        mainLogger.info("visit weapon");
     }
 
     @Override
     public void visit(HealthPotion potion) {
-
+        this.heal(potion.healValue);
+        mainLogger.info("visit potion1");
     }
 
     @Override
     public void visit(AttackScroll scroll) {
-
+        this.heal(scroll.healValue);
+        mainLogger.info("visit scroll");
     }
 }
