@@ -114,7 +114,7 @@ public class Hero extends Actor implements items.IItemVisitor {
 
         knockBackAble = true;
 
-        this.inventory = new Inventory(this, 10);
+        this.inventory = new Inventory(this, 10,game);
     }
     /**
      * Generates the run and idle animation for the hero.

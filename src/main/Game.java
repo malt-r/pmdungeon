@@ -4,8 +4,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -13,15 +12,10 @@ import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
-import items.potions.HealthPotion;
-import items.scrolls.AttackScroll;
-import items.weapons.RegularSword;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
 
-
-import java.util.Observer;
 import java.util.logging.Logger;
 
 /**
@@ -37,6 +31,7 @@ public class Game extends MainController {
     private Hero hero;
     private DungeonWorld firstLevel;
     private final Monster[] monsterArray = new Monster[5];
+    private ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
 
     /**
      * Setup of the game world.
@@ -109,6 +104,10 @@ public class Game extends MainController {
             } catch (IllegalAccessException ex) {
                 mainLogger.severe(ex.getMessage());
             }
+        }
+
+        for(IEntity entity : entitiesToRemove){
+            this.entityController.removeEntity(entity);
         }
     }
 
@@ -205,5 +204,13 @@ public class Game extends MainController {
         var otherTile = level.getTileAt(otherX, otherY);
 
         return ownTile == otherTile;
+    }
+
+    public void addEntity(IEntity entity){
+        this.entityController.addEntity(entity);
+    }
+
+    public void deleteEntitiy(IEntity entity){
+        this.entityController.removeEntity(entity);
     }
 }
