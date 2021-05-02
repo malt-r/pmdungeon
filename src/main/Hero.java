@@ -3,13 +3,18 @@ package main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.IItemVisitor;
+import items.potions.HealthPotion;
+import items.scrolls.AttackScroll;
+import items.weapons.RegularSword;
+
 /**
  * The controllable player character.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor {
+public class Hero extends Actor implements IItemVisitor {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private void RandomHealOnKill() {
@@ -180,5 +185,20 @@ public class Hero extends Actor {
         }
 
         return newPosition;
+    }
+
+    @Override
+    public void visit(RegularSword sword) {
+        //this.righthand = sword;
+    }
+
+    @Override
+    public void visit(HealthPotion potion) {
+     // this.heal(potion.healvalue)
+    }
+
+    @Override
+    public void visit(AttackScroll scroll) {
+        //this.attackvalue + 10%
     }
 }

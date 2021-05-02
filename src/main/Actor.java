@@ -250,7 +250,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   /**
-   * Constructor of the Hero class.
+   * Constructor of the Actor class.
    * <p>
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
