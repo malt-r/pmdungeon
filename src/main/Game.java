@@ -94,8 +94,6 @@ public class Game extends MainController {
             mainLogger.info("Next stage loaded");
         }
 
-        //handleItemPicking();
-
         if (hero.isDead()) {
             try {
                 levelController.loadDungeon(firstLevel);
@@ -210,7 +208,7 @@ public class Game extends MainController {
         this.entityController.addEntity(entity);
     }
 
-    public void deleteEntitiy(IEntity entity){
-        this.entityController.removeEntity(entity);
+    public void deleteEntity(IEntity entity){
+        this.entitiesToRemove.add(entity);
     }
 }

@@ -13,7 +13,10 @@ import items.inventory.Inventory;
 import items.Item;
 
 import items.potions.HealthPotion;
+import items.potions.PoisonPotion;
 import items.scrolls.AttackScroll;
+import items.scrolls.SpeedScroll;
+import items.shields.Shield;
 import items.weapons.RegularSword;
 import items.weapons.Weapon;
 
@@ -265,15 +268,11 @@ public class Hero extends Actor implements items.IItemVisitor {
                 var item = (Item) entity;
                 if(game.checkForTrigger(item.getPosition())){
                     inventory.addItem(item);
+                    game.deleteEntity(entity);
                     System.out.println(item.getName());
                 }
             }
         }
-    }
-
-    private void updateStats(Weapon weapon){
-        attackDamageModifierWeapon = weapon.getAttackDamageModifier(); //When absolut
-        hitChanceModifierWeapon = weapon.getHitChanceModifier();
     }
 
     @Override
@@ -284,12 +283,29 @@ public class Hero extends Actor implements items.IItemVisitor {
         return false;
     }
 
+    private void updateStats(Weapon weapon){
+        attackDamageModifierWeapon = weapon.getAttackDamageModifier(); //When absolut
+        hitChanceModifierWeapon = weapon.getHitChanceModifier();
+    }
+
+    private void updateStats(Shield shield){
+        evasionChanceModifierWeapon = shield.getDefenseValue();
+    }
+
     @Override
     public void visit(Weapon weapon){
-        //if (rightHandSlot != null) { inventory.addItem(rightHandSlot, 1); }
+        if (rightHandSlot != null) { inventory.addItem(rightHandSlot); }
         rightHandSlot = weapon;
         updateStats(weapon);
         mainLogger.info("visit weapon");
+    }
+
+    @Override
+    public void visit(Shield shield){
+        if (leftHandSlot != null) { inventory.addItem(rightHandSlot); }
+        leftHandSlot = shield;
+        updateStats(shield);
+        mainLogger.info("visit shield");
     }
 
     @Override
@@ -299,8 +315,21 @@ public class Hero extends Actor implements items.IItemVisitor {
     }
 
     @Override
+    public void visit(PoisonPotion potion){
+        this.heal(potion.damageValue);
+        mainLogger.info("visit potion2");
+    }
+
+    @Override
     public void visit(AttackScroll scroll) {
         this.heal(scroll.healValue);
-        mainLogger.info("visit scroll");
+        mainLogger.info("visit healScroll");
     }
+
+    @Override
+    public void visit(SpeedScroll scroll){
+        mainLogger.info("visit speedscroll");
+    }
+
+
 }
