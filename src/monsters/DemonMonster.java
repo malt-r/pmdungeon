@@ -55,4 +55,9 @@ public class DemonMonster extends Monster{
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
   }
+
+  @Override
+  public void draw(){
+    drawWithScaling(2.0f,2.0f);
+  }
 }
