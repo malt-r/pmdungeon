@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.Chest;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
@@ -55,7 +56,6 @@ public class Game extends MainController {
         mainLogger.info("Hero created");
         // attach camera to hero
         camera.follow(hero);
-
 
     }
 
@@ -147,6 +147,7 @@ public class Game extends MainController {
             }
 
     }*/
+
 
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;

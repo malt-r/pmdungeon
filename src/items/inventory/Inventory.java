@@ -64,7 +64,6 @@ public class Inventory<T extends Item> {
 
     private void  dropItem(Item item){
         item.setPosition(parent.getPosition());
-
     }
 
     public void update() {
