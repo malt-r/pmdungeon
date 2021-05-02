@@ -64,4 +64,7 @@ public abstract class Item implements IAnimatable, IEntity{
   }
 
 
+  public void setPosition(Point newPosition){
+    this.position = newPosition;
+  }
 }

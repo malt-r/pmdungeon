@@ -4,17 +4,17 @@ package items.inventory;
 import items.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import main.Game;
+import main.Hero;
 
 import java.util.logging.Logger;
 
 public class InventorySelectState implements IInventoryControlState {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     int selectorIdx;
-
     public InventorySelectState(int selectorIdx) {
         this.selectorIdx = selectorIdx;
     }
-
     @Override
     public void enter(Inventory inventory) {
         logSelectedItem(inventory);
@@ -74,6 +74,7 @@ public class InventorySelectState implements IInventoryControlState {
 
             mainLogger.info("Dropped " + item.getName() + " from inventory");
             // TODO: drop back into world
+
         }
     }
 }
