@@ -1,6 +1,5 @@
 package monsters;
 
-import main.Game;
 /**
  * Demon Monster.
  * <p>
@@ -13,10 +12,9 @@ public class DemonMonster extends Monster{
    * <p>
    *     This constructor will instantiate the animations and read all required texture data.
    * </p>
-   *  @param game Game of the demonmonster
    */
-  public DemonMonster(Game game){
-  super(game);
+  public DemonMonster(){
+  super();
   }
   /**
    * Generates the run and idle animation for the Demon monster.

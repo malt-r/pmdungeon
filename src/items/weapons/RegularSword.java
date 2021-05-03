@@ -1,7 +1,6 @@
 package items.weapons;
 
 import items.IItemVisitor;
-import main.Game;
 /**
  * Weapon base class.
  * <p>
@@ -9,8 +8,8 @@ import main.Game;
  * </p>
  */
 public class RegularSword extends Weapon {
-  public RegularSword(Game game){
-    super(game);
+  public RegularSword(){
+    super();
     this.attackDamageModifier=1.2f;
     this.hitChanceModifier=1.2f;
     this.condition=100;

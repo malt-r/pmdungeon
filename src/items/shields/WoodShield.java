@@ -1,7 +1,6 @@
 package items.shields;
 
 import items.IItemVisitor;
-import main.Game;
 /**
  * Wood Shield.
  * <p>
@@ -15,8 +14,8 @@ public class WoodShield extends Shield{
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public WoodShield(Game game) {
-    super(game);
+  public WoodShield() {
+    super();
     this.defenseValue= 1.1f;
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_wood.png"

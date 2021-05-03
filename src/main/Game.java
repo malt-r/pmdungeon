@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import items.Item;
 import items.ItemFactory;
 import items.ItemType;
 import monsters.Monster;
@@ -27,12 +26,17 @@ import java.util.logging.Logger;
  */
 public class Game extends MainController {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
+    private static Game instance;
     private Hero hero;
     private DungeonWorld firstLevel;
     private final Monster[] monsterArray = new Monster[5];
     private ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
-
+    public static Game getInstance(){
+        if(Game.instance==null){
+            Game.instance = new Game();
+        }
+        return Game.instance;
+    }
     /**
      * Setup of the game world.
      * <p>
@@ -42,7 +46,7 @@ public class Game extends MainController {
      */
     @Override
     protected void setup() {
-        hero = new Hero(this);
+        hero = new Hero();
         firstLevel = null;
         // the entityController will call hero.update each frame
         entityController.addEntity(hero);
@@ -57,7 +61,7 @@ public class Game extends MainController {
                 monsterType = MonsterType.DEMON;
             }
             try{
-                var mon = MonsterFactory.createMonster(monsterType,this);
+                var mon = MonsterFactory.createMonster(monsterType);
                 monsterArray[i]= mon;
                 entityController.addEntity(mon);
                 //TODO Add which kind of monster spawned
@@ -128,35 +132,35 @@ public class Game extends MainController {
 
 
         try {
-            var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR,this);
+            var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR);
             entityController.addEntity(sword);
             sword.setLevel(levelController.getDungeon());
 
-            var spear = ItemFactory.CreateItem(ItemType.SPEAR_REGULAR,this);
+            var spear = ItemFactory.CreateItem(ItemType.SPEAR_REGULAR);
             entityController.addEntity(spear);
             spear.setLevel(levelController.getDungeon());
 
-            var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED,this);
+            var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED);
             entityController.addEntity(scroll);
             scroll.setLevel(levelController.getDungeon());
 
-            var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK,this);
+            var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK);
             entityController.addEntity(scrollAttack);
             scrollAttack.setLevel(levelController.getDungeon());
 
-            var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL,this);
+            var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL);
             entityController.addEntity(potion);
             potion.setLevel(levelController.getDungeon());
 
-            var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON,this);
+            var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON);
             entityController.addEntity(potionPoison);
             potionPoison.setLevel(levelController.getDungeon());
 
-            var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD,this);
+            var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD);
             entityController.addEntity(shieldWood);
             shieldWood.setLevel(levelController.getDungeon());
 
-            var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE,this);
+            var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE);
             entityController.addEntity(shieldEagle);
             shieldEagle.setLevel(levelController.getDungeon());
         } catch (Exception e) {
@@ -173,7 +177,7 @@ public class Game extends MainController {
      * @return List of all entities in the game.
      */
     public ArrayList<IEntity> getAllEntities() {
-        return entityController.getList();
+        return this.entityController.getList();
     }
 
     /*private void handleItemPicking(){

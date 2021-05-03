@@ -1,7 +1,6 @@
 package items.scrolls;
 
 import items.IItemVisitor;
-import main.Game;
 /**
  * Speed scroll.
  * <p>
@@ -39,8 +38,8 @@ public class SpeedScroll extends Scroll {
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public SpeedScroll(Game game){
-    super(game);
+  public SpeedScroll(){
+    super();
     String[] idleLeftFrames = new String[]{
             "tileset/items/speedscroll.png"
 

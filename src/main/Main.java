@@ -36,7 +36,7 @@ public class Main {
     public static void main(String[] args) {
         setupLogger();
         mainLogger.info("Game started");
-        DesktopLauncher.run(new Game());
+        DesktopLauncher.run(Game.getInstance());
 
     }
 }

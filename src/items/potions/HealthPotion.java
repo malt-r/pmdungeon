@@ -1,7 +1,6 @@
 package items.potions;
 
 import items.IItemVisitor;
-import main.Game;
 
 /**
  * Health Potion.
@@ -40,8 +39,8 @@ public class HealthPotion extends Potion {
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public HealthPotion(Game game){
-    super(game);
+  public HealthPotion(){
+    super();
     String[] idleLeftFrames = new String[]{
             "tileset/items/flask_big_red.png"
     };

@@ -2,7 +2,6 @@ package monsters;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
-import main.Game;
 import main.ICombatable;
 
 import java.util.*;
@@ -27,10 +26,8 @@ public abstract class Monster extends Actor {
    * <p>
    *     This constructor will instantiate the animations and read all required texture data.
    * </p>
-   *  @param game Game of the monster
    */
-  public Monster(Game game) {
-    super(game);
+  public Monster() {
     updateDirectionStateTimer = new Timer();
     updateDirectionState=true;
 

@@ -7,7 +7,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import items.Item;
 import util.math.Vec;
 
 import java.util.*;
@@ -257,8 +256,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public Actor(Game game) {
-    this.game = game;
+  public Actor() {
+    this.game = Game.getInstance();
     generateAnimations();
     lookLeft = false;
     canAttack = true;
