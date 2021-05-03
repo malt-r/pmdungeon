@@ -2,7 +2,6 @@ package items.inventory;
 
 import items.*;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import main.Game;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -27,7 +26,7 @@ public class Inventory<T extends Item> {
     private int capacity;
     private ArrayList<T> items;
 
-    public Inventory(IDrawable parent, int capacity, Game game) {
+    public Inventory(IDrawable parent, int capacity) {
         items = new ArrayList<T>();
         //items = new ArrayList<InventoryItem<T>>();
         this.parent = parent;

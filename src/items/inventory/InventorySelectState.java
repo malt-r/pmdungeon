@@ -1,12 +1,8 @@
 package items.inventory;
 
-//import InventorySystem.TestItems.Item;
 import items.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import main.Game;
-import main.Hero;
-
 import java.util.logging.Logger;
 
 public class InventorySelectState implements IInventoryControlState {

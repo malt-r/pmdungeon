@@ -17,7 +17,6 @@ import items.potions.PoisonPotion;
 import items.scrolls.AttackScroll;
 import items.scrolls.SpeedScroll;
 import items.shields.Shield;
-import items.weapons.RegularSword;
 import items.weapons.Weapon;
 
 /**
@@ -94,10 +93,9 @@ public class Hero extends Actor implements items.IItemVisitor {
      * <p>
      * This constructor will instantiate the animations and read all required texture data.
      * </p>
-     * @param game Game of the monster
      */
-    public Hero(Game game) {
-        super(game);
+    public Hero() {
+        super();
         movementSpeed=0.13f;
         // combat-characteristics:
         health = 200.f;
@@ -117,7 +115,7 @@ public class Hero extends Actor implements items.IItemVisitor {
 
         knockBackAble = true;
 
-        this.inventory = new Inventory(this, 10,game);
+        this.inventory = new Inventory(this, 10);
     }
     /**
      * Generates the run and idle animation for the hero.

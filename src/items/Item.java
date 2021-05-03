@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class Item implements IAnimatable, IEntity{
-  protected final Game game;
+  protected final Game game = Game.getInstance();
   protected DungeonWorld level;
   protected Animation currentAnimation;
   protected Point position;
@@ -22,9 +22,7 @@ public abstract class Item implements IAnimatable, IEntity{
   }
   public abstract String getName();
   protected abstract String getDescription();
-  public Item(Game game){
-    this.game= game;
-  }
+  public Item(){}
   @Override
   public void update(){
     this.draw();

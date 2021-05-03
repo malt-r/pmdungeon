@@ -1,11 +1,10 @@
 package items.weapons;
 
 import items.IItemVisitor;
-import main.Game;
 
 public class Spear extends Weapon{
-  public Spear(Game game) {
-    super(game);
+  public Spear() {
+    super();
     this.attackDamageModifier=1.5f;
     this.hitChanceModifier=0.7f;
     this.condition=100;

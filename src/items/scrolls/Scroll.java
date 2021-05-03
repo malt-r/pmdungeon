@@ -1,7 +1,6 @@
 package items.scrolls;
 
 import items.UseableItem;
-import main.Game;
 /**
  * Scroll.
  * <p>
@@ -9,7 +8,7 @@ import main.Game;
  * </p>
  */
 public abstract class Scroll extends UseableItem {
-  public Scroll(Game game) {
-    super(game);
+  public Scroll() {
+    super();
   }
 }

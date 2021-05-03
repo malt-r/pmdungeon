@@ -1,7 +1,6 @@
 package items.weapons;
 
 import items.EquipableItem;
-import main.Game;
 /**
  * Weapon base class.
  * <p>
@@ -40,7 +39,7 @@ public abstract class Weapon extends EquipableItem {
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public Weapon(Game game) {
-    super(game);
+  public Weapon() {
+    super();
   }
 }

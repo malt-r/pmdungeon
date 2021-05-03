@@ -1,7 +1,6 @@
 package items.shields;
 
 import items.EquipableItem;
-import main.Game;
 /**
  * Shield.
  * <p>
@@ -17,8 +16,8 @@ public abstract class Shield extends EquipableItem {
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public Shield(Game game) {
-    super(game);
+  public Shield() {
+    super();
   }
 
   /**

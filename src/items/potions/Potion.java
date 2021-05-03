@@ -1,7 +1,6 @@
 package items.potions;
 
 import items.UseableItem;
-import main.Game;
 /**
  *  Abstract Potion class.
  * <p>
@@ -9,7 +8,7 @@ import main.Game;
  * </p>
  */
 public abstract class Potion extends UseableItem {
-  public Potion(Game game) {
-    super(game);
+  public Potion() {
+    super();
   }
 }

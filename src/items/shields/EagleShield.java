@@ -1,7 +1,6 @@
 package items.shields;
 
 import items.IItemVisitor;
-import main.Game;
 /**
  * Eagle Shield.
  * <p>
@@ -15,8 +14,8 @@ public class EagleShield extends Shield{
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public EagleShield(Game game) {
-    super(game);
+  public EagleShield() {
+    super();
     this.defenseValue= 1.3f;
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_red_yellow_eagle.png"

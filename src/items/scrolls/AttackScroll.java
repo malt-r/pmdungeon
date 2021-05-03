@@ -1,7 +1,6 @@
 package items.scrolls;
 
 import items.IItemVisitor;
-import main.Game;
 /**
  * Attack Scroll.
  * <p>
@@ -39,8 +38,8 @@ public class AttackScroll extends Scroll {
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public AttackScroll(Game game){
-    super(game);
+  public AttackScroll(){
+    super();
     String[] idleLeftFrames = new String[]{
             "tileset/items/attackscroll.png"
 
