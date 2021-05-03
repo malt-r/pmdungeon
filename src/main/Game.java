@@ -57,6 +57,26 @@ public class Game extends MainController {
         // attach camera to hero
         camera.follow(hero);
 
+
+        // test
+        //BaseBag bag = new BaseBag(this);
+        //BaseBag weaponBag = new WeaponBag(this);
+
+        //var sword = new RegularSword(this);
+        //Item sword2 = new RegularSword(this);
+        //Item potion = new HealthPotion(this);
+        //// this is pretty unsafe code and should be wrapped in try catch
+        //weaponBag.addItem(sword);
+        //weaponBag.addItem(sword2);
+        //var can = weaponBag.canAddItem(sword2);
+        //if (can) {
+        //    weaponBag.addItem(sword2);
+        //}
+        //can = weaponBag.canAddItem(potion);
+        //if (can) {
+        //    weaponBag.addItem(potion);
+        //}
+
     }
 
     /**

@@ -67,7 +67,7 @@ public class InventorySelectState implements IInventoryControlState {
         if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {
             var item = inventory.removeAt(this.selectorIdx);
             this.selectorIdx -= 1;
-            inventory.dropItem(item);
+            //inventory.dropItem(item);
 
             mainLogger.info("Dropped " + item.getName() + " from inventory");
             // TODO: drop back into world
