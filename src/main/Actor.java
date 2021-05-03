@@ -184,6 +184,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
   @Override
   public void heal(float amount) {
+    //TODO: negative amount on poison?
     this.health += amount;
     if (this.health > maxHealth) {
       this.health = maxHealth;

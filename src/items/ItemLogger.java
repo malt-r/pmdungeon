@@ -19,7 +19,7 @@ public class ItemLogger implements IItemVisitor {
   public void visit(Shield shield) { mainLogger.info("Jo das ist nen Schild");}
 
   @Override
-  public void visit(PoisonPotion potion) { mainLogger.info(String.valueOf(potion.damageValue));}
+  public void visit(PoisonPotion potion) { mainLogger.info(String.valueOf(potion.getDamageValue()));}
 
   @Override
   public void visit(HealthPotion potion) {
@@ -27,8 +27,8 @@ public class ItemLogger implements IItemVisitor {
   }
 
   @Override
-  public void visit(AttackScroll scroll) { mainLogger.info(String.valueOf(scroll.healValue)); }
+  public void visit(AttackScroll scroll) { mainLogger.info(String.valueOf(scroll.getAttackBonus())); }
 
   @Override
-  public void visit(SpeedScroll scroll) { mainLogger.info(String.valueOf(scroll.healValue)); }
+  public void visit(SpeedScroll scroll) { mainLogger.info(String.valueOf(scroll.getSpeedMultiplier())); }
 }
