@@ -310,20 +310,21 @@ public class Hero extends Actor implements items.IItemVisitor {
 
     @Override
     public void visit(HealthPotion potion) {
-        this.heal(potion.healValue);
+        this.heal(potion.getHealValue());
         mainLogger.info("visit potion1");
     }
 
     @Override
     public void visit(PoisonPotion potion){
-        this.heal(potion.damageValue);
+        //TODO: heal with a negative
+        this.heal(-potion.getDamageValue());
         mainLogger.info("visit potion2");
     }
 
     @Override
     public void visit(AttackScroll scroll) {
-        this.heal(scroll.healValue);
-        mainLogger.info("visit healScroll");
+        this.heal(scroll.getAttackBonus());
+        mainLogger.info("visit Attackscroll");
     }
 
     @Override
