@@ -1,5 +1,6 @@
 package monsters;
 
+import main.Game;
 /**
  * Factory for creation of monster
  * <p>

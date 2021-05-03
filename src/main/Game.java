@@ -9,8 +9,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.Item;
 import items.ItemFactory;
 import items.ItemType;
+import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
@@ -29,8 +31,8 @@ public class Game extends MainController {
     private static Game instance;
     private Hero hero;
     private DungeonWorld firstLevel;
-    private final Monster[] monsterArray = new Monster[5];
     private ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
+    private int currentLevelIndex =0;
     public static Game getInstance(){
         if(Game.instance==null){
             Game.instance = new Game();
@@ -51,26 +53,6 @@ public class Game extends MainController {
         // the entityController will call hero.update each frame
         entityController.addEntity(hero);
         mainLogger.info("Hero created");
-
-        for(int i=0;i<monsterArray.length;i++){
-            MonsterType monsterType;
-            if(i%2==0){
-                monsterType = MonsterType.LIZARD;
-            }
-            else{
-                monsterType = MonsterType.DEMON;
-            }
-            try{
-                var mon = MonsterFactory.createMonster(monsterType);
-                monsterArray[i]= mon;
-                entityController.addEntity(mon);
-                //TODO Add which kind of monster spawned
-                mainLogger.info("Monster(" + (i + 1) + ") created");
-            }
-            catch(Exception e){
-                mainLogger.severe(e.toString());
-            }
-        }
         // attach camera to hero
         camera.follow(hero);
 
@@ -94,13 +76,18 @@ public class Game extends MainController {
     protected void endFrame() {
         // check, if current position of hero is on the trigger to load a new level
         if (levelController.checkForTrigger(hero.getPosition()) ) {
+            currentLevelIndex++;
+            entityController.removeAllFrom(Item.class);
+            entityController.removeAllFrom(Monster.class);
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
+
         }
 
         if (hero.isDead()) {
             try {
                 levelController.loadDungeon(firstLevel);
+                currentLevelIndex =0;
             } catch (InvocationTargetException ex) {
                 mainLogger.severe(ex.getMessage());
             } catch (IllegalAccessException ex) {
@@ -126,49 +113,16 @@ public class Game extends MainController {
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
 
-        for (Monster monster : monsterArray) {
-            monster.setLevel(levelController.getDungeon());
-        }
+        //test_SpawnAllItemsAndMonster();
 
+        var levelInfo = new LevelInfo();
+        var content = levelInfo.getLevelContent(currentLevelIndex);
 
         try {
-            var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR);
-            entityController.addEntity(sword);
-            sword.setLevel(levelController.getDungeon());
-
-            var spear = ItemFactory.CreateItem(ItemType.SPEAR_REGULAR);
-            entityController.addEntity(spear);
-            spear.setLevel(levelController.getDungeon());
-
-            var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED);
-            entityController.addEntity(scroll);
-            scroll.setLevel(levelController.getDungeon());
-
-            var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK);
-            entityController.addEntity(scrollAttack);
-            scrollAttack.setLevel(levelController.getDungeon());
-
-            var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL);
-            entityController.addEntity(potion);
-            potion.setLevel(levelController.getDungeon());
-
-            var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON);
-            entityController.addEntity(potionPoison);
-            potionPoison.setLevel(levelController.getDungeon());
-
-            var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD);
-            entityController.addEntity(shieldWood);
-            shieldWood.setLevel(levelController.getDungeon());
-
-            var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE);
-            entityController.addEntity(shieldEagle);
-            shieldEagle.setLevel(levelController.getDungeon());
+            Spawner.spawnEntities(content,levelController,entityController);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 
     /**
@@ -214,5 +168,9 @@ public class Game extends MainController {
 
     public void deleteEntity(IEntity entity){
         this.entitiesToRemove.add(entity);
+    }
+
+    public void test_SpawnAllItemsAndMonster(){
+        DebugControl.SpawnAll(entityController,levelController);
     }
 }
