@@ -31,7 +31,7 @@ public class ItemFactory {
     if(itemType == ItemType.POTION_POISON)  return new PoisonPotion(game);
     if(itemType == ItemType.SCROLL_ATTACK)  return new AttackScroll(game);
     if(itemType == ItemType.SCROLL_SPEED)   return new SpeedScroll(game);
-    if(itemType == ItemType.SHIELD_WOOD)  return new WoodShield(game);
+    if(itemType == ItemType.SHIELD_WOOD)    return new WoodShield(game);
     if(itemType == ItemType.SHIELD_EAGLE)   return new EagleShield(game);
     throw new Exception("ItemType no supported");
   }
