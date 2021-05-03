@@ -2,7 +2,12 @@ package items.weapons;
 
 import items.IItemVisitor;
 import main.Game;
-
+/**
+ * Weapon base class.
+ * <p>
+ *   Contains everything that describes a shield.
+ * </p>
+ */
 public class RegularSword extends Weapon {
   public RegularSword(Game game){
     super(game);

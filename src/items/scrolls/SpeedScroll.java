@@ -2,20 +2,43 @@ package items.scrolls;
 
 import items.IItemVisitor;
 import main.Game;
-
+/**
+ * Speed scroll.
+ * <p>
+ *   Contains everything that describes a Speed Scroll.
+ * </p>
+ */
 public class SpeedScroll extends Scroll {
-  public int healValue=100;
-
+  protected float speedMultiplier = 1.5f;
+  /**
+   *  Returns the speedMultiplier value of the potion which can be used for display purposes
+   *  @return attackbonus of the scroll
+   */
+  public float getSpeedMultiplier(){
+    return speedMultiplier;
+  }
+  /**
+   *  Returns the name of the scroll which can be used for display purposes
+   *  @return Name of the scroll
+   */
   @Override
   public String getName() {
-    return "Healscroll";
+    return "Speedscroll";
   }
-
+  /**
+   *  Returns the deescription of the potion which can be used for display purposes
+   *  @return description of the potion
+   */
   @Override
   protected String getDescription() {
     return "A scroll that heals";
   }
-
+  /**
+   * Constructor of the Speedscroll class.
+   * <p>
+   * This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
   public SpeedScroll(Game game){
     super(game);
     String[] idleLeftFrames = new String[]{
@@ -24,12 +47,16 @@ public class SpeedScroll extends Scroll {
     };
     currentAnimation = createAnimation(idleLeftFrames, 9001);
   }
-
+  /**
+   * Called each frame and draws the scroll.
+   */
   @Override
   public void update(){
     drawWithScaling(0.75f,0.75f);
   }
-
+  /**
+   * Accept method for a item visitor to extend the functionality of the scroll class.
+   */
   @Override
   public void accept(IItemVisitor visitor){
     visitor.visit(this);
