@@ -2,6 +2,7 @@ package main.sample;
 
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.EntityController;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
+import items.Chest;
 import items.ItemFactory;
 import items.ItemType;
 import monsters.Monster;
@@ -75,6 +76,11 @@ public class DebugControl {
       var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE);
       entityController.addEntity(shieldEagle);
       shieldEagle.setLevel(levelController.getDungeon());
+
+      var chest1 = new Chest();
+      entityController.addEntity(chest1);
+      chest1.setLevel(levelController.getDungeon());
+
     } catch (Exception e) {
       e.printStackTrace();
     }

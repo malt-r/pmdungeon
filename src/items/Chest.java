@@ -17,7 +17,6 @@ public class Chest implements IAnimatable, IEntity {
     Animation idleAnimation;
     Point position;
     DungeonWorld level;
-    Game game;
 
     Inventory inventory;
 
@@ -26,13 +25,13 @@ public class Chest implements IAnimatable, IEntity {
         return idleAnimation;
     }
 
-    public Chest(Game game) {
+    public Chest() {
         String[] idleFrame = new String[]{
                 "tileset/other/chest_empty_open_anim_f0.png",
         };
         idleAnimation = createAnimation(idleFrame, 4);
 
-        this.inventory = new Inventory(this, 10, game);
+        this.inventory = new Inventory(this, 10);
         generateContents();
     }
 
@@ -41,13 +40,14 @@ public class Chest implements IAnimatable, IEntity {
         int max = 3;
         int num = (int)((Math.random() * (max - min)) + min);
 
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < max; i++) {
             int iter = (int)((Math.random() * (ItemType.values().length)));
 
             for (int n = 0; n < ItemType.values().length; n++ ) {
                 if (iter == n) {
                     try {
-                        this.inventory.addItem(ItemFactory.CreateItem(ItemType.values()[n], this.game));
+                        this.inventory.addItem(ItemFactory.CreateItem(ItemType.values()[n]));
+                        break;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -64,6 +64,9 @@ public class Chest implements IAnimatable, IEntity {
         return new Animation(textureList, frameTime);
     }
 
+    public void open(IInventoryOpener opener) {
+        this.inventory.open(opener);
+    }
 
     /**
      * Get the current position in the DungeonWorld.
@@ -81,6 +84,7 @@ public class Chest implements IAnimatable, IEntity {
      */
     @Override
     public void update() {
+        this.inventory.update();
         this.draw();
     }
 

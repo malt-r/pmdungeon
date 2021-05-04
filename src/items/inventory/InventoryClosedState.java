@@ -1,6 +1,9 @@
 package items.inventory;
 
+import java.util.logging.Logger;
+
 public class InventoryClosedState implements IInventoryControlState {
+    protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     // TODO: find real usage for this..
     @Override
@@ -12,5 +15,11 @@ public class InventoryClosedState implements IInventoryControlState {
             ///nextState = new InventoryOpenState();
         //}
         return nextState;
+    }
+
+    @Override
+    public void enter(Inventory inventory) {
+        mainLogger.info("Closing inventory");
+        inventory.getOpener().unlock();
     }
 }
