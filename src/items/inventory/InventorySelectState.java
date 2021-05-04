@@ -41,6 +41,10 @@ public class InventorySelectState implements IInventoryControlState {
         else if (Gdx.input.isKeyJustPressed((Input.Keys.M))) {
             // swap item positions or put item in bag
         }
+
+        if (openerLeft(inventory)) {
+            nextState = new InventoryClosedState();
+        }
         return nextState;
     }
 

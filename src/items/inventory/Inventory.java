@@ -16,6 +16,11 @@ public class Inventory<T extends Item> {
     public items.IInventoryOpener getOpener() {
         return inventoryOpener;
     }
+    protected float leavingDistanceThreshold = 0.7f;
+
+    public float getLeavingDistanceThreshold() {
+        return leavingDistanceThreshold;
+    }
 
     public int getCount() {
         return items.size();
@@ -28,7 +33,6 @@ public class Inventory<T extends Item> {
 
     public Inventory(IDrawable parent, int capacity) {
         items = new ArrayList<>();
-        //items = new ArrayList<InventoryItem<T>>();
         this.parent = parent;
         this.capacity = capacity;
         this.currentState = new InventoryClosedState();

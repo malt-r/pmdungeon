@@ -2,6 +2,7 @@ package items.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import util.math.Vec;
 
 import java.util.logging.Logger;
 
@@ -70,6 +71,10 @@ public abstract class InventoryOpenState implements IInventoryControlState{
         }
         if (inventory.getCount() == 0) {
             nextState = new InventoryEmptyState();
+        }
+
+        if (openerLeft(inventory)) {
+            nextState = new InventoryClosedState();
         }
         return nextState;
     }

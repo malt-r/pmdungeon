@@ -13,8 +13,6 @@ import items.Chest;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
-import items.bag.BaseBag;
-import items.bag.WeaponBag;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
