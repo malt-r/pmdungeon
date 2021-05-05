@@ -7,6 +7,8 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 
+import items.Chest;
+import items.IInventoryOpener;
 import items.inventory.Inventory;
 
 
@@ -25,10 +27,11 @@ import items.weapons.Weapon;
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor implements items.IItemVisitor {
+public class Hero extends Actor implements items.IInventoryOpener {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private Inventory inventory;
+    private boolean inventoryLock = false;
     private Item leftHandSlot = null; //Defence hand
     private Weapon rightHandSlot = null; //Offence hand
     private float itemAddDamage = 0.0f;
@@ -171,17 +174,11 @@ public class Hero extends Actor implements items.IItemVisitor {
 
         switch (this.movementState) {
             case CAN_MOVE:
-                if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                    this.inventory.open(this);
-
-                    // find chest
-                    //chest.inventory.open(this);
+                if (!inventoryLock) {
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+                        this.inventory.open(this);
+                    }
                 }
-                /*if (Gdx.input.isKeyJustPressed(Input.Keys.E)) { // interact with stuff
-                    // Find target for interaction and interact
-                    // if (target instanceof chest) --> chest.inventory.open();
-                    // if (target instanceof item) --> this.inventory.addItem((item)target);
-                }*/
                 break;
             case IS_KNOCKED_BACK:
                 break;
@@ -252,8 +249,10 @@ public class Hero extends Actor implements items.IItemVisitor {
 
     @Override
     protected boolean readPickupInput(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
-            return true;
+        if (!inventoryLock) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+                return true;
+            }
         }
         return false;
     }
@@ -268,6 +267,14 @@ public class Hero extends Actor implements items.IItemVisitor {
                     inventory.addItem(item);
                     game.deleteEntity(entity);
                     System.out.println(item.getName());
+                    break;
+                }
+            } else if (entity instanceof Chest) {
+                var chest = (Chest) entity;
+                if(game.checkForTrigger(chest.getPosition())) {
+                    System.out.println("Opening chest");
+                    chest.open(this);
+                    break;
                 }
             }
         }
@@ -330,5 +337,31 @@ public class Hero extends Actor implements items.IItemVisitor {
         mainLogger.info("visit speedscroll");
     }
 
+    @Override
+    public boolean addItemToInventory(Item item) {
+        return this.inventory.addItem(item);
+    }
 
+    @Override
+    public int getNumFreeSlotsOfInventory() {
+        return this.inventory.getNumFreeSlots();
+    }
+
+    @Override
+    public boolean lock() {
+        if (!this.inventoryLock) {
+            this.inventoryLock = true;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unlock() {
+        if (this.inventoryLock) {
+            this.inventoryLock = false;
+            return true;
+        }
+        return false;
+    }
 }

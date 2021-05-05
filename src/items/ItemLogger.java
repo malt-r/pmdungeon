@@ -13,13 +13,13 @@ public class ItemLogger implements IItemVisitor {
   protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   @Override
-  public void visit(Weapon weapon) { mainLogger.info("Regular Sword, dayum boi, he thicc"); }
+  public void visit(Weapon weapon) { mainLogger.info("A weapon"); }
 
   @Override
-  public void visit(Shield shield) { mainLogger.info("Jo das ist nen Schild");}
+  public void visit(Shield shield) { mainLogger.info("A shield");}
 
   @Override
-  public void visit(PoisonPotion potion) { mainLogger.info(String.valueOf(potion.getDamageValue()));}
+  public void visit(PoisonPotion potion) { mainLogger.info("Poison Potion, Damage:" + String.valueOf(potion.getDamageValue()));}
 
   @Override
   public void visit(HealthPotion potion) {
@@ -27,8 +27,8 @@ public class ItemLogger implements IItemVisitor {
   }
 
   @Override
-  public void visit(AttackScroll scroll) { mainLogger.info(String.valueOf(scroll.getAttackBonus())); }
+  public void visit(AttackScroll scroll) { mainLogger.info("Attack Scroll, Bonus:" + String.valueOf(scroll.getAttackBonus())); }
 
   @Override
-  public void visit(SpeedScroll scroll) { mainLogger.info(String.valueOf(scroll.getSpeedMultiplier())); }
+  public void visit(SpeedScroll scroll) { mainLogger.info("SpeedScroll, Multiplier: " +String.valueOf(scroll.getSpeedMultiplier())); }
 }

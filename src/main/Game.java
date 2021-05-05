@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.Chest;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
@@ -28,10 +29,12 @@ import java.util.logging.Logger;
  */
 public class Game extends MainController {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
     private static Game instance;
     private Hero hero;
     private DungeonWorld firstLevel;
     private ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
+    private ArrayList <IEntity> entitiesToAdd = new ArrayList<>();
     private int currentLevelIndex =0;
     public static Game getInstance(){
         if(Game.instance==null){
@@ -55,8 +58,6 @@ public class Game extends MainController {
         mainLogger.info("Hero created");
         // attach camera to hero
         camera.follow(hero);
-
-
     }
 
     /**
@@ -64,6 +65,12 @@ public class Game extends MainController {
      */
     @Override
     protected void beginFrame() {
+        if (entitiesToAdd.size() > 0) {
+            for (IEntity entity : entitiesToAdd) {
+                this.entityController.addEntity(entity);
+            }
+            entitiesToAdd.clear();
+        }
     }
     /**
      * Implements logic executed at the end of a frame.
@@ -95,8 +102,11 @@ public class Game extends MainController {
             }
         }
 
-        for(IEntity entity : entitiesToRemove){
-            this.entityController.removeEntity(entity);
+        if (entitiesToRemove.size() > 0){
+            for(IEntity entity : entitiesToRemove){
+                this.entityController.removeEntity(entity);
+            }
+            entitiesToRemove.clear();
         }
     }
 
@@ -112,6 +122,15 @@ public class Game extends MainController {
         }
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
+
+        // test chest
+        var chest = new Chest();
+        entityController.addEntity(chest);
+        chest.setLevel(levelController.getDungeon());
+
+        chest = new Chest();
+        entityController.addEntity(chest);
+        chest.setLevel(levelController.getDungeon());
 
         //test_SpawnAllItemsAndMonster();
 
@@ -134,20 +153,7 @@ public class Game extends MainController {
         return this.entityController.getList();
     }
 
-    /*private void handleItemPicking(){
-        var allEntities = getAllEntities();
-            for (IEntity entity : allEntities) {
-                if (entity instanceof Item) {
-                    var item = (Item) entity;
-                    if(checkForTrigger(item.getPosition())){
-                        //TODO: Add to inventory
-                        System.out.println(item.getName());
-                    }
-                }
-            }
-
-    }*/
-
+    // TODO: find better place / name/ for this, don't hardcode hero as the IDrawable to check against
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
         var level = levelController.getDungeon();
@@ -163,7 +169,7 @@ public class Game extends MainController {
     }
 
     public void addEntity(IEntity entity){
-        this.entityController.addEntity(entity);
+        this.entitiesToAdd.add(entity);
     }
 
     public void deleteEntity(IEntity entity){

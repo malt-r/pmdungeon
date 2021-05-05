@@ -1,16 +1,18 @@
 package items.inventory;
 
-public class InventoryClosedState implements IInventoryControlState {
+import java.util.logging.Logger;
 
-    // TODO: find real usage for this..
+public class InventoryClosedState implements IInventoryControlState {
+    protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
     @Override
     public IInventoryControlState handleInput(Inventory inventory) {
-        IInventoryControlState nextState = null;
-        // TODO: how to prevent all inventories (from chests and stuff) to pop open, if
-        // I is pressed? -> this needs to be in hero
-        //if (Gdx.input.isKeyJustPressed((Input.Keys.I))){
-            ///nextState = new InventoryOpenState();
-        //}
-        return nextState;
+        return null;
+    }
+
+    @Override
+    public void enter(Inventory inventory) {
+        mainLogger.info("Closing inventory");
+        inventory.getOpener().unlock();
     }
 }

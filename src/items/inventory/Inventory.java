@@ -12,9 +12,14 @@ public class Inventory<T extends Item> {
     protected items.ItemLogger itemLogger;
     protected IDrawable parent;
 
-    protected items.IItemVisitor inventoryOpener;
-    public items.IItemVisitor getOpener() {
+    protected items.IInventoryOpener inventoryOpener;
+    public items.IInventoryOpener getOpener() {
         return inventoryOpener;
+    }
+    protected float leavingDistanceThreshold = 0.7f;
+
+    public float getLeavingDistanceThreshold() {
+        return leavingDistanceThreshold;
     }
 
     public int getCount() {
@@ -23,21 +28,20 @@ public class Inventory<T extends Item> {
 
     protected IInventoryControlState currentState;
 
-    private int capacity;
-    private ArrayList<T> items;
+    private final int capacity;
+    private final ArrayList<T> items;
 
     public Inventory(IDrawable parent, int capacity) {
-        items = new ArrayList<T>();
-        //items = new ArrayList<InventoryItem<T>>();
+        items = new ArrayList<>();
         this.parent = parent;
         this.capacity = capacity;
         this.currentState = new InventoryClosedState();
         this.itemLogger = new items.ItemLogger();
     }
 
-    public  boolean addItem(T item) {
-        var itemType = item.getClass();
+    public boolean addItem(T item) {
         if (this.getCount() < this.capacity) {
+            mainLogger.info("Adding item: " + item.getName());
             return items.add(item);
         }
         return true;
@@ -64,7 +68,6 @@ public class Inventory<T extends Item> {
 
     private void  dropItem(Item item){
         item.setPosition(parent.getPosition());
-
     }
 
     public void update() {
@@ -77,10 +80,34 @@ public class Inventory<T extends Item> {
         }
     }
 
-    public void open(IItemVisitor opener) {
-        this.inventoryOpener = opener;
+    private boolean isOpenerParent(IInventoryOpener opener) {
+        return opener.equals(this.parent);
+    }
 
-        var nextState = new InventoryOpenState();
+    public int getNumFreeSlots() {
+        return this.capacity - this.items.size();
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void open(IInventoryOpener opener) {
+        this.inventoryOpener = opener;
+        mainLogger.info("This: " + this.parent.toString() + " Opener: " + this.inventoryOpener.toString());
+
+        IInventoryControlState nextState;
+        if (this.getCount() == 0){
+            nextState = new InventoryEmptyState();
+        } else {
+            boolean openerIsParent = isOpenerParent(opener);
+            if (openerIsParent) {
+                nextState = new OwnInventoryOpenState();
+            } else {
+                nextState = new OtherInventoryOpenState();
+            }
+        }
+
         this.currentState.exit(this);
         nextState.enter(this);
         this.currentState = nextState;
