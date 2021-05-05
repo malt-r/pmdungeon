@@ -1,5 +1,6 @@
 package main;
 
+import GUI.HeartIcon;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -32,6 +33,9 @@ import java.util.logging.Logger;
 public class Game extends MainController {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+    //GUI
+    private HeartIcon[] hearts = new HeartIcon[10];
+
     private static Game instance;
     private Hero hero;
     private DungeonWorld firstLevel;
@@ -60,6 +64,13 @@ public class Game extends MainController {
         mainLogger.info("Hero created");
         // attach camera to hero
         camera.follow(hero);
+
+        //GUI
+        for (int i = 0; i < 10; i++){
+            hearts[i] = new HeartIcon(i);
+            hud.addHudElement(hearts[i]);
+        }
+
     }
 
     /**
@@ -73,6 +84,9 @@ public class Game extends MainController {
             }
             entitiesToAdd.clear();
         }
+
+        //GUI
+        heartCalc();
     }
     /**
      * Implements logic executed at the end of a frame.
@@ -242,10 +256,29 @@ public class Game extends MainController {
         DebugControl.SpawnAll(entityController,levelController);
     }
 
+
     public void spawnMonster(MonsterType monsterType, Point position) throws Exception {
         var monster = Spawner.spawnMonster(monsterType);
         addEntity(monster);
         monster.setLevel(levelController.getDungeon());
         monster.position = position;
+    }
+
+    private void heartCalc(){
+        float health = hero.getHealth();
+        int heartHalves = (int) health/5;
+
+        int i = 0;
+
+        for (i = 0; i < ((int)heartHalves/2); i++){
+            hearts[i].setState(2);
+        }
+        if (heartHalves%2 == 1){
+            hearts[i].setState(1);
+            i++;
+        }
+        for (int j = i; j < 10; j++){
+            hearts[j].setState(0);
+        }
     }
 }

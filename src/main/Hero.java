@@ -131,7 +131,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
         super();
         movementSpeed=0.13f;
         // combat-characteristics:
-        health = 200.f;
+        health = 100.f;
         maxHealth = 200.f;
 
         baseHitChance = 0.6f;

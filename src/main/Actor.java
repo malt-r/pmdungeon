@@ -406,7 +406,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * Rests tje combat stats of the actor. E.g. after the actor died.
    */
   protected void resetCombatStats() {
-    this.setHealth(maxHealth);
+    this.setHealth(maxHealth - 100.0f);
     this.movementState = MovementState.CAN_MOVE;
     this.canAttack = true;
   }
