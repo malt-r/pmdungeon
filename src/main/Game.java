@@ -174,17 +174,27 @@ public class Game extends MainController {
     }
 
     /**
+     * Adds an entitty to the game. To prevent a ConcurrentException adding and deleting may
+     * only be done in the endframe method.
      *
-     * @param entity
+     * @param entity entity which should be added to the game
      */
     public void addEntity(IEntity entity){
         this.entitiesToAdd.add(entity);
     }
-
+    /**
+     * Deletes an entitty to the game. To prevent a ConcurrentException adding and deleting may
+     * only be done in the endframe method.
+     *
+     * @param entity entity which should be added to the game
+     */
     public void deleteEntity(IEntity entity){
         this.entitiesToRemove.add(entity);
     }
 
+    /**
+     * Spawns all monsters and items at once which are present in the game.
+     */
     public void test_SpawnAllItemsAndMonster(){
         DebugControl.SpawnAll(entityController,levelController);
     }
