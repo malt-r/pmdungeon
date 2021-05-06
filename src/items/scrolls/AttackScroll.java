@@ -4,7 +4,7 @@ import items.IItemVisitor;
 /**
  * Attack Scroll.
  * <p>
- *   Contains everything that describes a Attacks croll.
+ *   Contains everything that describes a Attack scroll.
  * </p>
  */
 public class AttackScroll extends Scroll {
@@ -55,6 +55,7 @@ public class AttackScroll extends Scroll {
   }
   /**
    * Accept method for a item visitor to extend the functionality of the scroll class.
+   * @param visitor Visitor that visits the class
    */
   @Override
   public void accept(IItemVisitor visitor){

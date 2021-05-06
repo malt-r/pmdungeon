@@ -55,6 +55,7 @@ public class SpeedScroll extends Scroll {
   }
   /**
    * Accept method for a item visitor to extend the functionality of the scroll class.
+   * @param visitor Visitor that visits the class
    */
   @Override
   public void accept(IItemVisitor visitor){

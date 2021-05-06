@@ -154,6 +154,11 @@ public class Game extends MainController {
     }
 
     // TODO: find better place / name/ for this, don't hardcode hero as the IDrawable to check against
+    /**
+     *
+     * @param p Point which should be checked if it collids with the hero
+     * @return if point is on the same tile as the hero
+     */
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
         var level = levelController.getDungeon();
@@ -168,6 +173,10 @@ public class Game extends MainController {
         return ownTile == otherTile;
     }
 
+    /**
+     *
+     * @param entity
+     */
     public void addEntity(IEntity entity){
         this.entitiesToAdd.add(entity);
     }

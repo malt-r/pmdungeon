@@ -291,7 +291,12 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     };
     hitAnimation = createAnimation(hitAnimationFrames, 3);
   }
-
+  /**
+   *
+   * @param texturePaths array of textures that should be added to the animation
+   * @param frameTime time between two textures
+   * @return
+   */
   protected Animation createAnimation(String[] texturePaths, int frameTime) {
     List<Texture> textureList = new ArrayList<>();
     for (var frame : texturePaths) {
@@ -397,6 +402,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     return false;
   }
 
+  /**
+   * Rests tje combat stats of the actor. E.g. after the actor died.
+   */
   protected void resetCombatStats() {
     this.setHealth(maxHealth);
     this.movementState = MovementState.CAN_MOVE;
@@ -426,12 +434,14 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     return scaleDelta(this.position, newPosition, movementSpeed);
   }
 
+  /**
+   * abstract method which has to be overwritten in the sub classes
+   * this makes it possible to control an actor autoamticly or via key presisng
+   * @return returns the new point where the actor should be moved
+   */
   protected abstract Point readMovementInput();
-
   protected boolean readCombatInput() { return true; }
-
   protected boolean readPickupInput() { return false; }
-
   protected void handleItemPicking(){}
 
 }
