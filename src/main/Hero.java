@@ -37,6 +37,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
     private Weapon rightHandSlot = null; //Offence hand
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
+    // TODO: this should be packaged in an unified handler of stats and modifiers
     private float bonusHealth = 0.0f;
     private float bonusDamage = 0.0f;
 
