@@ -41,7 +41,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
     private float bonusDamage = 0.0f;
 
     private Level level;
-    private boolean invincible = true;
+    private boolean invincible = false;
 
     // TODO: turn this into an ability
     private void RandomHealOnKill() {
