@@ -2,6 +2,7 @@ package main;
 
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 
 
@@ -17,8 +18,7 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
-import traps.HoleTrap;
-import traps.SpikesTrap;
+import traps.*;
 
 import java.util.logging.Logger;
 
@@ -137,28 +137,28 @@ public class Game extends MainController {
         var hole = new HoleTrap();
         entityController.addEntity(hole);
         hole.setLevel(levelController.getDungeon());
+
         hole = new HoleTrap();
         entityController.addEntity(hole);
         hole.setLevel(levelController.getDungeon());
-        hole = new HoleTrap();
-        entityController.addEntity(hole);
-        hole.setLevel(levelController.getDungeon());
-        hole = new HoleTrap();
-        entityController.addEntity(hole);
-        hole.setLevel(levelController.getDungeon());
-//
+
         var spikes = new SpikesTrap();
         entityController.addEntity(spikes);
         spikes.setLevel(levelController.getDungeon());
+
         spikes = new SpikesTrap();
         entityController.addEntity(spikes);
         spikes.setLevel(levelController.getDungeon());
-        spikes = new SpikesTrap();
-        entityController.addEntity(spikes);
-        spikes.setLevel(levelController.getDungeon());
-        spikes = new SpikesTrap();
-        entityController.addEntity(spikes);
-        spikes.setLevel(levelController.getDungeon());
+
+
+        try {
+            var activator = TrapFactory.createTrap(TrapType.ACTIVATOR);
+            entityController.addEntity(activator);
+            activator.setLevel(levelController.getDungeon());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         //test_SpawnAllItemsAndMonster();
 
@@ -201,6 +201,19 @@ public class Game extends MainController {
         return ownTile == otherTile;
     }
 
+    public boolean checkForIntersection (IDrawable drawable1, IDrawable drawable2, DungeonWorld level) {
+        int ownX = Math.round(drawable1.getPosition().x);
+        int ownY = Math.round(drawable1.getPosition().y);
+        var ownTile = level.getTileAt(ownX, ownY);
+        Point otherPosition = drawable2.getPosition();
+
+        int otherX = Math.round(otherPosition.x);
+        int otherY = Math.round(otherPosition.y);
+        var otherTile = level.getTileAt(otherX, otherY);
+        return ownTile == otherTile;
+    }
+
+
     /**
      * Adds an entitty to the game. To prevent a ConcurrentException adding and deleting may
      * only be done in the endframe method.
@@ -225,5 +238,11 @@ public class Game extends MainController {
      */
     public void test_SpawnAllItemsAndMonster(){
         DebugControl.SpawnAll(entityController,levelController);
+    }
+
+    public void spawnMonster(MonsterType monsterType, Point position) throws Exception {
+        var monster = Spawner.spawnMonster(monsterType,position);
+        addEntity(monster);
+        monster.setLevel(levelController.getDungeon());
     }
 }

@@ -54,21 +54,7 @@ public class SpikesTrap extends Trap{
 
     currentAnimation= bigSpikesAnimation;
   }
-  @Override
-  public Animation getActiveAnimation() {
-    return currentAnimation;
-  }
 
-
-  /**
-   * Get the current position in the DungeonWorld.
-   *
-   * @return the current position in the DungeonWorld.
-   */
-  @Override
-  public Point getPosition() {
-    return position;
-  }
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
@@ -134,28 +120,5 @@ public class SpikesTrap extends Trap{
     }
   }
 
-  /**
-   * Override IEntity.deletable and return false for the actor.
-   *
-   * @return false
-   */
-  @Override
-  public boolean deleteable() {
-    return false;
-  }
-
-  /**
-   * Set reference to DungeonWorld and spawn player at random position in the level.
-   */
-  public void setLevel(DungeonWorld level) {
-    this.level = level;
-    findRandomPosition();
-  }
-  /**
-   * Sets the current position of the Hero to a random position inside the DungeonWorld.
-   */
-  public void findRandomPosition() {
-    this.position = new Point(level.getRandomPointInDungeon());
-  }
 
 }

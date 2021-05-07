@@ -2,7 +2,9 @@ package main;
 
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.EntityController;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.ItemFactory;
+import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
 
@@ -31,7 +33,6 @@ public class Spawner {
       mainLogger.info(monsterType.toString()+" spawned");
       entityController.addEntity(monster);
       monster.setLevel(levelController.getDungeon());
-
     }
 
     for(var itemType:levelContent.items){
@@ -40,5 +41,10 @@ public class Spawner {
       entityController.addEntity(item);
       item.setLevel(levelController.getDungeon());
     }
+  }
+
+  public static Monster spawnMonster(MonsterType monsterType, Point position) throws Exception {
+    mainLogger.info(monsterType.toString()+" spawned");
+    return MonsterFactory.createMonster(monsterType);
   }
 }

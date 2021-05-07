@@ -17,21 +17,26 @@ public abstract class Trap implements IAnimatable, IEntity {
   protected Game game;
   protected Point position;
   protected DungeonWorld level;
+  protected boolean isVisible;
+
+  public boolean getIsVisible() {
+    return isVisible;
+  }
+
   public Trap(){
     this.game = Game.getInstance();
+    isVisible= true;
     String[] idleLeftFrames = new String[]{
             "tileset/default/default_anim.png",
     };
     currentAnimation = createAnimation(idleLeftFrames, 6);
-
-
   }
 
   /**
    *
    * @param texturePaths array of textures that should be added to the animation
    * @param frameTime time between two textures
-   * @return
+   * @return returns an Animation containing the specifed textures
    */
   protected Animation createAnimation(String[] texturePaths, int frameTime) {
     List<Texture> textureList = new ArrayList<>();
@@ -60,7 +65,9 @@ public abstract class Trap implements IAnimatable, IEntity {
    */
   @Override
   public void update() {
-    this.draw();
+    if(isVisible) {
+      this.draw();
+    }
   }
   /**
    * Override IEntity.deletable and return false for the actor.
