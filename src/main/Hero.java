@@ -37,9 +37,13 @@ public class Hero extends Actor implements items.IInventoryOpener {
     private Weapon rightHandSlot = null; //Offence hand
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
+    private float bonusHealth = 0.0f;
+    private float bonusDamage = 0.0f;
 
     private Level level;
+    private boolean invincible = true;
 
+    // TODO: turn this into an ability
     private void RandomHealOnKill() {
         float rand = (float)Math.random();
         if (rand < healOnKillChance) {
@@ -49,6 +53,15 @@ public class Hero extends Actor implements items.IInventoryOpener {
     }
 
     public boolean[] movementLog = new boolean[4];
+
+    private void applyLevelUp() {
+        mainLogger.info("You leveled up to level " + this.level.getCurrentLevel() + "!");
+        this.baseAttackDamage += this.level.getDamageIncrementForCurrentLevel();
+        mainLogger.info("Your base attack damage is now " + this.baseAttackDamage);
+        this.maxHealth += this.level.getHealthIncrementForCurrentLevel();
+        mainLogger.info("Your max health is now " + this.maxHealth);
+    }
+
     /**
      *  Manages attacking of another actor.
      *  @param other The actor that should be attacked
@@ -75,7 +88,10 @@ public class Hero extends Actor implements items.IInventoryOpener {
 
             // TODO: specify xp amount based on monster kind
             boolean levelIncrease = this.level.increaseXP(50);
+            mainLogger.info("Current XP: " + level.getCurrentXP());
+            mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
             if (levelIncrease) {
+                applyLevelUp();
                 // apply level up bonus
                 // increase max health, attack damage
                 // grant special ability at specific level up points
@@ -95,7 +111,9 @@ public class Hero extends Actor implements items.IInventoryOpener {
     public void dealDamage(float damage, ICombatable attacker) {
 
         //TODO - Reduce life of shield if equipped
-        super.dealDamage(damage, attacker);
+        if (!this.invincible) {
+            super.dealDamage(damage, attacker);
+        }
         mainLogger.info(this.toString() + ": " + health + " health left");
 
         if (isDead()) {

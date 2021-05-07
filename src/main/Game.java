@@ -132,7 +132,7 @@ public class Game extends MainController {
         entityController.addEntity(chest);
         chest.setLevel(levelController.getDungeon());
 
-        //test_SpawnAllItemsAndMonster();
+        test_SpawnAllItemsAndMonster();
 
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);
