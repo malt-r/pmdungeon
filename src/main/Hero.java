@@ -20,6 +20,7 @@ import items.scrolls.AttackScroll;
 import items.scrolls.SpeedScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
+import progress.Level;
 
 /**
  * The controllable player character.
@@ -36,8 +37,14 @@ public class Hero extends Actor implements items.IInventoryOpener {
     private Weapon rightHandSlot = null; //Offence hand
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
+    // TODO: this should be packaged in an unified handler of stats and modifiers
+    private float bonusHealth = 0.0f;
+    private float bonusDamage = 0.0f;
 
+    private Level level;
+    private boolean invincible = false;
 
+    // TODO: turn this into an ability
     private void RandomHealOnKill() {
         float rand = (float)Math.random();
         if (rand < healOnKillChance) {
@@ -47,6 +54,15 @@ public class Hero extends Actor implements items.IInventoryOpener {
     }
 
     public boolean[] movementLog = new boolean[4];
+
+    private void applyLevelUp() {
+        mainLogger.info("You leveled up to level " + this.level.getCurrentLevel() + "!");
+        this.baseAttackDamage += this.level.getDamageIncrementForCurrentLevel();
+        mainLogger.info("Your base attack damage is now " + this.baseAttackDamage);
+        this.maxHealth += this.level.getHealthIncrementForCurrentLevel();
+        mainLogger.info("Your max health is now " + this.maxHealth);
+    }
+
     /**
      *  Manages attacking of another actor.
      *  @param other The actor that should be attacked
@@ -70,6 +86,18 @@ public class Hero extends Actor implements items.IInventoryOpener {
         }
         if (other.isDead()) {
             mainLogger.info("Other has been slain!");
+
+            // TODO: specify xp amount based on monster kind
+            boolean levelIncrease = this.level.increaseXP(50);
+            mainLogger.info("Current XP: " + level.getCurrentXP());
+            mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
+            if (levelIncrease) {
+                applyLevelUp();
+                // apply level up bonus
+                // increase max health, attack damage
+                // grant special ability at specific level up points
+            }
+
             // here would the hero gain experience...
             RandomHealOnKill();
         }
@@ -84,7 +112,9 @@ public class Hero extends Actor implements items.IInventoryOpener {
     public void dealDamage(float damage, ICombatable attacker) {
 
         //TODO - Reduce life of shield if equipped
-        super.dealDamage(damage, attacker);
+        if (!this.invincible) {
+            super.dealDamage(damage, attacker);
+        }
         mainLogger.info(this.toString() + ": " + health + " health left");
 
         if (isDead()) {
@@ -119,6 +149,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
         knockBackAble = true;
 
         this.inventory = new Inventory(this, 10);
+        this.level = new Level();
     }
     /**
      * Generates the run and idle animation for the hero.
