@@ -20,6 +20,7 @@ import items.scrolls.AttackScroll;
 import items.scrolls.SpeedScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
+import progress.Level;
 
 /**
  * The controllable player character.
@@ -37,6 +38,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
 
+    private Level level;
 
     private void RandomHealOnKill() {
         float rand = (float)Math.random();
@@ -70,6 +72,15 @@ public class Hero extends Actor implements items.IInventoryOpener {
         }
         if (other.isDead()) {
             mainLogger.info("Other has been slain!");
+
+            // TODO: specify xp amount based on monster kind
+            boolean levelIncrease = this.level.increaseXP(50);
+            if (levelIncrease) {
+                // apply level up bonus
+                // increase max health, attack damage
+                // grant special ability at specific level up points
+            }
+
             // here would the hero gain experience...
             RandomHealOnKill();
         }
@@ -119,6 +130,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
         knockBackAble = true;
 
         this.inventory = new Inventory(this, 10);
+        this.level = new Level();
     }
     /**
      * Generates the run and idle animation for the hero.
