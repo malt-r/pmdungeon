@@ -1,6 +1,8 @@
 package main;
 
 import GUI.HeartIcon;
+import GUI.InventoryIcon;
+import GUI.InventoryObserver;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -15,6 +17,8 @@ import items.Chest;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
+import items.inventory.Inventory;
+import items.inventory.Observable;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
@@ -30,11 +34,12 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController {
+public class Game extends MainController implements InventoryObserver{
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     //GUI
     private HeartIcon[] hearts = new HeartIcon[10];
+    private InventoryIcon[] inventory = new InventoryIcon[10];
 
     private static Game instance;
     private Hero hero;
@@ -69,7 +74,13 @@ public class Game extends MainController {
         for (int i = 0; i < 10; i++){
             hearts[i] = new HeartIcon(i);
             hud.addHudElement(hearts[i]);
+
+            inventory[i] = new InventoryIcon(i);
+            hud.addHudElement(inventory[i]);
         }
+
+        //Register Observer
+        hero.getInventory().register(this);
 
     }
 
@@ -266,7 +277,7 @@ public class Game extends MainController {
 
     private void heartCalc(){
         float health = hero.getHealth();
-        int heartHalves = (int) health/5;
+        int heartHalves = (int) Math.ceil(health/10);
 
         int i = 0;
 
@@ -279,6 +290,16 @@ public class Game extends MainController {
         }
         for (int j = i; j < 10; j++){
             hearts[j].setState(0);
+        }
+    }
+
+    @Override
+    public void update(Inventory inv){
+
+        System.out.println(inv.getCount());
+        for (int i = 0; i < inv.getCount(); i++){
+            System.out.println("INHALT : " + inv.getItemAt(i));
+            inventory[i].setTexture(inv.getItemAt(i).getTexture());
         }
     }
 }

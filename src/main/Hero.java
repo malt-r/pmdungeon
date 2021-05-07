@@ -32,6 +32,9 @@ public class Hero extends Actor implements items.IInventoryOpener {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private Inventory inventory;
+
+    public Inventory getInventory() { return inventory; }
+
     private boolean inventoryLock = false;
     private Item leftHandSlot = null; //Defence hand
     private Weapon rightHandSlot = null; //Offence hand
@@ -131,7 +134,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
         super();
         movementSpeed=0.13f;
         // combat-characteristics:
-        health = 100.f;
+        health = 200.f;
         maxHealth = 200.f;
 
         baseHitChance = 0.6f;

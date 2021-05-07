@@ -1,12 +1,13 @@
 package items.inventory;
 
+import GUI.InventoryObserver;
 import items.*;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class Inventory<T extends Item> {
+public class Inventory<T extends Item> implements Observable{
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     protected items.ItemLogger itemLogger;
@@ -31,6 +32,8 @@ public class Inventory<T extends Item> {
     private final int capacity;
     private final ArrayList<T> items;
 
+    private ArrayList<InventoryObserver> observerList = new ArrayList<InventoryObserver>();
+
     public Inventory(IDrawable parent, int capacity) {
         items = new ArrayList<>();
         this.parent = parent;
@@ -42,7 +45,9 @@ public class Inventory<T extends Item> {
     public boolean addItem(T item) {
         if (this.getCount() < this.capacity) {
             mainLogger.info("Adding item: " + item.getName());
-            return items.add(item);
+            boolean success = items.add(item);
+            notifyObservers();
+            return success;
         }
         return true;
     }
@@ -62,6 +67,7 @@ public class Inventory<T extends Item> {
             // this will shift all indices after 'index' to the left (minus 1)
             T item = items.remove(index);
             dropItem(item);
+            notifyObservers();
             return item;
         }
     }
@@ -125,5 +131,22 @@ public class Inventory<T extends Item> {
 
     public ItemLogger getItemLogger() {
         return this.itemLogger;
+    }
+
+    @Override
+    public void register(InventoryObserver observer){
+        this.observerList.add(observer);
+    }
+
+    @Override
+    public void unregister(InventoryObserver observer){
+        this.observerList.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(){
+        for (InventoryObserver invObs : observerList){
+            invObs.update(this);
+        }
     }
 }
