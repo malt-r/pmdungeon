@@ -8,5 +8,6 @@ package traps;
  */
 public enum TrapType {
   SPIKES,
-  HOLE
+  HOLE,
+  ACTIVATOR
 }
