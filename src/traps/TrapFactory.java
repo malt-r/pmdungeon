@@ -17,6 +17,7 @@ public class TrapFactory {
   public static Trap createTrap(TrapType trapType) throws Exception{
     if(trapType == TrapType.HOLE) return new HoleTrap();
     if(trapType == TrapType.SPIKES) return new SpikesTrap();
+    if(trapType == TrapType.ACTIVATOR) return new ActivatorTrap();
     throw new Exception("TrapType no supported");
   }
 }
