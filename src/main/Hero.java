@@ -297,6 +297,10 @@ public class Hero extends Actor implements items.IInventoryOpener {
         evasionChanceModifierWeapon = shield.getDefenseValue();
     }
 
+    /**
+     * Visits a weapon item
+     * @param weapon weapon which should be visited
+     */
     @Override
     public void visit(Weapon weapon){
         if (rightHandSlot != null) { inventory.addItem(rightHandSlot); }
@@ -305,6 +309,10 @@ public class Hero extends Actor implements items.IInventoryOpener {
         mainLogger.info("visit weapon");
     }
 
+    /**
+     * Visits a shield itme
+     * @param shield weapon which should be visited
+     */
     @Override
     public void visit(Shield shield){
         if (leftHandSlot != null) { inventory.addItem(rightHandSlot); }
@@ -313,12 +321,20 @@ public class Hero extends Actor implements items.IInventoryOpener {
         mainLogger.info("visit shield");
     }
 
+    /**
+     * Visits a Healpotion item
+     * @param potion weapon which should be visited
+     */
     @Override
     public void visit(HealthPotion potion) {
         this.heal(potion.getHealValue());
         mainLogger.info("visit potion1");
     }
 
+    /**
+     * Visits a PoisonPotion item
+     * @param potion weapon which should be visited
+     */
     @Override
     public void visit(PoisonPotion potion){
         //TODO: heal with a negative
@@ -326,12 +342,21 @@ public class Hero extends Actor implements items.IInventoryOpener {
         mainLogger.info("visit potion2");
     }
 
+    /**
+     * Visits a AttackScroll item
+     * @param scroll weapon which should be visited
+     */
     @Override
     public void visit(AttackScroll scroll) {
-        this.heal(scroll.getAttackBonus());
+        //TODO: AttackScroll should not heal
+        //this.heal(scroll.getAttackBonus());
         mainLogger.info("visit Attackscroll");
     }
 
+    /**
+     *  Visits a SpeedScroll item
+     * @param scroll scroll which should be visited
+     */
     @Override
     public void visit(SpeedScroll scroll){
         mainLogger.info("visit speedscroll");

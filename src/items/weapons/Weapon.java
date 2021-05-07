@@ -30,7 +30,7 @@ public abstract class Weapon extends EquipableItem {
   }
   /**
    *  Returns the condition value of the shield which can be used for display purposes
-   *  @return condition of the shield
+   *  @return condition of the weapon
    */
   public float getCondition(){return condition;};
   /**

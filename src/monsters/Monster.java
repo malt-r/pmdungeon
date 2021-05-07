@@ -58,6 +58,12 @@ public abstract class Monster extends Actor {
     super.update();
   }
 
+  /**
+   * Monster shouldn't attack other monsters.
+   *
+   * @param other other combatable instance
+   * @return if the other combatable instance is friendly
+   */
   @Override
   public boolean isOtherFriendly(ICombatable other) {
     if (other instanceof Monster) {

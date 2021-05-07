@@ -4,7 +4,7 @@ import items.IItemVisitor;
 /**
  * Eagle Shield.
  * <p>
- *   Contains everything that describes a Attacks croll.
+ *   Contains everything that describes a Eagle Shield
  * </p>
  */
 public class EagleShield extends Shield{
@@ -24,7 +24,7 @@ public class EagleShield extends Shield{
   }
   /**
    *  Returns the name of the shield which can be used for display purposes
-   *  @return Name of the scroll
+   *  @return Name of the shield
    */
   @Override
   public String getName() {
@@ -40,6 +40,7 @@ public class EagleShield extends Shield{
   }
   /**
    * Accept method for a item visitor to extend the functionality of the scroll class.
+   * @param visitor Visitor that visits the class
    */
   @Override
   public void accept(IItemVisitor visitor){

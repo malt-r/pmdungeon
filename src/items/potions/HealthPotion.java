@@ -48,7 +48,7 @@ public class HealthPotion extends Potion {
   }
 
   /**
-   * Called each frame and draws the potion.
+   * Called each frame and draws the potion witht he right scaling.
    */
   @Override
   public void update(){
@@ -57,10 +57,11 @@ public class HealthPotion extends Potion {
 
   /**
    * Accept method for a item visitor to extend the functionality of the Potion class.
+   * @param visitor Visitor that visits the class
    */
   @Override
   public void accept(IItemVisitor visitor){
     visitor.visit(this);
-  }
 
+  }
 }

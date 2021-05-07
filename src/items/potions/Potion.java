@@ -8,6 +8,12 @@ import items.UseableItem;
  * </p>
  */
 public abstract class Potion extends UseableItem {
+  /**
+   * Constructor of the Potion class.
+   * <p>
+   * This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
   public Potion() {
     super();
   }

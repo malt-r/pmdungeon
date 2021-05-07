@@ -3,7 +3,7 @@ package items.potions;
 import items.IItemVisitor;
 
 /**
- * Health Potion.
+ * Poison Potion.
  * <p>
  *   Contains everything that describes a Poison potion.
  * </p>
@@ -12,7 +12,7 @@ public class PoisonPotion extends Potion {
   protected int damageValue = 100;
   /**
    *  Returns the damage value of the potion which can be used for display purposes
-   *  @return healvalue of the potion
+   *  @return damageBalue of the potion
    */
   public int getDamageValue(){return damageValue;}
   /**
@@ -45,7 +45,7 @@ public class PoisonPotion extends Potion {
     currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
   }
   /**
-   * Called each frame and draws the potion.
+   * Called each frame and draws the potion with the right scaling.
    */
   @Override
   public void update() {
@@ -53,6 +53,7 @@ public class PoisonPotion extends Potion {
   }
   /**
    * Accept method for a item visitor to extend the functionality of the Potion class.
+   * @param visitor Visitor that visits the class
    */
   @Override
   public void accept(IItemVisitor visitor){

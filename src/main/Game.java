@@ -154,6 +154,11 @@ public class Game extends MainController {
     }
 
     // TODO: find better place / name/ for this, don't hardcode hero as the IDrawable to check against
+    /**
+     *
+     * @param p Point which should be checked if it collids with the hero
+     * @return if point is on the same tile as the hero
+     */
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
         var level = levelController.getDungeon();
@@ -168,14 +173,28 @@ public class Game extends MainController {
         return ownTile == otherTile;
     }
 
+    /**
+     * Adds an entitty to the game. To prevent a ConcurrentException adding and deleting may
+     * only be done in the endframe method.
+     *
+     * @param entity entity which should be added to the game
+     */
     public void addEntity(IEntity entity){
         this.entitiesToAdd.add(entity);
     }
-
+    /**
+     * Deletes an entitty to the game. To prevent a ConcurrentException adding and deleting may
+     * only be done in the endframe method.
+     *
+     * @param entity entity which should be added to the game
+     */
     public void deleteEntity(IEntity entity){
         this.entitiesToRemove.add(entity);
     }
 
+    /**
+     * Spawns all monsters and items at once which are present in the game.
+     */
     public void test_SpawnAllItemsAndMonster(){
         DebugControl.SpawnAll(entityController,levelController);
     }

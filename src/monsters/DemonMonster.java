@@ -59,6 +59,9 @@ public class DemonMonster extends Monster{
     hitAnimation = createAnimation(hitAnimationFrames, 1);
   }
 
+  /**
+   * Draws the monster with correct scaling.
+   */
   @Override
   public void draw(){
     drawWithScaling(2.0f,2.0f);

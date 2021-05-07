@@ -8,10 +8,23 @@ import monsters.MonsterType;
 
 import java.util.logging.Logger;
 
-
+/**
+ * Spawner class.
+ * <p>
+ *   Utillity class for simple spawning of entities in the game.
+ * </p>
+ */
 public class Spawner {
   private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+  /**
+   * Spawns all monsters and items present in the levelContent in the current game-
+   *
+   * @param levelContent content of a level
+   * @param levelController levelController of the game
+   * @param entityController entityController of the game
+   * @throws Exception if creation of an itme or monster fails
+   */
   public static void spawnEntities(LevelContent levelContent, LevelController levelController, EntityController entityController) throws Exception {
     for(MonsterType monsterType: levelContent.monsters){
       var monster = MonsterFactory.createMonster(monsterType);
