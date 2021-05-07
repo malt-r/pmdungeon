@@ -17,6 +17,8 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
+import traps.HoleTrap;
+import traps.SpikesTrap;
 
 import java.util.logging.Logger;
 
@@ -131,6 +133,32 @@ public class Game extends MainController {
         chest = new Chest();
         entityController.addEntity(chest);
         chest.setLevel(levelController.getDungeon());
+
+//        var hole = new HoleTrap();
+//        entityController.addEntity(hole);
+//        hole.setLevel(levelController.getDungeon());
+//        hole = new HoleTrap();
+//        entityController.addEntity(hole);
+//        hole.setLevel(levelController.getDungeon());
+//        hole = new HoleTrap();
+//        entityController.addEntity(hole);
+//        hole.setLevel(levelController.getDungeon());
+//        hole = new HoleTrap();
+//        entityController.addEntity(hole);
+//        hole.setLevel(levelController.getDungeon());
+//
+        var spikes = new SpikesTrap();
+        entityController.addEntity(spikes);
+        spikes.setLevel(levelController.getDungeon());
+//        spikes = new SpikesTrap();
+//        entityController.addEntity(spikes);
+//        spikes.setLevel(levelController.getDungeon());
+//        spikes = new SpikesTrap();
+//        entityController.addEntity(spikes);
+//        spikes.setLevel(levelController.getDungeon());
+//        spikes = new SpikesTrap();
+//        entityController.addEntity(spikes);
+//        spikes.setLevel(levelController.getDungeon());
 
         //test_SpawnAllItemsAndMonster();
 
