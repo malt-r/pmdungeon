@@ -46,7 +46,7 @@ public class RegularSword extends Weapon {
    */
   @Override
   public void update(){
-    draw(-0.75f,0,0.5f,1.0f);
+    draw(-0.75f,-0.75f,0.5f,1.0f);
   }
   /**
    * Accept method for a item visitor to extend the functionality of the scroll class.

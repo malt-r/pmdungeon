@@ -1,6 +1,7 @@
 package traps;
 
 import items.Item;
+import main.Hero;
 import monsters.MonsterType;
 
 public class ActivatorTrap extends Trap{
@@ -24,7 +25,7 @@ public class ActivatorTrap extends Trap{
    */
   @Override
   public void update() {
-    this.draw(-1f,0.25f);
+    this.draw(-1f,-0.75f);
     checkIfActivated();
 
   }
@@ -36,11 +37,11 @@ public class ActivatorTrap extends Trap{
     for(var entitiy : allEntities){
       if (!(entitiy instanceof Item)) { continue; }
       var item = (Item) entitiy;
-      if (!game.checkForIntersection(this, item, level)){ return false;  }
-      if (isActivated){ return false; }
+      if (!game.checkForIntersection(this, item, level)){ continue;  }
+      //  if (isActivated){ return false; }
       isActivated = true;
       System.out.println("I was activated mothafucka");
-      spawnMonsters();
+      //spawnMonsters();
       return true;
     }
     return false;

@@ -188,7 +188,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
 
-        test_SpawnAllItemsAndMonster();
+        //test_SpawnAllItemsAndMonster();
 
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);
