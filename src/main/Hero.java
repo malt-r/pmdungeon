@@ -18,6 +18,7 @@ import items.potions.HealthPotion;
 import items.potions.PoisonPotion;
 import items.scrolls.AttackScroll;
 import items.scrolls.SpeedScroll;
+import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
 import progress.ability.Ability;
@@ -442,6 +443,14 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     @Override
     public void visit(SpeedScroll scroll){
         mainLogger.info("visit speedscroll");
+    }
+    /**
+     *  Visits a SupervisionScroll item
+     * @param scroll scroll which should be visited
+     */
+    @Override
+    public void visit(SupervisionScroll scroll) {
+        mainLogger.info("visit supervisionScroll");
     }
 
     @Override

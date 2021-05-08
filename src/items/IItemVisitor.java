@@ -4,6 +4,7 @@ import items.potions.HealthPotion;
 import items.potions.PoisonPotion;
 import items.scrolls.AttackScroll;
 import items.scrolls.SpeedScroll;
+import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
 
@@ -47,4 +48,10 @@ public interface IItemVisitor {
    * @param scroll scroll which should be visited
    */
   void visit(SpeedScroll scroll);
+
+  /**
+   * Visists the scroll
+   * @param scroll scroll shich should be visited
+   */
+  void visit(SupervisionScroll scroll);
 }
