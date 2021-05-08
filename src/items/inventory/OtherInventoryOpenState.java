@@ -1,5 +1,6 @@
 package items.inventory;
 
+import GUI.OpenStateObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import items.Item;
@@ -22,6 +23,7 @@ public class OtherInventoryOpenState extends InventoryOpenState {
         if (null == nextState && !lockInput) {
             if (Gdx.input.isKeyJustPressed((Input.Keys.E))) { // take
                 transferItemToOpenersInventory(inventory);
+                notifyObservers();
                 //nextState = new InventoryOpenState(this.selectorIdx);
             }
             else if (Gdx.input.isKeyJustPressed((Input.Keys.I))) {

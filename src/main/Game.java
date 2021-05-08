@@ -2,6 +2,7 @@ package main;
 
 import GUI.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController implements InventoryObserver, HeroObserver, LevelObserver {
+public class Game extends MainController implements InventoryObserver, HeroObserver, LevelObserver, OpenStateObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     //GUI
@@ -42,7 +43,9 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private InventoryIcon[] inventory = new InventoryIcon[10];
     private InventoryIcon[] chest = new InventoryIcon[10];
     private InventoryIcon[] heroSlots = new InventoryIcon[2];
-    private Label expLevel;
+    private InvBackgroundIcon[] invBackground = new InvBackgroundIcon[10];
+    private InvBackgroundIcon[] chestBackground = new InvBackgroundIcon[10];
+    private Label expLabel;
     private Label heartLabel;
 
     private static Game instance;
@@ -76,6 +79,14 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 
         //GUI
         for (int i = 0; i < 10; i++){
+
+            invBackground[i] = new InvBackgroundIcon(i, 0.0f);
+            invBackground[i].setDefaultBackgroundTexture();
+            hud.addHudElement(invBackground[i]);
+
+            chestBackground[i] = new InvBackgroundIcon(i, 1.0f);
+            hud.addHudElement(chestBackground[i]);
+
             hearts[i] = new HeartIcon(i);
             hud.addHudElement(hearts[i]);
 
@@ -84,6 +95,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 
             chest[i] = new InventoryIcon(i, 1.0f);
             hud.addHudElement(chest[i]);
+
         }
 
         for (int i = 0; i < 2; i++){
@@ -91,10 +103,13 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             hud.addHudElement(heroSlots[i]);
         }
 
-        expLevel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
+        expLabel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
                                     hero.getLevel().getCurrentXP() + "/" +
                                     hero.getLevel().getXPForNextLevelTotal(),
                             "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
+
+        heartLabel = textHUD.drawText("","fonts/Pixeled.ttf",
+                                    Color.RED, 20,20,20,50,445);
 
         heartCalc();
 
@@ -207,7 +222,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
 
 
-        test_SpawnAllItemsAndMonster();
+        //test_SpawnAllItemsAndMonster();
 
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);
@@ -300,12 +315,10 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         int heartHalves = (int) Math.ceil(health/10);
         int heartFull = (int)heartHalves/2;
 
-        if (heartLabel != null) {
-            textHUD.removeText(heartLabel);
-            heartLabel = null;
-        }
+        heartLabel.setText("");
 
-        if (health <= 100.0f){
+
+        if (health <= 200.0f){
             int i = 0;
 
             for (i = 0; i < heartFull; i++){
@@ -324,8 +337,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
                 hearts[i].setDefaultTexture();
             }
 
-            heartLabel = textHUD.drawText("" + heartFull,
-                    "fonts/Pixeled.ttf", Color.RED, 20,20,20,50,445);
+            heartLabel.setText("" + heartFull);
+
         }
     }
 
@@ -333,6 +346,15 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     public void update(Inventory inv, boolean fromHero){
         if (fromHero){
             //TODO - Pointer to current selected inv slot
+            if (inv.getCurrentState() instanceof OwnInventoryOpenState){
+                ((OwnInventoryOpenState)inv.getCurrentState()).register(this);
+
+                invBackground[((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
+            } else {
+                for(int i = 0; i < invBackground.length; i++){
+                    invBackground[i].setDefaultBackgroundTexture();
+                }
+            }
             for (int i = 0; i < inventory.length; i++){
                 if (i < inv.getCount()){
                     inventory[i].setTexture(inv.getItemAt(i).getTexture());
@@ -343,6 +365,12 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }else{
             if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
                 for (int i = 0; i < chest.length; i++){
+                    chestBackground[i].setDefaultBackgroundTexture();
+                }
+                ((OtherInventoryOpenState)inv.getCurrentState()).register(this);
+                chestBackground[((OtherInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
+
+                for (int i = 0; i < chest.length; i++){
                     if (i < inv.getCount()){
                         chest[i].setTexture(inv.getItemAt(i).getTexture());
                     } else {
@@ -352,6 +380,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             }else {//if (inv.getCurrentState() instanceof InventoryClosedState){
                 for (int i = 0; i < chest.length; i++) {
                     chest[i].setDefaultTexture();
+                    chestBackground[i].setDefaultTexture();
                 }
             }
         }
@@ -379,7 +408,22 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 
     @Override
     public void update(Level level) {
-        textHUD.removeText(expLevel);
-        textHUD.drawText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal(), "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
+        expLabel.setText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal());
+    }
+
+    @Override
+    public void update(InventoryOpenState invOp) {
+        if (invOp instanceof OwnInventoryOpenState){
+            for(int i = 0; i < invBackground.length; i++){
+                invBackground[i].setDefaultBackgroundTexture();
+            }
+            invBackground[invOp.getselectorIdx()].setPointerTexture();
+        }else if (invOp instanceof OtherInventoryOpenState){
+            for(int i = 0; i < invBackground.length; i++){
+                chestBackground[i].setDefaultBackgroundTexture();
+            }
+            chestBackground[invOp.getselectorIdx()].setPointerTexture();
+        }
+
     }
 }

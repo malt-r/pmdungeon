@@ -60,6 +60,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         if (rand < healOnKillChance) {
             this.heal(healOnKillAmount);
             mainLogger.info("Hero got healed, health is now " + this.health);
+            notifyObservers();
         }
     }
 
@@ -241,6 +242,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     protected void resetCombatStats() {
         super.resetCombatStats();
         mainLogger.info("Combat stats reset");
+        notifyObservers();
     }
     /**
      * Generates Movement Input, depending on the pressed key on the keyboard.
@@ -362,7 +364,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(Shield shield){
-        if (leftHandSlot != null) { inventory.addItem(rightHandSlot); }
+        if (leftHandSlot != null) { inventory.addItem(leftHandSlot); }
         leftHandSlot = shield;
         updateStats(shield);
         mainLogger.info("visit shield");
@@ -377,6 +379,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     public void visit(HealthPotion potion) {
         this.heal(potion.getHealValue());
         mainLogger.info("visit potion1");
+        notifyObservers();
     }
 
     /**
@@ -388,6 +391,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         //TODO: heal with a negative
         this.heal(-potion.getDamageValue());
         mainLogger.info("visit potion2");
+        notifyObservers();
     }
 
     /**

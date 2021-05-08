@@ -4,14 +4,16 @@ import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IHUDElement;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
-public class InventoryIcon implements IHUDElement {
+public class InvBackgroundIcon implements IHUDElement {
 
     private Point position;
     private Texture texture;
     private Texture defaultTexture = new Texture("tileset/default/default_anim_seethrough.png");
+    private Texture pointer = new Texture("tileset/default/floor_1_test.png");
+    private Texture defaultBackground = new Texture("textures/dungeon/floor/floor_1.png");
 
-    public InventoryIcon (int index, float hight){
-        position = new Point((float)index * 0.5f, hight);
+    public InvBackgroundIcon (int index, float height){
+        position = new Point((float)index * 0.5f, height);
         texture = defaultTexture;
     }
 
@@ -25,12 +27,11 @@ public class InventoryIcon implements IHUDElement {
         return texture;
     }
 
-    public void setTexture(Texture texture){
-        this.texture = texture;
-    }
-
     public void setDefaultTexture(){
         texture = defaultTexture;
     }
 
+    public void setPointerTexture(){ texture = pointer; }
+
+    public void setDefaultBackgroundTexture(){ texture = defaultBackground; }
 }

@@ -1,12 +1,16 @@
 package items.inventory;
 
+import GUI.InventoryObserver;
+import GUI.OpenStateObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import main.Hero;
 import util.math.Vec;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public abstract class InventoryOpenState implements IInventoryControlState{
+public abstract class InventoryOpenState implements IInventoryControlState, ObservableOpenState{
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     // organize inventory as a pseudo-grid
@@ -14,6 +18,8 @@ public abstract class InventoryOpenState implements IInventoryControlState{
     protected int selectorIdx;
     protected boolean lockInput;
     protected int lockCounter;
+
+    private ArrayList<OpenStateObserver> observerList = new ArrayList<OpenStateObserver>();
 
     public InventoryOpenState() {
         this.selectorIdx = -1;
@@ -33,21 +39,25 @@ public abstract class InventoryOpenState implements IInventoryControlState{
             if (Gdx.input.isKeyJustPressed((Input.Keys.UP))){
                 if (this.selectorIdx > gridWidth) {
                     this.selectorIdx -= gridWidth;
+                    notifyObservers();
                 }
             }
             else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                 if (this.selectorIdx > 0) {
                     this.selectorIdx -= 1;
+                    notifyObservers();
                 }
             }
             else if (Gdx.input.isKeyJustPressed((Input.Keys.DOWN))) {
                 if (inventory.getCount() > this.selectorIdx + gridWidth) {
                     this.selectorIdx += gridWidth;
+                    notifyObservers();
                 }
             }
             else if (Gdx.input.isKeyJustPressed((Input.Keys.RIGHT))) {
                 if ((this.selectorIdx + 1) < inventory.getCount()) {
                     this.selectorIdx += 1;
+                    notifyObservers();
                 }
             }
             else if (Gdx.input.isKeyJustPressed((Input.Keys.ESCAPE))) {
@@ -112,4 +122,20 @@ public abstract class InventoryOpenState implements IInventoryControlState{
     public void exit(Inventory inventory) {
         mainLogger.info("Leaving open state");
     };
+
+    public int getselectorIdx() { return selectorIdx; }
+
+    public void register(OpenStateObserver observer){
+        observerList.add(observer);
+    }
+
+    public void unregister(OpenStateObserver observer){
+        observerList.remove(observer);
+    }
+
+    public void notifyObservers(){
+        for (OpenStateObserver obs : observerList){
+            obs.update(this);
+        }
+    }
 }

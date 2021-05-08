@@ -21,6 +21,7 @@ public class OwnInventoryOpenState extends InventoryOpenState {
             if (Gdx.input.isKeyJustPressed((Input.Keys.E))) {
                 if (this.selectorIdx >= 0) {
                     nextState = new InventorySelectState(this.selectorIdx);
+                    notifyObservers();
                 } else {
                     mainLogger.info("can not select anything, inventory is empty");
                 }
