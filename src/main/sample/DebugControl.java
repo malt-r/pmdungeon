@@ -26,7 +26,7 @@ public class DebugControl {
         monsterType = MonsterType.DEMON;
       }
       try{
-        var mon = MonsterFactory.createMonster(monsterType);
+        var mon = MonsterFactory.CreateMonster(monsterType);
         monsterArray[i]= mon;
         entityController.addEntity(mon);
         //TODO Add which kind of monster spawned
