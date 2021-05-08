@@ -14,7 +14,7 @@ public class TrapFactory {
    * @throws  Exception   if monsterType is not supported
    * @return  A trap, of the specified type.
    */
-  public static Trap createTrap(TrapType trapType) throws Exception{
+  public static Trap CreateTrap(TrapType trapType) throws Exception{
     if(trapType == TrapType.HOLE) return new HoleTrap();
     if(trapType == TrapType.SPIKES) return new SpikesTrap();
     if(trapType == TrapType.ACTIVATOR) return new ActivatorTrap();
