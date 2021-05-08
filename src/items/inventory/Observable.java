@@ -1,10 +1,10 @@
 package items.inventory;
 
-import GUI.InventoryObserver;
+import GUI.Observer;
 
 public interface Observable {
-    void register(InventoryObserver observer);
-    void unregister(InventoryObserver observer);
+    void register(Observer observer);
+    void unregister(Observer observer);
     void notifyObservers();
 
 }

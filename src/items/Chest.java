@@ -24,6 +24,8 @@ public class Chest implements IAnimatable, IEntity {
         return idleAnimation;
     }
 
+    public Inventory getInventory(){ return inventory; }
+
     public Chest() {
         String[] idleFrame = new String[]{
                 "tileset/other/chest_empty_open_anim_f0.png",

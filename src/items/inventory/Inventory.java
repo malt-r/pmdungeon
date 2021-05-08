@@ -1,13 +1,16 @@
 package items.inventory;
 
 import GUI.InventoryObserver;
+import GUI.Observer;
 import items.*;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
+//TODO - is this necessary?
+import main.Hero;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class Inventory<T extends Item> implements Observable{
+public class Inventory<T extends Item> implements ObservableInventory{
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     protected items.ItemLogger itemLogger;
@@ -72,7 +75,7 @@ public class Inventory<T extends Item> implements Observable{
         }
     }
 
-    private void  dropItem(Item item){
+    private void dropItem(Item item){
         item.setPosition(parent.getPosition());
     }
 
@@ -83,6 +86,8 @@ public class Inventory<T extends Item> implements Observable{
             this.currentState.exit(this);
             nextState.enter(this);
             this.currentState = nextState;
+
+            notifyObservers();
         }
     }
 
@@ -117,6 +122,8 @@ public class Inventory<T extends Item> implements Observable{
         this.currentState.exit(this);
         nextState.enter(this);
         this.currentState = nextState;
+
+        notifyObservers();
     }
 
     public void logContent() {
@@ -133,6 +140,8 @@ public class Inventory<T extends Item> implements Observable{
         return this.itemLogger;
     }
 
+    public IInventoryControlState getCurrentState() { return currentState; }
+
     @Override
     public void register(InventoryObserver observer){
         this.observerList.add(observer);
@@ -144,9 +153,19 @@ public class Inventory<T extends Item> implements Observable{
     }
 
     @Override
+    public void register(Observer observer) {
+        return;
+    }
+
+    @Override
+    public void unregister(Observer observer) {
+        return;
+    }
+
+    @Override
     public void notifyObservers(){
-        for (InventoryObserver invObs : observerList){
-            invObs.update(this);
+        for (InventoryObserver obs : observerList){
+            obs.update(this, this.parent instanceof Hero);
         }
     }
 }

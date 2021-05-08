@@ -17,8 +17,7 @@ import items.Chest;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
-import items.inventory.Inventory;
-import items.inventory.Observable;
+import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
@@ -40,6 +39,7 @@ public class Game extends MainController implements InventoryObserver{
     //GUI
     private HeartIcon[] hearts = new HeartIcon[10];
     private InventoryIcon[] inventory = new InventoryIcon[10];
+    private InventoryIcon[] chest = new InventoryIcon[10];
 
     private static Game instance;
     private Hero hero;
@@ -75,8 +75,11 @@ public class Game extends MainController implements InventoryObserver{
             hearts[i] = new HeartIcon(i);
             hud.addHudElement(hearts[i]);
 
-            inventory[i] = new InventoryIcon(i);
+            inventory[i] = new InventoryIcon(i, 0.0f);
             hud.addHudElement(inventory[i]);
+
+            chest[i] = new InventoryIcon(i, 1.0f);
+            hud.addHudElement(chest[i]);
         }
 
         //Register Observer
@@ -155,11 +158,13 @@ public class Game extends MainController implements InventoryObserver{
         var chest = new Chest();
         entityController.addEntity(chest);
         chest.setLevel(levelController.getDungeon());
+        chest.getInventory().register(this);
 
-
-        chest = new Chest();
-        entityController.addEntity(chest);
-        chest.setLevel(levelController.getDungeon());
+        var chest2 = new Chest();
+        entityController.addEntity(chest2);
+        chest2.setLevel(levelController.getDungeon());
+        //TODO - make dynamic, maybe getAllChests()
+        chest2.getInventory().register(this);
 
         var hole = new HoleTrap();
         entityController.addEntity(hole);
@@ -294,12 +299,36 @@ public class Game extends MainController implements InventoryObserver{
     }
 
     @Override
-    public void update(Inventory inv){
-
-        System.out.println(inv.getCount());
-        for (int i = 0; i < inv.getCount(); i++){
-            System.out.println("INHALT : " + inv.getItemAt(i));
-            inventory[i].setTexture(inv.getItemAt(i).getTexture());
+    public void update(Inventory inv, boolean fromHero){
+        if (fromHero){
+            //TODO - Pointer to current selected inv slot
+            for (int i = 0; i < inventory.length; i++){
+                if (i < inv.getCount()){
+                    inventory[i].setTexture(inv.getItemAt(i).getTexture());
+                } else {
+                    inventory[i].setDefaultTexture();
+                }
+            }
+        }else{
+            if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
+                for (int i = 0; i < chest.length; i++){
+                    if (i < inv.getCount()){
+                        chest[i].setTexture(inv.getItemAt(i).getTexture());
+                    } else {
+                        chest[i].setDefaultTexture();
+                    }
+                }
+            }else {//if (inv.getCurrentState() instanceof InventoryClosedState){
+                for (int i = 0; i < chest.length; i++) {
+                    chest[i].setDefaultTexture();
+                }
+            }
         }
+    }
+
+    //TODO - necessary?
+    @Override
+    public void update() {
+
     }
 }
