@@ -88,6 +88,7 @@ public class Game extends MainController {
             currentLevelIndex++;
             entityController.removeAllFrom(Item.class);
             entityController.removeAllFrom(Monster.class);
+            entityController.removeAllFrom(Trap.class);
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
 
@@ -152,7 +153,7 @@ public class Game extends MainController {
 
 
         try {
-            var activator = TrapFactory.createTrap(TrapType.ACTIVATOR);
+            var activator = TrapFactory.CreateTrap(TrapType.ACTIVATOR);
             entityController.addEntity(activator);
             activator.setLevel(levelController.getDungeon());
         } catch (Exception e) {
@@ -241,8 +242,9 @@ public class Game extends MainController {
     }
 
     public void spawnMonster(MonsterType monsterType, Point position) throws Exception {
-        var monster = Spawner.spawnMonster(monsterType,position);
+        var monster = Spawner.spawnMonster(monsterType);
         addEntity(monster);
         monster.setLevel(levelController.getDungeon());
+        monster.position = position;
     }
 }

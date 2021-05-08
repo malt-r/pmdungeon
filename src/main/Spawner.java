@@ -2,11 +2,15 @@ package main;
 
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.EntityController;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
-import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import items.Item;
 import items.ItemFactory;
+import items.ItemType;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
+import traps.Trap;
+import traps.TrapFactory;
+import traps.TrapType;
 
 import java.util.logging.Logger;
 
@@ -29,7 +33,7 @@ public class Spawner {
    */
   public static void spawnEntities(LevelContent levelContent, LevelController levelController, EntityController entityController) throws Exception {
     for(MonsterType monsterType: levelContent.monsters){
-      var monster = MonsterFactory.createMonster(monsterType);
+      var monster = MonsterFactory.CreateMonster(monsterType);
       mainLogger.info(monsterType.toString()+" spawned");
       entityController.addEntity(monster);
       monster.setLevel(levelController.getDungeon());
@@ -43,8 +47,18 @@ public class Spawner {
     }
   }
 
-  public static Monster spawnMonster(MonsterType monsterType, Point position) throws Exception {
+  public static Monster spawnMonster(MonsterType monsterType) throws Exception {
     mainLogger.info(monsterType.toString()+" spawned");
-    return MonsterFactory.createMonster(monsterType);
+    return MonsterFactory.CreateMonster(monsterType);
+  }
+
+  public static Item spawnItem(ItemType itemType) throws Exception {
+    mainLogger.info(itemType.toString()+" spawned");
+    return ItemFactory.CreateItem(itemType);
+  }
+
+  public static Trap spawnTrap(TrapType trapType) throws Exception {
+    mainLogger.info(trapType.toString()+" spawned");
+    return TrapFactory.CreateTrap(trapType);
   }
 }
