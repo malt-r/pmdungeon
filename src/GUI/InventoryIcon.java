@@ -8,7 +8,7 @@ public class InventoryIcon implements IHUDElement {
 
     private Point position;
     private Texture texture;
-    private Texture defaultTexture = new Texture("tileset/default/default_anim.png");
+    private Texture defaultTexture = new Texture("tileset/default/default_anim_seethrough.png");
 
     public InventoryIcon (int index, float hight){
         position = new Point((float)index * 0.5f, hight);
