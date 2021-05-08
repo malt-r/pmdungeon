@@ -162,7 +162,7 @@ public class Game extends MainController {
         }
 
 
-        test_SpawnAllItemsAndMonster();
+        //test_SpawnAllItemsAndMonster();
 
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);

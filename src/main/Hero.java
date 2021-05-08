@@ -8,7 +8,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 
 import items.Chest;
-import items.IInventoryOpener;
 import items.inventory.Inventory;
 
 
@@ -20,7 +19,12 @@ import items.scrolls.AttackScroll;
 import items.scrolls.SpeedScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
+import progress.ability.Ability;
 import progress.Level;
+import progress.ability.KnockbackAbility;
+import progress.ability.SprintAbility;
+
+import java.util.ArrayList;
 
 /**
  * The controllable player character.
@@ -43,6 +47,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
 
     private Level level;
     private boolean invincible = false;
+    private ArrayList<Ability> abilities;
 
     // TODO: turn this into an ability
     private void RandomHealOnKill() {
@@ -61,6 +66,18 @@ public class Hero extends Actor implements items.IInventoryOpener {
         mainLogger.info("Your base attack damage is now " + this.baseAttackDamage);
         this.maxHealth += this.level.getHealthIncrementForCurrentLevel();
         mainLogger.info("Your max health is now " + this.maxHealth);
+        switch (this.level.getCurrentLevel()) {
+            case 2:
+                this.abilities.add(new SprintAbility());
+                mainLogger.info("You gained the sprint ability! Hold down left shift to sprint");
+                break;
+            case 5:
+                this.abilities.add(new KnockbackAbility());
+                mainLogger.info("You gained the knockback ability! Press K to knock back enemies!");
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -93,9 +110,6 @@ public class Hero extends Actor implements items.IInventoryOpener {
             mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
             if (levelIncrease) {
                 applyLevelUp();
-                // apply level up bonus
-                // increase max health, attack damage
-                // grant special ability at specific level up points
             }
 
             // here would the hero gain experience...
@@ -150,6 +164,8 @@ public class Hero extends Actor implements items.IInventoryOpener {
 
         this.inventory = new Inventory(this, 10);
         this.level = new Level();
+
+        this.abilities = new ArrayList<>();
     }
     /**
      * Generates the run and idle animation for the hero.
@@ -196,6 +212,11 @@ public class Hero extends Actor implements items.IInventoryOpener {
         hitAnimation = createAnimation(hitAnimationFrames, 3);
     }
 
+    private void checkForAbilityAcitvation() {
+        for (Ability ability: abilities) {
+            ability.checkForActivation(this);
+        }
+    }
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
@@ -209,6 +230,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
                     if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
                         this.inventory.open(this);
                     }
+                    checkForAbilityAcitvation();
                 }
                 break;
             case IS_KNOCKED_BACK:

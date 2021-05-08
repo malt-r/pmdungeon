@@ -7,6 +7,8 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import progress.effect.OneShotEffect;
+import progress.effect.PersistentEffect;
 import util.math.Vec;
 
 import java.util.*;
@@ -82,7 +84,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * The speed for being knocked back. Gets added to the position of the
    * actor every update, if it is being knocked back.
    */
-  protected float knockBackSpeed = 0.25f;
+  protected float knockBackSpeed = 0.3f;
 
   /**
    * The distance the actor should be knocked back.
@@ -95,9 +97,14 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected long attackDelay = 1000;
   protected boolean canAttack;
   protected float movementSpeed = 0.1f;
+  protected float movementSpeedMultiplier = 1.f;
   // cache a reference to the game to be able to scan all entities for possible attack targets
   public static Game game;
   private ICombatable target;
+  // TODO: temporary solution
+  public void applyMovementSpeedMultiplier(float multiplier) {
+    this.movementSpeedMultiplier = multiplier;
+  }
 
   // combat-characteristics:
   //TODO:acter should only have basic hit chance, attack damge, evasion change
@@ -205,6 +212,64 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
   // end ICombatable implementation ----------------------------------------------------------------
 
+  // Abilitysystem implementation ------------------------------------------------------------------
+  /**
+   * The persistent effects, which are currently applied to this actor.
+   */
+  protected ArrayList<PersistentEffect> persistentEffects;
+
+  /**
+   * The persistent effects, which are currently applied to this actor but are scheduled for removal.
+   */
+  protected ArrayList<PersistentEffect> effectsScheduledForRemoval;
+
+  /**
+   * Call the update-method of all stored persistent effects. Remove any persistent effects, which are scheduled for removal.
+   */
+  protected void updatePersistentEffects() {
+    for (PersistentEffect effect : persistentEffects) {
+      effect.update(this);
+    }
+
+    for (int i = 0; i < effectsScheduledForRemoval.size(); i++) {
+      var effect = persistentEffects.get(i);
+      mainLogger.info("Removing persistent effect" + effect);
+      effect.onRemoval(this);
+      persistentEffects.remove(effect);
+    }
+    effectsScheduledForRemoval.clear();
+  }
+
+  /**
+   * Schedule persistent effect for removal from this actor. Will be removed in updatePersistentEffects
+   * @param effect The effect to remove.
+   */
+  public void scheduleForRemoval(PersistentEffect effect) {
+    mainLogger.info("Scheduling effect for removal: " + effect.toString());
+    effectsScheduledForRemoval.add(effect);
+  }
+
+  /**
+   * Apply a one-shot effect to this actor.
+   * @param effect The effect to apply.
+   */
+  public void applyOneShotEffect(OneShotEffect effect) {
+    effect.applyTo(this);
+  }
+
+  /**
+   * Apply persistent effect to this actor. Passed effect will be stored in this.persistentEffects and updated on
+   * update of the Actor.
+   * @param effect The effect to apply.
+   */
+  public void applyPersistentEffect(PersistentEffect effect) {
+    mainLogger.info("Applying persistent effect: " + effect.toString());
+    effect.onApply(this);
+    persistentEffects.add(effect);
+  }
+
+  // end Abilitysystem implementation --------------------------------------------------------------
+
   /**
    * Starts a knock back and calculates the knockBackTargetPoint.
    * @param other The attacker, which caused the knock back. Used to calculate the destination
@@ -214,11 +279,20 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected void initiateKnockBack(ICombatable other) {
     if (other instanceof IDrawable) {
       var attackerPosition = ((IDrawable)other).getPosition();
-
-      var diff = scaleDelta(this.position, attackerPosition, knockBackDistance);
-      this.knockBackTargetPoint = (new Vec(this.position)).subtract(diff).toPoint();
-      this.movementState = MovementState.IS_KNOCKED_BACK;
+      initiateKnockBackFromPoint(attackerPosition, knockBackDistance);
     }
+  }
+
+  /**
+   * Starts a knock and calculates the knockBackTargetPoint.
+   * @param point The point, from which the knock back is initiated. Used to calculate the destination
+   *              in which the knock back should be performed.
+   */
+  // TODO: this should use a falloff function so that the knockback-distance gets smaller dependent of the distance from the point
+  public void initiateKnockBackFromPoint(Point point, float knockBackDistance) {
+    var diff = scaleDelta(this.position, point, knockBackDistance);
+    this.knockBackTargetPoint = (new Vec(this.position)).subtract(diff).toPoint();
+    this.movementState = MovementState.IS_KNOCKED_BACK;
   }
 
   /**
@@ -263,6 +337,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     canAttack = true;
     attackTimer = new Timer();
     movementState = MovementState.CAN_MOVE;
+    this.persistentEffects = new ArrayList<>();
+    this.effectsScheduledForRemoval = new ArrayList<>();
   }
 
   protected void generateAnimations(){
@@ -291,6 +367,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     };
     hitAnimation = createAnimation(hitAnimationFrames, 3);
   }
+
   /**
    *
    * @param texturePaths array of textures that should be added to the animation
@@ -349,6 +426,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   @Override
   public void update() {
     animationState = AnimationState.IDLE;
+
+    updatePersistentEffects();
+
     switch (movementState) {
       case CAN_MOVE:
         var movementDelta = calculateMovementDelta();
@@ -431,7 +511,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     Point newPosition = readMovementInput();
     // calculate normalized delta of this.position and the calculated
     // new position to avoid increased diagonal movement speed
-    return scaleDelta(this.position, newPosition, movementSpeed);
+    return scaleDelta(this.position, newPosition, movementSpeed * movementSpeedMultiplier);
   }
 
   /**
