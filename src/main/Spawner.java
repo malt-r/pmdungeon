@@ -47,16 +47,32 @@ public class Spawner {
     }
   }
 
+  /**
+   * Spawnst a monster of the specific type
+   * @param monsterType of the monster that should be spawned
+   * @return  spawned monster
+   * @throws Exception  if monsterType is no supported
+   */
   public static Monster spawnMonster(MonsterType monsterType) throws Exception {
     mainLogger.info(monsterType.toString()+" spawned");
     return MonsterFactory.CreateMonster(monsterType);
   }
-
+  /**
+   * Spawnst a monster of the specific type
+   * @param itemType of the item that should be spawned
+   * @return  spawned item
+   * @throws Exception  if itemType is no supported
+   */
   public static Item spawnItem(ItemType itemType) throws Exception {
     mainLogger.info(itemType.toString()+" spawned");
     return ItemFactory.CreateItem(itemType);
   }
-
+  /**
+   * Spawnst a trap of the specific type
+   * @param trapType of the trap that should be spawned
+   * @return  spawned trap
+   * @throws Exception  if trap is no supported
+   */
   public static Trap spawnTrap(TrapType trapType) throws Exception {
     mainLogger.info(trapType.toString()+" spawned");
     return TrapFactory.CreateTrap(trapType);

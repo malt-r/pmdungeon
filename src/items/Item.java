@@ -22,10 +22,25 @@ public abstract class Item implements IAnimatable, IEntity{
   protected DungeonWorld level;
   protected Animation currentAnimation;
   protected Point position;
+
+  /**
+   * Returns of an item is stackable
+   * @return if item is stackable
+   */
   public boolean isStackable() {
     return true;
   }
+
+  /**
+   * Returns the name of the item
+   * @return name of the item
+   */
   public abstract String getName();
+
+  /**
+   * Returns the description of an item
+   * @return description of the item
+   */
   protected abstract String getDescription();
   /**
    * Constructor of the item class.
@@ -77,7 +92,7 @@ public abstract class Item implements IAnimatable, IEntity{
    *
    * @param texturePaths array of textures that should be added to the animation
    * @param frameTime time between two textures
-   * @return
+   * @return Animation containing the textures
    */
   protected Animation createAnimation(String[] texturePaths, int frameTime) {
     List<Texture> textureList = new ArrayList<>();
