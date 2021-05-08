@@ -4,12 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import main.Actor;
 
+import java.util.concurrent.Callable;
+
 /**
  * Effect to increase the movement speed of an actor.
  * @author malte
  */
 public class IncreaseMovementSpeedEffect extends PersistentEffect {
     private float movementSpeedMultiplier = 1.5f;
+    //private EffectRemovalCheck removalCheck;
+    private Callable<Boolean> removalCheck;
+
+    @Override
+    protected Callable<Boolean> getRemovalCheck() {
+        return removalCheck;
+    }
+
+    public IncreaseMovementSpeedEffect(Callable<Boolean> removalCheck) {
+        this.removalCheck = removalCheck;
+    }
 
     @Override
     public void onApply(Actor target) {
@@ -18,9 +31,7 @@ public class IncreaseMovementSpeedEffect extends PersistentEffect {
 
     @Override
     public void update(Actor target) {
-        if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            target.scheduleForRemoval(this);
-        }
+        super.update(target);
     }
 
     @Override

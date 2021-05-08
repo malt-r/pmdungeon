@@ -9,6 +9,7 @@ import util.math.Vec;
 import progress.ability.Ability;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 /**
  * Ability to knock back other Actors in an area of effect.
@@ -16,14 +17,19 @@ import java.util.ArrayList;
  */
 public class KnockbackAbility extends Ability {
     float areaRadius = 5.f;
+    private Callable<Boolean> activationCheck;
+
+    /**
+     * constructor.
+     * @param activationCheck Callable, which returns true, if the ability should be activated.
+     */
+    public KnockbackAbility(Callable<Boolean> activationCheck) {
+        this.activationCheck = activationCheck;
+    }
 
     @Override
-    public boolean checkForActivation(Actor origin) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-            this.activate(origin);
-            return true;
-        }
-        return false;
+    protected Callable<Boolean> getActivationCheck() {
+        return activationCheck;
     }
 
     @Override
