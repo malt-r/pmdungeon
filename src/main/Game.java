@@ -43,6 +43,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private InventoryIcon[] chest = new InventoryIcon[10];
     private InventoryIcon[] heroSlots = new InventoryIcon[2];
     private Label expLevel;
+    private Label heartLabel;
 
     private static Game instance;
     private Hero hero;
@@ -95,6 +96,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
                                     hero.getLevel().getXPForNextLevelTotal(),
                             "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
 
+        heartCalc();
+
         //Register Observer
         hero.getInventory().register(this);
         hero.register(this);
@@ -113,9 +116,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             }
             entitiesToAdd.clear();
         }
-
-        //GUI
-        heartCalc();
     }
     /**
      * Implements logic executed at the end of a frame.
@@ -298,18 +298,34 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private void heartCalc(){
         float health = hero.getHealth();
         int heartHalves = (int) Math.ceil(health/10);
+        int heartFull = (int)heartHalves/2;
 
-        int i = 0;
+        if (heartLabel != null) {
+            textHUD.removeText(heartLabel);
+            heartLabel = null;
+        }
 
-        for (i = 0; i < ((int)heartHalves/2); i++){
-            hearts[i].setState(2);
-        }
-        if (heartHalves%2 == 1){
-            hearts[i].setState(1);
-            i++;
-        }
-        for (int j = i; j < 10; j++){
-            hearts[j].setState(0);
+        if (health <= 100.0f){
+            int i = 0;
+
+            for (i = 0; i < heartFull; i++){
+                hearts[i].setState(2);
+            }
+            if (heartHalves%2 == 1){
+                hearts[i].setState(1);
+                i++;
+            }
+            for (int j = i; j < 10; j++){
+                hearts[j].setState(0);
+            }
+        }else{
+            hearts[0].setState(2);
+            for (int i = 1; i < hearts.length; i++){
+                hearts[i].setDefaultTexture();
+            }
+
+            heartLabel = textHUD.drawText("" + heartFull,
+                    "fonts/Pixeled.ttf", Color.RED, 20,20,20,50,445);
         }
     }
 
@@ -357,6 +373,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }else{
             heroSlots[1].setDefaultTexture();
         }
+
+        heartCalc();
     }
 
     @Override

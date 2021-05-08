@@ -33,4 +33,5 @@ public class InventoryIcon implements IHUDElement {
     public void setDefaultTexture(){
         texture = defaultTexture;
     }
+
 }

@@ -129,6 +129,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
         mainLogger.info(this.toString() + ": " + health + " health left");
 
+        notifyObservers();
+
         if (isDead()) {
             mainLogger.info("GAME OVER");
         }
