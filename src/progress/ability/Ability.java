@@ -2,6 +2,7 @@ package progress.ability;
 
 import main.Actor;
 
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 /**
@@ -12,12 +13,38 @@ public abstract class Ability {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     // TODO: how to activate specific Ability on keypress?
 
+    protected abstract Callable<Boolean> getActivationCheck();
+
     /**
      * Should be called periodically in update-method to check, if the ability should be activated.
+     * Will get an Callable which is treated as an activationCheck.
      * @param origin The Actor, which should activate the ability.
      * @return True, if the ability was activated.
      */
-    public abstract boolean checkForActivation(Actor origin);
+    public boolean checkForActivation(Actor origin) {
+        var activationCheck = getActivationCheck();
+        if (null != activationCheck) {
+            if (executeActivationCheck(activationCheck)) {
+                activate(origin);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Call the activationCheck Callable and return the result.
+     * @param activationCheck The Callable to call.
+     * @return Result of the activationCheck.call()
+     */
+    protected boolean executeActivationCheck(Callable<Boolean> activationCheck) {
+        try {
+            return activationCheck.call();
+        } catch (Exception ex) {
+            mainLogger.info(ex.toString());
+        }
+        return false;
+    }
 
     /**
      * Activates this ability (apply effects to Actors)

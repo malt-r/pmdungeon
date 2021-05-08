@@ -60,24 +60,28 @@ public class Hero extends Actor implements items.IInventoryOpener {
 
     public boolean[] movementLog = new boolean[4];
 
+    private void grantAbility() {
+        switch (this.level.getCurrentLevel()) {
+            case 2:
+                this.abilities.add(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
+                mainLogger.info("You gained the sprint ability! Hold down left shift to sprint");
+                break;
+            case 5:
+                this.abilities.add(new KnockbackAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.K)));
+                mainLogger.info("You gained the knockback ability! Press K to knock back enemies!");
+                break;
+            default:
+                break;
+        }
+    }
+
     private void applyLevelUp() {
         mainLogger.info("You leveled up to level " + this.level.getCurrentLevel() + "!");
         this.baseAttackDamage += this.level.getDamageIncrementForCurrentLevel();
         mainLogger.info("Your base attack damage is now " + this.baseAttackDamage);
         this.maxHealth += this.level.getHealthIncrementForCurrentLevel();
         mainLogger.info("Your max health is now " + this.maxHealth);
-        switch (this.level.getCurrentLevel()) {
-            case 2:
-                this.abilities.add(new SprintAbility());
-                mainLogger.info("You gained the sprint ability! Hold down left shift to sprint");
-                break;
-            case 5:
-                this.abilities.add(new KnockbackAbility());
-                mainLogger.info("You gained the knockback ability! Press K to knock back enemies!");
-                break;
-            default:
-                break;
-        }
+        grantAbility();
     }
 
     /**
@@ -166,7 +170,10 @@ public class Hero extends Actor implements items.IInventoryOpener {
         this.level = new Level();
 
         this.abilities = new ArrayList<>();
+        //this.abilities.add(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
+        //this.abilities.add(new KnockbackAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.K)));
     }
+
     /**
      * Generates the run and idle animation for the hero.
      */
