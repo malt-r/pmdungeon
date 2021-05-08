@@ -48,14 +48,6 @@ public class HealthPotion extends Potion {
   }
 
   /**
-   * Called each frame and draws the potion witht he right scaling.
-   */
-  @Override
-  public void update(){
-    drawWithScaling(1.0f,1.0f);
-  }
-
-  /**
    * Accept method for a item visitor to extend the functionality of the Potion class.
    * @param visitor Visitor that visits the class
    */

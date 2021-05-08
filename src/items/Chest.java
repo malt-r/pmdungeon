@@ -7,7 +7,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.inventory.Inventory;
-import main.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +84,8 @@ public class Chest implements IAnimatable, IEntity {
     @Override
     public void update() {
         this.inventory.update();
-        this.draw();
+        this.draw(-1f,-0.75F,1,1);
+
     }
 
     /**

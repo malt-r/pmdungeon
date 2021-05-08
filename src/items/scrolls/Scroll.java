@@ -17,4 +17,12 @@ public abstract class Scroll extends UseableItem {
   public Scroll() {
     super();
   }
+
+  /**
+   * Called each frame and draws the scroll.
+   */
+  @Override
+  public void update(){
+    draw(-0.85F, -0.75F,0.75f,0.75f);
+  }
 }
