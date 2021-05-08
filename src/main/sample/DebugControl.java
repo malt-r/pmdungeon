@@ -26,7 +26,7 @@ public class DebugControl {
         monsterType = MonsterType.DEMON;
       }
       try{
-        var mon = MonsterFactory.createMonster(monsterType);
+        var mon = MonsterFactory.CreateMonster(monsterType);
         monsterArray[i]= mon;
         entityController.addEntity(mon);
         //TODO Add which kind of monster spawned
@@ -60,6 +60,10 @@ public class DebugControl {
       var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK);
       entityController.addEntity(scrollAttack);
       scrollAttack.setLevel(levelController.getDungeon());
+
+      var scrollSupervision = ItemFactory.CreateItem(ItemType.SCROL_SUPERVISION);
+      entityController.addEntity(scrollSupervision);
+      scrollSupervision.setLevel(levelController.getDungeon());
 
       var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL);
       entityController.addEntity(potion);

@@ -45,13 +45,6 @@ public class PoisonPotion extends Potion {
     currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
   }
   /**
-   * Called each frame and draws the potion with the right scaling.
-   */
-  @Override
-  public void update() {
-    drawWithScaling(1.0f, 1.0f);
-  }
-  /**
    * Accept method for a item visitor to extend the functionality of the Potion class.
    * @param visitor Visitor that visits the class
    */

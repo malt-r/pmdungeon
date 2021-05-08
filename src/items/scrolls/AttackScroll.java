@@ -47,13 +47,6 @@ public class AttackScroll extends Scroll {
     currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
   }
   /**
-   * Called each frame and draws the scroll.
-   */
-  @Override
-  public void update(){
-    drawWithScaling(0.75f,0.75f);
-  }
-  /**
    * Accept method for a item visitor to extend the functionality of the scroll class.
    * @param visitor Visitor that visits the class
    */

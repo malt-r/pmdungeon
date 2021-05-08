@@ -14,7 +14,7 @@ public class MonsterFactory {
    * @throws  Exception   if monsterType is not supported
    * @return  A monster, of the specified type.
    */
-  public static Monster createMonster(MonsterType monsterType) throws Exception{
+  public static Monster CreateMonster(MonsterType monsterType) throws Exception{
     if(monsterType == MonsterType.DEMON) return new DemonMonster();
     if(monsterType == MonsterType.LIZARD) return new LizardMonster();
     throw new Exception("MonsterType no supported");

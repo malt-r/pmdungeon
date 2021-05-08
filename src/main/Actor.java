@@ -177,7 +177,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   public void dealDamage(float damage, ICombatable attacker) {
     ICombatable.super.dealDamage(damage, attacker);
 
-    if (isKnockBackAble()) {
+    if (isKnockBackAble() && attacker != null) {
       initiateKnockBack(attacker);
     }
   }

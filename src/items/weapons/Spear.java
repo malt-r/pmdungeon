@@ -46,7 +46,7 @@ public class Spear extends Weapon{
    */
   @Override
   public void update(){
-    drawWithScaling(0.25f,1.0f);
+    draw(-0.75f,-1f,0.25f,1.0f);
   }
   /**
    * Accept method for a item visitor to extend the functionality of the scroll class.
