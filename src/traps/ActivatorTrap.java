@@ -4,6 +4,8 @@ import items.Item;
 import main.Hero;
 import monsters.MonsterType;
 
+import java.util.Random;
+
 public class ActivatorTrap extends Trap{
   protected  boolean isActivated;
 
@@ -38,10 +40,10 @@ public class ActivatorTrap extends Trap{
       if (!(entitiy instanceof Item)) { continue; }
       var item = (Item) entitiy;
       if (!game.checkForIntersection(this, item, level)){ continue;  }
-      //  if (isActivated){ return false; }
+      if (isActivated){ return false; }
       isActivated = true;
-      System.out.println("I was activated mothafucka");
-      //spawnMonsters();
+      mainLogger.info("Trap activated");
+      spawnMonsters();
       return true;
     }
     return false;
@@ -49,9 +51,18 @@ public class ActivatorTrap extends Trap{
 
   private void spawnMonsters(){
     try {
-      game.spawnMonster(MonsterType.DEMON,this.position);
-      game.spawnMonster(MonsterType.DEMON,this.position);
-      game.spawnMonster(MonsterType.DEMON,this.position);
+      Random rand = new Random();
+      int upperbound = 100;
+
+      for(int i =0;i<3;i++){
+        int int_random = rand.nextInt(upperbound);
+      if(int_random %2==0){
+        game.spawnMonster(MonsterType.LIZARD,this.position);
+      }
+      else{
+        game.spawnMonster(MonsterType.DEMON,this.position);
+      }
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

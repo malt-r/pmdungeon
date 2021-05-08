@@ -9,5 +9,6 @@ package traps;
 public enum TrapType {
   SPIKES,
   HOLE,
-  ACTIVATOR
+  ACTIVATOR,
+  TELEPORT
 }

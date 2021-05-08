@@ -26,7 +26,7 @@ public class LevelInfo {
             new MonsterType[]{MonsterType.LIZARD},
             new ItemType[]{ItemType.SWORD_REGULAR,ItemType.SCROL_SUPERVISION},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
-            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR});
+            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR,TrapType.TELEPORT});
     content.add(level1);
     var level2 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
