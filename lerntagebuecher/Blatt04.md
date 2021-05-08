@@ -59,7 +59,8 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 ## Fallen
 
 Als Fallen soll einmal eine HoleTrap (Loch in das ein Actor fallen kann und stirbt), eine SpikeTrap (Stacheln die
-kontinuierlich ein und ausfahren), die unsichtbar ist und erst durch einen Zauberspruch sichtbar gemacht werden können 
+kontinuierlich ein und ausfahren), die unsichtbar ist und erst durch einen Zauberspruch sichtbar gemacht werden können,
+eine TeleportTrap (die einen Actor an eine zufällige Stelle im Level teleportiert)
 und eine ActivatorTrap (Beim Ablegen einer Gegenstands auf den Altar werden Monster gespawnt).
 Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeigt. Dadurch wird das Erstellen von 
 Fallen vereinfacht. Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern kommen kann, wird ein TrapType
