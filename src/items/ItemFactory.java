@@ -17,7 +17,6 @@ import items.weapons.Spear;
  */
 public class ItemFactory {
   /**
-   * Normalize the difference-vector between two Points on a defined basis.
    *
    * @param   itemType    Type of the item
    * @throws  Exception   if itemType is not supported

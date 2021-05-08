@@ -24,7 +24,7 @@ public class ActivatorTrap extends Trap{
    */
   @Override
   public void update() {
-    this.draw(0,0.25f);
+    this.draw(-1f,0.25f);
     checkIfActivated();
 
   }
@@ -34,7 +34,7 @@ public class ActivatorTrap extends Trap{
   private boolean checkIfActivated(){
     var allEntities = game.getAllEntities();
     for(var entitiy : allEntities){
-      if (!(entitiy instanceof Item)) { return false; }
+      if (!(entitiy instanceof Item)) { continue; }
       var item = (Item) entitiy;
       if (!game.checkForIntersection(this, item, level)){ return false;  }
       if (isActivated){ return false; }

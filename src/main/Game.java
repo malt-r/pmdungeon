@@ -2,7 +2,6 @@ package main;
 
 import GUI.*;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
@@ -14,14 +13,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import items.Chest;
 import items.Item;
-import items.ItemFactory;
-import items.ItemType;
 import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
-import monsters.MonsterFactory;
 import monsters.MonsterType;
 import progress.Level;
 import traps.*;
@@ -51,9 +46,22 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private static Game instance;
     private Hero hero;
     private DungeonWorld firstLevel;
-    private ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
-    private ArrayList <IEntity> entitiesToAdd = new ArrayList<>();
+    private final ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
+    private final ArrayList <IEntity> entitiesToAdd = new ArrayList<>();
     private int currentLevelIndex =0;
+    private boolean drawTraps=false;
+
+    public DungeonWorld getCurrentLevel() {
+        return levelController.getDungeon();
+    }
+
+    public boolean getDrawTraps() {
+        return drawTraps;
+    }
+    public void setDrawTraps(boolean value){
+        drawTraps= value;
+    }
+
     public static Game getInstance(){
         if(Game.instance==null){
             Game.instance = new Game();
@@ -183,36 +191,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
-
-        // test chest
-        var chest = new Chest();
-        entityController.addEntity(chest);
-        chest.setLevel(levelController.getDungeon());
-        chest.getInventory().register(this);
-
-        var chest2 = new Chest();
-        entityController.addEntity(chest2);
-        chest2.setLevel(levelController.getDungeon());
-        //TODO - make dynamic, maybe getAllChests()
-        chest2.getInventory().register(this);
-
-        var hole = new HoleTrap();
-        entityController.addEntity(hole);
-        hole.setLevel(levelController.getDungeon());
-
-        hole = new HoleTrap();
-        entityController.addEntity(hole);
-        hole.setLevel(levelController.getDungeon());
-
-        var spikes = new SpikesTrap();
-        entityController.addEntity(spikes);
-        spikes.setLevel(levelController.getDungeon());
-
-        spikes = new SpikesTrap();
-        entityController.addEntity(spikes);
-        spikes.setLevel(levelController.getDungeon());
-
-
         try {
             var activator = TrapFactory.CreateTrap(TrapType.ACTIVATOR);
             entityController.addEntity(activator);

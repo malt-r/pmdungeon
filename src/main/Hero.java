@@ -8,7 +8,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 
-import items.Chest;
+import items.chests.Chest;
 import items.inventory.Inventory;
 
 
@@ -450,7 +450,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(SupervisionScroll scroll) {
-        mainLogger.info("visit supervisionScroll");
+        game.setDrawTraps(true);
+        mainLogger.info("Traps can now be seen");
     }
 
     @Override

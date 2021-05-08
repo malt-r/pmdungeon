@@ -54,7 +54,7 @@ public class SpikesTrap extends Trap{
    */
   @Override
   public void update() {
-    if(isVisible) {
+    if(game.getDrawTraps()) {
       this.draw(-1, -1);
     }
 
