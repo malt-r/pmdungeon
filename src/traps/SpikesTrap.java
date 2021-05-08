@@ -1,13 +1,7 @@
 package traps;
 
-import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
-import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import main.Actor;
 import main.ICombatable;
-
-import javax.swing.text.Position;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,9 +54,9 @@ public class SpikesTrap extends Trap{
    */
   @Override
   public void update() {
-    //this.draw();
-    this.draw(-1,-1);
-
+    if(isVisible) {
+      this.draw(-1, -1);
+    }
 
     if(nextFrame){
       nextFrame= false;

@@ -61,6 +61,10 @@ public class DebugControl {
       entityController.addEntity(scrollAttack);
       scrollAttack.setLevel(levelController.getDungeon());
 
+      var scrollSupervision = ItemFactory.CreateItem(ItemType.SCROL_SUPERVISION);
+      entityController.addEntity(scrollSupervision);
+      scrollSupervision.setLevel(levelController.getDungeon());
+
       var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL);
       entityController.addEntity(potion);
       potion.setLevel(levelController.getDungeon());

@@ -1,12 +1,6 @@
 package traps;
 
-import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
-import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
-import main.ICombatable;
-import main.Spawner;
 import monsters.MonsterType;
 
 public class ActivatorTrap extends Trap{
@@ -30,42 +24,35 @@ public class ActivatorTrap extends Trap{
    */
   @Override
   public void update() {
-    //this.draw();
     this.draw(0,0.25f);
-    //Check if item lays on it
-    //to spawn a monster
-    var allEntities = game.getAllEntities();
-    for(var entitiy : allEntities){
-      if (entitiy instanceof IDrawable && entitiy instanceof Item) {
-        if(game.checkForIntersection(this,(IDrawable) entitiy,level)){
-          if(!isActivated){
-            isActivated = true;
-            System.out.println("I was activated mothafucka");
-            try {
-              game.spawnMonster(MonsterType.DEMON,this.position);
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
-          }
-        }
-      }
-    }
-  }
-
-
- // @Override
-  public void update2() {
-    this.draw(0,0.25f);
-    var allEntities = game.getAllEntities();
-    for(var entitiy : allEntities){
-      if (entitiy instanceof IDrawable && entitiy instanceof ICombatable) {
-        if(game.checkForIntersection(this,(IDrawable) entitiy,level)){
-          ICombatable victim = (ICombatable) entitiy;
-          victim.dealDamage(Float.MAX_VALUE,null);
-        }
-      }
-    }
+    checkIfActivated();
 
   }
 
+  //Check if item lays on it
+  //to spawn a monster
+  private boolean checkIfActivated(){
+    var allEntities = game.getAllEntities();
+    for(var entitiy : allEntities){
+      if (!(entitiy instanceof Item)) { return false; }
+      var item = (Item) entitiy;
+      if (!game.checkForIntersection(this, item, level)){ return false;  }
+      if (isActivated){ return false; }
+      isActivated = true;
+      System.out.println("I was activated mothafucka");
+      spawnMonsters();
+      return true;
+    }
+    return false;
+  }
+
+  private void spawnMonsters(){
+    try {
+      game.spawnMonster(MonsterType.DEMON,this.position);
+      game.spawnMonster(MonsterType.DEMON,this.position);
+      game.spawnMonster(MonsterType.DEMON,this.position);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 }
