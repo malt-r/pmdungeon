@@ -2,12 +2,16 @@ package main.sample;
 
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.EntityController;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
-import items.Chest;
+import items.chests.Chest;
 import items.ItemFactory;
 import items.ItemType;
+import items.chests.ChestFactory;
+import items.chests.ChestType;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
+import traps.TrapFactory;
+import traps.TrapType;
 
 import java.util.logging.Logger;
 
@@ -81,9 +85,21 @@ public class DebugControl {
       entityController.addEntity(shieldEagle);
       shieldEagle.setLevel(levelController.getDungeon());
 
-      var chest1 = new Chest();
+      var chest1 = ChestFactory.CreateChest(ChestType.NORMAL);
       entityController.addEntity(chest1);
       chest1.setLevel(levelController.getDungeon());
+
+      var trapHole = TrapFactory.CreateTrap(TrapType.HOLE);
+      entityController.addEntity(trapHole);
+      trapHole.setLevel(levelController.getDungeon());
+
+      var trapSpikes = TrapFactory.CreateTrap(TrapType.SPIKES);
+      entityController.addEntity(trapSpikes);
+      trapSpikes.setLevel(levelController.getDungeon());
+
+      var trapActivator = TrapFactory.CreateTrap(TrapType.ACTIVATOR);
+      entityController.addEntity(trapActivator);
+      trapActivator.setLevel(levelController.getDungeon());
 
     } catch (Exception e) {
       e.printStackTrace();

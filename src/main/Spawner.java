@@ -5,6 +5,9 @@ import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
+import items.chests.Chest;
+import items.chests.ChestFactory;
+import items.chests.ChestType;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
@@ -48,7 +51,7 @@ public class Spawner {
   }
 
   /**
-   * Spawnst a monster of the specific type
+   * Spawns a monster of the specific type
    * @param monsterType of the monster that should be spawned
    * @return  spawned monster
    * @throws Exception  if monsterType is no supported
@@ -58,7 +61,7 @@ public class Spawner {
     return MonsterFactory.CreateMonster(monsterType);
   }
   /**
-   * Spawnst a monster of the specific type
+   * Spawns a monster of the specific type
    * @param itemType of the item that should be spawned
    * @return  spawned item
    * @throws Exception  if itemType is no supported
@@ -68,7 +71,7 @@ public class Spawner {
     return ItemFactory.CreateItem(itemType);
   }
   /**
-   * Spawnst a trap of the specific type
+   * Spawns a trap of the specific type
    * @param trapType of the trap that should be spawned
    * @return  spawned trap
    * @throws Exception  if trap is no supported
@@ -76,5 +79,16 @@ public class Spawner {
   public static Trap spawnTrap(TrapType trapType) throws Exception {
     mainLogger.info(trapType.toString()+" spawned");
     return TrapFactory.CreateTrap(trapType);
+  }
+
+  /**
+   * Spawns a chest of the specific type
+   * @param chestType of the chest that should be spawned
+   * @return  spawned chest
+   * @throws Exception  if chest is no supported
+   */
+  public static Chest spawnChest(ChestType chestType) throws Exception {
+    mainLogger.info(chestType.toString()+" spawned");
+    return ChestFactory.CreateChest(chestType);
   }
 }

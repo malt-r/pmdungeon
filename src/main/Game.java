@@ -7,11 +7,8 @@ import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
-
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
 import items.inventory.*;
@@ -20,7 +17,6 @@ import monsters.Monster;
 import monsters.MonsterType;
 import progress.Level;
 import traps.*;
-
 import java.util.logging.Logger;
 
 /**
@@ -191,16 +187,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
-        try {
-            var activator = TrapFactory.CreateTrap(TrapType.ACTIVATOR);
-            entityController.addEntity(activator);
-            activator.setLevel(levelController.getDungeon());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-
-        //test_SpawnAllItemsAndMonster();
+        test_SpawnAllItemsAndMonster();
 
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);
