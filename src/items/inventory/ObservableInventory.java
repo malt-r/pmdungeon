@@ -1,9 +1,8 @@
 package items.inventory;
 
 import GUI.InventoryObserver;
-import GUI.Observer;
 
-public interface ObservableInventory extends Observable{
+public interface ObservableInventory{
     void register(InventoryObserver observer);
     void unregister(InventoryObserver observer);
     void notifyObservers();

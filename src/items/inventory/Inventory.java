@@ -1,7 +1,6 @@
 package items.inventory;
 
 import GUI.InventoryObserver;
-import GUI.Observer;
 import items.*;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 //TODO - is this necessary?
@@ -150,16 +149,6 @@ public class Inventory<T extends Item> implements ObservableInventory{
     @Override
     public void unregister(InventoryObserver observer){
         this.observerList.remove(observer);
-    }
-
-    @Override
-    public void register(Observer observer) {
-        return;
-    }
-
-    @Override
-    public void unregister(Observer observer) {
-        return;
     }
 
     @Override

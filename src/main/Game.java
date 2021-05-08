@@ -1,9 +1,6 @@
 package main;
 
-import GUI.HeartIcon;
-import GUI.HeroObserver;
-import GUI.InventoryIcon;
-import GUI.InventoryObserver;
+import GUI.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
@@ -25,6 +22,7 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
+import progress.Level;
 import traps.*;
 
 import java.util.logging.Logger;
@@ -36,7 +34,7 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController implements InventoryObserver, HeroObserver {
+public class Game extends MainController implements InventoryObserver, HeroObserver, LevelObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     //GUI
@@ -92,11 +90,15 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             hud.addHudElement(heroSlots[i]);
         }
 
-        expLevel = textHUD.drawText("Platzhalter level", "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
+        expLevel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
+                                    hero.getLevel().getCurrentXP() + "/" +
+                                    hero.getLevel().getXPForNextLevelTotal(),
+                            "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
 
         //Register Observer
         hero.getInventory().register(this);
         hero.register(this);
+        hero.getLevel().register(this);
 
     }
 
@@ -341,9 +343,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 
     @Override
     public void update(Hero hero) {
-        //Update Hands and level
-        textHUD.removeText(expLevel);
-        textHUD.drawText("Is / Should", "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
 
         Item leftHand = hero.getLeftHandSlot();
         Item rightHand = hero.getRightHandSlot();
@@ -360,9 +359,9 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
     }
 
-    //TODO - necessary?
     @Override
-    public void update() {
-
+    public void update(Level level) {
+        textHUD.removeText(expLevel);
+        textHUD.drawText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal(), "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
     }
 }

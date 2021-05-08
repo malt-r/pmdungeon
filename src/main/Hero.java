@@ -2,7 +2,6 @@ package main;
 
 
 import GUI.HeroObserver;
-import GUI.Observer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
@@ -10,13 +9,11 @@ import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 
 import items.Chest;
-import items.IInventoryOpener;
 import items.inventory.Inventory;
 
 
 import items.Item;
 
-import items.inventory.ObservableHero;
 import items.potions.HealthPotion;
 import items.potions.PoisonPotion;
 import items.scrolls.AttackScroll;
@@ -52,6 +49,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     private float bonusDamage = 0.0f;
 
     private Level level;
+    public Level getLevel(){ return this.level; }
     private boolean invincible = false;
 
     private ArrayList<HeroObserver> observerList = new ArrayList<HeroObserver>();
@@ -101,6 +99,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
             // TODO: specify xp amount based on monster kind
             boolean levelIncrease = this.level.increaseXP(50);
+
+
             mainLogger.info("Current XP: " + level.getCurrentXP());
             mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
             if (levelIncrease) {
@@ -437,22 +437,12 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     }
 
     @Override
-    public void register(Observer observer) {
-        return;
-    }
-
-    @Override
-    public void unregister(Observer observer) {
-        return;
-    }
-
-    @Override
     public void register(HeroObserver observer) {
         this.observerList.add(observer);
     }
 
     @Override
-    public void unregister(Hero observer) {
+    public void unregister(HeroObserver observer) {
         this.observerList.remove(observer);
     }
 
