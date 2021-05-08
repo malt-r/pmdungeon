@@ -1,8 +1,11 @@
 package main;
 
 import GUI.HeartIcon;
+import GUI.HeroObserver;
 import GUI.InventoryIcon;
 import GUI.InventoryObserver;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -33,13 +36,15 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController implements InventoryObserver{
+public class Game extends MainController implements InventoryObserver, HeroObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     //GUI
     private HeartIcon[] hearts = new HeartIcon[10];
     private InventoryIcon[] inventory = new InventoryIcon[10];
     private InventoryIcon[] chest = new InventoryIcon[10];
+    private InventoryIcon[] heroSlots = new InventoryIcon[2];
+    private Label expLevel;
 
     private static Game instance;
     private Hero hero;
@@ -82,8 +87,16 @@ public class Game extends MainController implements InventoryObserver{
             hud.addHudElement(chest[i]);
         }
 
+        for (int i = 0; i < 2; i++){
+            heroSlots[i] = new InventoryIcon( i + 11, 0.0f);
+            hud.addHudElement(heroSlots[i]);
+        }
+
+        expLevel = textHUD.drawText("Platzhalter level", "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
+
         //Register Observer
         hero.getInventory().register(this);
+        hero.register(this);
 
     }
 
@@ -323,6 +336,27 @@ public class Game extends MainController implements InventoryObserver{
                     chest[i].setDefaultTexture();
                 }
             }
+        }
+    }
+
+    @Override
+    public void update(Hero hero) {
+        //Update Hands and level
+        textHUD.removeText(expLevel);
+        textHUD.drawText("Is / Should", "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
+
+        Item leftHand = hero.getLeftHandSlot();
+        Item rightHand = hero.getRightHandSlot();
+        if (leftHand != null){
+            heroSlots[0].setTexture(leftHand.getTexture());
+        }else{
+            heroSlots[0].setDefaultTexture();
+        }
+
+        if (rightHand != null){
+            heroSlots[1].setTexture(rightHand.getTexture());
+        }else{
+            heroSlots[1].setDefaultTexture();
         }
     }
 

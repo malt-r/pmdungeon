@@ -8,6 +8,7 @@ public class HeartIcon implements IHUDElement {
 
     private Point position;
     private Texture texture;
+    private Texture defaultTexture = new Texture("tileset/default/default_anim.png");
     private Texture heartFull = new Texture("tileset/other/ui_heart_full.png");
     private Texture heartHalf = new Texture("tileset/other/ui_heart_half.png");
     private Texture heartEmpty = new Texture("tileset/other/ui_heart_empty.png");
@@ -43,4 +44,7 @@ public class HeartIcon implements IHUDElement {
         return texture;
     }
 
+    public void setDefaultTexture(){
+        texture = defaultTexture;
+    }
 }

@@ -1,6 +1,8 @@
 package main;
 
 
+import GUI.HeroObserver;
+import GUI.Observer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
@@ -14,6 +16,7 @@ import items.inventory.Inventory;
 
 import items.Item;
 
+import items.inventory.ObservableHero;
 import items.potions.HealthPotion;
 import items.potions.PoisonPotion;
 import items.scrolls.AttackScroll;
@@ -22,13 +25,15 @@ import items.shields.Shield;
 import items.weapons.Weapon;
 import progress.Level;
 
+import java.util.ArrayList;
+
 /**
  * The controllable player character.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public class Hero extends Actor implements items.IInventoryOpener {
+public class Hero extends Actor implements items.IInventoryOpener, ObservableHero {
     private float healOnKillChance = 0.6f;
     private float healOnKillAmount =  100.f;
     private Inventory inventory;
@@ -37,7 +42,9 @@ public class Hero extends Actor implements items.IInventoryOpener {
 
     private boolean inventoryLock = false;
     private Item leftHandSlot = null; //Defence hand
+    public Item getLeftHandSlot() { return leftHandSlot; }
     private Weapon rightHandSlot = null; //Offence hand
+    public Item getRightHandSlot() { return rightHandSlot; }
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
     // TODO: this should be packaged in an unified handler of stats and modifiers
@@ -46,6 +53,8 @@ public class Hero extends Actor implements items.IInventoryOpener {
 
     private Level level;
     private boolean invincible = false;
+
+    private ArrayList<HeroObserver> observerList = new ArrayList<HeroObserver>();
 
     // TODO: turn this into an ability
     private void RandomHealOnKill() {
@@ -298,9 +307,9 @@ public class Hero extends Actor implements items.IInventoryOpener {
             if (entity instanceof Item) {
                 var item = (Item) entity;
                 if(game.checkForTrigger(item.getPosition())){
-                    inventory.addItem(item);
-                    game.deleteEntity(entity);
-                    System.out.println(item.getName());
+                    if (inventory.addItem(item)){
+                        game.deleteEntity(entity);
+                    }
                     break;
                 }
             } else if (entity instanceof Chest) {
@@ -337,10 +346,12 @@ public class Hero extends Actor implements items.IInventoryOpener {
      */
     @Override
     public void visit(Weapon weapon){
+        //TODO - Error if Inventory is full!
         if (rightHandSlot != null) { inventory.addItem(rightHandSlot); }
         rightHandSlot = weapon;
         updateStats(weapon);
         mainLogger.info("visit weapon");
+        notifyObservers();
     }
 
     /**
@@ -353,6 +364,7 @@ public class Hero extends Actor implements items.IInventoryOpener {
         leftHandSlot = shield;
         updateStats(shield);
         mainLogger.info("visit shield");
+        notifyObservers();
     }
 
     /**
@@ -422,5 +434,32 @@ public class Hero extends Actor implements items.IInventoryOpener {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void register(Observer observer) {
+        return;
+    }
+
+    @Override
+    public void unregister(Observer observer) {
+        return;
+    }
+
+    @Override
+    public void register(HeroObserver observer) {
+        this.observerList.add(observer);
+    }
+
+    @Override
+    public void unregister(Hero observer) {
+        this.observerList.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(HeroObserver obs : observerList){
+            obs.update(this);
+        }
     }
 }

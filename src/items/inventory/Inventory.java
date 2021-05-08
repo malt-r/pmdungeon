@@ -52,7 +52,7 @@ public class Inventory<T extends Item> implements ObservableInventory{
             notifyObservers();
             return success;
         }
-        return true;
+        return false;
     }
 
     public T getItemAt(int index) {
