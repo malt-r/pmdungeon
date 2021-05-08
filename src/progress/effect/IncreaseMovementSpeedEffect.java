@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import main.Actor;
 
-// TODO: add duration and cooldown
+/**
+ * Effect to increase the movement speed of an actor.
+ * @author malte
+ */
 public class IncreaseMovementSpeedEffect extends PersistentEffect {
     private float movementSpeedMultiplier = 1.5f;
 

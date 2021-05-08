@@ -10,8 +10,12 @@ import progress.ability.Ability;
 
 import java.util.ArrayList;
 
+/**
+ * Ability to knock back other Actors in an area of effect.
+ * @author malte
+ */
 public class KnockbackAbility extends Ability {
-    float areaRadius = 10.f;
+    float areaRadius = 5.f;
 
     @Override
     public boolean checkForActivation(Actor origin) {

@@ -213,9 +213,19 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   // end ICombatable implementation ----------------------------------------------------------------
 
   // Abilitysystem implementation ------------------------------------------------------------------
+  /**
+   * The persistent effects, which are currently applied to this actor.
+   */
   protected ArrayList<PersistentEffect> persistentEffects;
+
+  /**
+   * The persistent effects, which are currently applied to this actor but are scheduled for removal.
+   */
   protected ArrayList<PersistentEffect> effectsScheduledForRemoval;
 
+  /**
+   * Call the update-method of all stored persistent effects. Remove any persistent effects, which are scheduled for removal.
+   */
   protected void updatePersistentEffects() {
     for (PersistentEffect effect : persistentEffects) {
       effect.update(this);
@@ -230,15 +240,28 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     effectsScheduledForRemoval.clear();
   }
 
+  /**
+   * Schedule persistent effect for removal from this actor. Will be removed in updatePersistentEffects
+   * @param effect The effect to remove.
+   */
   public void scheduleForRemoval(PersistentEffect effect) {
     mainLogger.info("Scheduling effect for removal: " + effect.toString());
     effectsScheduledForRemoval.add(effect);
   }
 
+  /**
+   * Apply a one-shot effect to this actor.
+   * @param effect The effect to apply.
+   */
   public void applyOneShotEffect(OneShotEffect effect) {
     effect.applyTo(this);
   }
 
+  /**
+   * Apply persistent effect to this actor. Passed effect will be stored in this.persistentEffects and updated on
+   * update of the Actor.
+   * @param effect The effect to apply.
+   */
   public void applyPersistentEffect(PersistentEffect effect) {
     mainLogger.info("Applying persistent effect: " + effect.toString());
     effect.onApply(this);
@@ -261,11 +284,13 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   /**
-   *
-   * @param point
+   * Starts a knock and calculates the knockBackTargetPoint.
+   * @param point The point, from which the knock back is initiated. Used to calculate the destination
+   *              in which the knock back should be performed.
    */
-  public void initiateKnockBackFromPoint(Point point, float distance) {
-    var diff = scaleDelta(this.position, point, distance);
+  // TODO: this should use a falloff function so that the knockback-distance gets smaller dependent of the distance from the point
+  public void initiateKnockBackFromPoint(Point point, float knockBackDistance) {
+    var diff = scaleDelta(this.position, point, knockBackDistance);
     this.knockBackTargetPoint = (new Vec(this.position)).subtract(diff).toPoint();
     this.movementState = MovementState.IS_KNOCKED_BACK;
   }
@@ -342,6 +367,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     };
     hitAnimation = createAnimation(hitAnimationFrames, 3);
   }
+
   /**
    *
    * @param texturePaths array of textures that should be added to the animation

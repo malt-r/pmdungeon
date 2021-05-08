@@ -5,6 +5,10 @@ import com.badlogic.gdx.Input;
 import main.Actor;
 import progress.effect.IncreaseMovementSpeedEffect;
 
+/**
+ * Ability to increase the movement speed of the activating Actor.
+ * @author malte
+ */
 public class SprintAbility extends Ability {
     private IncreaseMovementSpeedEffect effect = new IncreaseMovementSpeedEffect();
     @Override
