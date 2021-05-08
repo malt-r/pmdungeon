@@ -19,6 +19,10 @@ public class InventoryEmptyState implements IInventoryControlState {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             nextState = new InventoryClosedState();
         }
+
+        if (openerLeft(inventory)) {
+            nextState = new InventoryClosedState();
+        }
         return nextState;
     }
 }
