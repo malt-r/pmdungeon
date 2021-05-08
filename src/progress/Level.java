@@ -1,16 +1,22 @@
 package progress;
 
+import GUI.LevelObserver;
+
+import java.util.ArrayList;
+
 /**
  * Encapsulates basic calculations for progress. Calculates the amount of xp needed
  * to reach the next level (currently just a first test).
  * @author malte
  */
-public class Level {
+public class Level implements ObserveableLevel{
     private int level;
     private int xp;
     private float xpConstant = 5.20f; //
     private float healthScaleConstant = 3.f;
     private float damageScaleConstant = 2.f;
+
+    private ArrayList<LevelObserver> observerList = new ArrayList<LevelObserver>();
 
     /**
      * constructor.
@@ -40,8 +46,10 @@ public class Level {
         if (this.xp >= xpForNextLevel) {
             this.xp -= xpForNextLevel;
             this.level += 1;
+            notifyObservers();
             return true;
         } else {
+            notifyObservers();
             return false;
         }
     }
@@ -92,5 +100,22 @@ public class Level {
      */
     public int getCurrentLevel() {
         return level;
+    }
+
+    @Override
+    public void register(LevelObserver observer) {
+        this.observerList.add(observer);
+    }
+
+    @Override
+    public void unregister(LevelObserver observer) {
+        this.observerList.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(LevelObserver obs : observerList){
+            obs.update(this);
+        }
     }
 }

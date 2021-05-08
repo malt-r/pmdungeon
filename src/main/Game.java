@@ -1,5 +1,9 @@
 package main;
 
+import GUI.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -14,10 +18,12 @@ import items.Chest;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
+import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
+import progress.Level;
 import traps.*;
 
 import java.util.logging.Logger;
@@ -29,8 +35,18 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController {
+public class Game extends MainController implements InventoryObserver, HeroObserver, LevelObserver, OpenStateObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+    //GUI
+    private HeartIcon[] hearts = new HeartIcon[10];
+    private InventoryIcon[] inventory = new InventoryIcon[10];
+    private InventoryIcon[] chest = new InventoryIcon[10];
+    private InventoryIcon[] heroSlots = new InventoryIcon[2];
+    private InvBackgroundIcon[] invBackground = new InvBackgroundIcon[10];
+    private InvBackgroundIcon[] chestBackground = new InvBackgroundIcon[10];
+    private Label expLabel;
+    private Label heartLabel;
 
     private static Game instance;
     private Hero hero;
@@ -60,6 +76,48 @@ public class Game extends MainController {
         mainLogger.info("Hero created");
         // attach camera to hero
         camera.follow(hero);
+
+        //GUI
+        for (int i = 0; i < 10; i++){
+
+            invBackground[i] = new InvBackgroundIcon(i, 0.0f);
+            invBackground[i].setDefaultBackgroundTexture();
+            hud.addHudElement(invBackground[i]);
+
+            chestBackground[i] = new InvBackgroundIcon(i, 1.0f);
+            hud.addHudElement(chestBackground[i]);
+
+            hearts[i] = new HeartIcon(i);
+            hud.addHudElement(hearts[i]);
+
+            inventory[i] = new InventoryIcon(i, 0.0f);
+            hud.addHudElement(inventory[i]);
+
+            chest[i] = new InventoryIcon(i, 1.0f);
+            hud.addHudElement(chest[i]);
+
+        }
+
+        for (int i = 0; i < 2; i++){
+            heroSlots[i] = new InventoryIcon( i + 11, 0.0f);
+            hud.addHudElement(heroSlots[i]);
+        }
+
+        expLabel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
+                                    hero.getLevel().getCurrentXP() + "/" +
+                                    hero.getLevel().getXPForNextLevelTotal(),
+                            "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
+
+        heartLabel = textHUD.drawText("","fonts/Pixeled.ttf",
+                                    Color.RED, 20,20,20,50,445);
+
+        heartCalc();
+
+        //Register Observer
+        hero.getInventory().register(this);
+        hero.register(this);
+        hero.getLevel().register(this);
+
     }
 
     /**
@@ -130,11 +188,13 @@ public class Game extends MainController {
         var chest = new Chest();
         entityController.addEntity(chest);
         chest.setLevel(levelController.getDungeon());
+        chest.getInventory().register(this);
 
-
-        chest = new Chest();
-        entityController.addEntity(chest);
-        chest.setLevel(levelController.getDungeon());
+        var chest2 = new Chest();
+        entityController.addEntity(chest2);
+        chest2.setLevel(levelController.getDungeon());
+        //TODO - make dynamic, maybe getAllChests()
+        chest2.getInventory().register(this);
 
         var hole = new HoleTrap();
         entityController.addEntity(hole);
@@ -242,10 +302,128 @@ public class Game extends MainController {
         DebugControl.SpawnAll(entityController,levelController);
     }
 
+
     public void spawnMonster(MonsterType monsterType, Point position) throws Exception {
         var monster = Spawner.spawnMonster(monsterType);
         addEntity(monster);
         monster.setLevel(levelController.getDungeon());
         monster.position = position;
+    }
+
+    private void heartCalc(){
+        float health = hero.getHealth();
+        int heartHalves = (int) Math.ceil(health/10);
+        int heartFull = (int)heartHalves/2;
+
+        heartLabel.setText("");
+
+
+        if (health <= 200.0f){
+            int i = 0;
+
+            for (i = 0; i < heartFull; i++){
+                hearts[i].setState(2);
+            }
+            if (heartHalves%2 == 1){
+                hearts[i].setState(1);
+                i++;
+            }
+            for (int j = i; j < 10; j++){
+                hearts[j].setState(0);
+            }
+        }else{
+            hearts[0].setState(2);
+            for (int i = 1; i < hearts.length; i++){
+                hearts[i].setDefaultTexture();
+            }
+
+            heartLabel.setText("" + heartFull);
+
+        }
+    }
+
+    @Override
+    public void update(Inventory inv, boolean fromHero){
+        if (fromHero){
+            //TODO - Pointer to current selected inv slot
+            if (inv.getCurrentState() instanceof OwnInventoryOpenState){
+                ((OwnInventoryOpenState)inv.getCurrentState()).register(this);
+
+                invBackground[((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
+            } else {
+                for(int i = 0; i < invBackground.length; i++){
+                    invBackground[i].setDefaultBackgroundTexture();
+                }
+            }
+            for (int i = 0; i < inventory.length; i++){
+                if (i < inv.getCount()){
+                    inventory[i].setTexture(inv.getItemAt(i).getTexture());
+                } else {
+                    inventory[i].setDefaultTexture();
+                }
+            }
+        }else{
+            if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
+                for (int i = 0; i < chest.length; i++){
+                    chestBackground[i].setDefaultBackgroundTexture();
+                }
+                ((OtherInventoryOpenState)inv.getCurrentState()).register(this);
+                chestBackground[((OtherInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
+
+                for (int i = 0; i < chest.length; i++){
+                    if (i < inv.getCount()){
+                        chest[i].setTexture(inv.getItemAt(i).getTexture());
+                    } else {
+                        chest[i].setDefaultTexture();
+                    }
+                }
+            }else {//if (inv.getCurrentState() instanceof InventoryClosedState){
+                for (int i = 0; i < chest.length; i++) {
+                    chest[i].setDefaultTexture();
+                    chestBackground[i].setDefaultTexture();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void update(Hero hero) {
+
+        Item leftHand = hero.getLeftHandSlot();
+        Item rightHand = hero.getRightHandSlot();
+        if (leftHand != null){
+            heroSlots[0].setTexture(leftHand.getTexture());
+        }else{
+            heroSlots[0].setDefaultTexture();
+        }
+
+        if (rightHand != null){
+            heroSlots[1].setTexture(rightHand.getTexture());
+        }else{
+            heroSlots[1].setDefaultTexture();
+        }
+
+        heartCalc();
+    }
+
+    @Override
+    public void update(Level level) {
+        expLabel.setText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal());
+    }
+
+    @Override
+    public void update(InventoryOpenState invOp) {
+        if (invOp instanceof OwnInventoryOpenState){
+            for(int i = 0; i < invBackground.length; i++){
+                invBackground[i].setDefaultBackgroundTexture();
+            }
+            invBackground[invOp.getselectorIdx()].setPointerTexture();
+        }else if (invOp instanceof OtherInventoryOpenState){
+            for(int i = 0; i < invBackground.length; i++){
+                chestBackground[i].setDefaultBackgroundTexture();
+            }
+            chestBackground[invOp.getselectorIdx()].setPointerTexture();
+        }
+
     }
 }
