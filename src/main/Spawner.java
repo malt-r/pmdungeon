@@ -48,6 +48,20 @@ public class Spawner {
       entityController.addEntity(item);
       item.setLevel(levelController.getDungeon());
     }
+
+    for(var chestType:levelContent.chests){
+      var chest = ChestFactory.CreateChest(chestType);
+      mainLogger.info(chestType.toString()+" spawned");
+      entityController.addEntity(chest);
+      chest.setLevel(levelController.getDungeon());
+    }
+
+    for(var trapType:levelContent.traps){
+      var trap = TrapFactory.CreateTrap(trapType);
+      mainLogger.info(trapType.toString()+" spawned");
+      entityController.addEntity(trap);
+      trap.setLevel(levelController.getDungeon());
+    }
   }
 
   /**
