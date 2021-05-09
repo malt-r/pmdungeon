@@ -114,6 +114,7 @@ wird die Anzahl an Herzen als Zahl dargestellt, falls ein Wert von mehr als zehn
 07.05.2021 15:00 - 20:00	Erste Version des HUDs mit Herzen und Grundlagen des Inventars
 08.05.2021 11:00 - 21:00 	Verbessern der Herzenanzeige, Hinzufügen von Levelanzeige, Hinzufügen von Hintergrund von
 							Inventaren, Hinzufügen von Pointer auf ausgewähltes Inventarobjekt
+09.05.2021 11:00 - 15:00 JavaDoc und letzte Bugfixes.
 							
 
 ## Erfahrung und Skills
