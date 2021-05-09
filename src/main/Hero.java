@@ -271,6 +271,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     public void onGameOver() {
         resetCombatStats();
+        this.rightHandSlot = null;
+        this.leftHandSlot = null;
         this.inventory.clear();
         this.level.reset();
     }
