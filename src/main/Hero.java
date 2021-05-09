@@ -275,6 +275,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         this.leftHandSlot = null;
         this.inventory.clear();
         this.level.reset();
+        notifyObservers();
     }
 
     /**
