@@ -17,6 +17,10 @@ public abstract class Potion extends UseableItem {
   public Potion() {
     super();
   }
+
+  /**
+   * Draws the potion with specific offsets and scalings
+   */
   @Override
   public void update(){
     draw(-0.85F, -0.75F,0.75f,0.75f);

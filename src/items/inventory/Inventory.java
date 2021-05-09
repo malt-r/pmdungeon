@@ -78,15 +78,24 @@ public class Inventory<T extends Item> implements ObservableInventory{
         item.setPosition(parent.getPosition());
     }
 
+    public void clear() {
+        transitionToNextState(new InventoryClosedState());
+        items.clear();
+        notifyObservers();
+    }
+
+    protected void transitionToNextState(IInventoryControlState nextState) {
+        this.currentState.exit(this);
+        nextState.enter(this);
+        this.currentState = nextState;
+        notifyObservers();
+    }
+
     public void update() {
         var nextState = this.currentState.handleInput(this);
 
         if (null != nextState) {
-            this.currentState.exit(this);
-            nextState.enter(this);
-            this.currentState = nextState;
-
-            notifyObservers();
+            transitionToNextState(nextState);
         }
     }
 
@@ -118,11 +127,7 @@ public class Inventory<T extends Item> implements ObservableInventory{
             }
         }
 
-        this.currentState.exit(this);
-        nextState.enter(this);
-        this.currentState = nextState;
-
-        notifyObservers();
+        transitionToNextState(nextState);
     }
 
     public void logContent() {

@@ -1,6 +1,8 @@
 package progress;
 
 import GUI.LevelObserver;
+import main.Actor;
+import progress.ability.Ability;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,28 @@ public class Level implements ObserveableLevel{
     private float damageScaleConstant = 2.f;
 
     private ArrayList<LevelObserver> observerList = new ArrayList<LevelObserver>();
+
+    private ArrayList<Ability> abilities = new ArrayList<>();
+
+    public boolean addAbility(Ability ability) {
+        if (!abilities.contains(ability)) {
+            abilities.add(ability);
+            return true;
+        }
+        return false;
+    }
+
+    public void checkForAbilityActivation(Actor origin) {
+        for (Ability ability: abilities) {
+            ability.checkForActivation(origin);
+        }
+    }
+
+    public void reset() {
+        this.abilities.clear();
+        this.xp = 0;
+        this.level = 1;
+    }
 
     /**
      * constructor.

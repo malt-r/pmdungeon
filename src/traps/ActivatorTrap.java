@@ -5,14 +5,28 @@ import main.Hero;
 import monsters.MonsterType;
 
 import java.util.Random;
-
+/**
+ * The base class for a Activator trap.
+ * <p>
+ *     Contains all animations, the current position in the DungeonWorld.
+ * </p>
+ */
 public class ActivatorTrap extends Trap{
   protected  boolean isActivated;
 
+  /**
+   * The Trap can only be activated once.
+   * @return if the trap has been activated
+   */
   public boolean isActivated() {
     return isActivated;
   }
-
+  /**
+   * Constructor of the Activator Trap class.
+   * <p>
+   *     This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
   public ActivatorTrap(){
     super();
     isActivated=false;

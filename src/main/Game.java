@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
+import items.chests.Chest;
 import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
@@ -48,20 +49,33 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private boolean drawTraps=false;
 
     /**
-     * Returns current DungeonWorld
-     * @return current dungeon
+     * Gets the current level where the hero is
+     * @return current level of the game
      */
     public DungeonWorld getCurrentLevel() {
         return levelController.getDungeon();
     }
 
+    /**
+     * Hero can see traps if a special potion/scroll has been used
+     * @return if traps are drawn
+     */
     public boolean getDrawTraps() {
         return drawTraps;
     }
+
+    /**
+     * Hero can see traps if a special potion/scroll has been used
+     * @param value that determines of traps are drawn
+     */
     public void setDrawTraps(boolean value){
         drawTraps= value;
     }
 
+    /**
+     * the game is a singleton instance which can be used everywhere in the game
+     * @return singelton instance of the game
+     */
     public static Game getInstance(){
         if(Game.instance==null){
             Game.instance = new Game();
@@ -138,6 +152,18 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         if (entitiesToAdd.size() > 0) {
             for (IEntity entity : entitiesToAdd) {
                 this.entityController.addEntity(entity);
+//                if(entity instanceof Actor) {
+//                    ((Actor)entity).setLevel(levelController.getDungeon());
+//                }
+//                if(entity instanceof Item) {
+//                    ((Item)entity).setLevel(levelController.getDungeon());
+//                }
+//                if(entity instanceof Chest) {
+//                    ((Chest)entity).setLevel(levelController.getDungeon());
+//                }
+//                if(entity instanceof Trap) {
+//                    ((Trap)entity).setLevel(levelController.getDungeon());
+//                }
             }
             entitiesToAdd.clear();
         }
@@ -157,20 +183,32 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entityController.removeAllFrom(Item.class);
             entityController.removeAllFrom(Monster.class);
             entityController.removeAllFrom(Trap.class);
+            entityController.removeAllFrom(Chest.class);
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
 
         }
 
         if (hero.isDead()) {
+            mainLogger.info("GAME OVER");
+            hero.onGameOver();
             try {
                 levelController.loadDungeon(firstLevel);
                 currentLevelIndex =0;
+                drawTraps=false;
             } catch (InvocationTargetException ex) {
                 mainLogger.severe(ex.getMessage());
             } catch (IllegalAccessException ex) {
                 mainLogger.severe(ex.getMessage());
             }
+            var allEntities = getAllEntities();
+            for(var entity: allEntities){
+                if(!(entity instanceof  Hero)){
+                    entitiesToRemove.add(entity);
+                }
+            }
+
+            //spawnEntitiesOfLevel();
         }
 
         if (entitiesToRemove.size() > 0){
@@ -195,17 +233,20 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         hero.setLevel(levelController.getDungeon());
 
         //test_SpawnAllItemsAndMonster();
+        spawnEntitiesOfLevel();
 
+    }
+
+    private void spawnEntitiesOfLevel(){
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);
 
         try {
-            Spawner.spawnEntities(content,levelController,entityController);
+            Spawner.spawnEntities(content,entitiesToAdd);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * Returns all entities from the entityController.
      * This method is used by the combat system to enable ICombatable-instances to scan for attackable targets.
@@ -235,6 +276,13 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         return ownTile == otherTile;
     }
 
+    /**
+     * A generic trigger function which checks if two IDrawable instances are on the same time
+     * @param drawable1 first drawable
+     * @param drawable2 second drawable
+     * @param level     dungeon level
+     * @return          if the two drawables are on the same tile in the same level
+     */
     public boolean checkForIntersection (IDrawable drawable1, IDrawable drawable2, DungeonWorld level) {
         int ownX = Math.round(drawable1.getPosition().x);
         int ownY = Math.round(drawable1.getPosition().y);
@@ -275,6 +323,12 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     }
 
 
+    /**
+     * Spawns a monster in the game
+     * @param monsterType type of the monster
+     * @param position      position of the monster
+     * @throws Exception  if monsterType is not supported
+     */
     public void spawnMonster(MonsterType monsterType, Point position) throws Exception {
         var monster = Spawner.spawnMonster(monsterType);
         addEntity(monster);
