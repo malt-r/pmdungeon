@@ -88,6 +88,17 @@ beispielsweise die Senkung eines Statusattributs oder das Initiieren eines
 bestimmten Verhaltens. Hierbei wird zwischen peristenten Effekten (die über eine
 längere Dauer angewandt werden) und einmalig angewandten Effekten unterschieden.
 
+Im folgenden sind die UML-Diagramme für die `Ability`- und `Effect`-Klassen
+abgebildet:
+
+![UML Ability](./Blatt04/UML_Ability.png "UML Diagramm der Ability Klasse")
+
+![UML Effect](./Blatt04/UML_Effect.png "UML Diagramm der Effect Klasse")
+
+Durch die Kapselung der Fähigkeiten und Effekte auf diese Weise können
+Fähigkeiten und Effekte einen eigenen Zustand haben, um beispielsweise zeitlich
+begrenzte Effekte zu realisieren.
+
 ## Fallen
 
 Als Fallen soll einmal eine HoleTrap (Loch in das ein Actor fallen kann und stirbt), eine SpikeTrap (Stacheln die
@@ -113,10 +124,33 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 ## HUD
 ## Erfahung und Fähigkeiten ##
 
-Tätigkeiten:
-- 06.05.21: Konzeptionierung und Implementierung des Erfahrungssystems (3 Std.)
-- 07.05.21: Konzeptionierung und Implementierung des Fähigkeitensystems (3 Std.)
-- 08.05.21: Bugfixing, Refactoring, Lerntagebuxh ausfüllen (3 Std.)
+Die Berechnung der für einen Stufenaufstieg benoetigten Erfahrungpunkte erfolgt
+nach der Formel $n_{Erfahrungspunkte} = (level * c_{xp})^2$, wobei $c_{xp}$ eine
+Konstante ist, die bestimmt, wie stark die Funktion ansteigt. Diese Formel wurde
+gewählt, damit die Anzahl der benötigten Erfahrungspunkte in Abhängigkeit des
+Levels zunimmt. Für das Wachstum der Boni auf Gesundheit und Schaden wird eine
+lineare Charakteristik gewählt, da der Held sonst mitunter sehr schnell zu stark
+für die aktuell implementierten Gegner ist. Die Anpassung solcher
+Wachstumscharakteristika kann sehr viel Zeit in Anspruch nehmen, daher werden
+die beschriebenen Kurven als erster Iterationsschritt betrachtet.
+
+Es sind aktuell zwei Fähigkeiten implementiert. Die "Sprint"-Fähigkeit erhöht
+die Bewegungsgeschwindigkeit des Helden um einen bestimmten Faktor. Die
+"KnockBack"-Fähigkeit stößt Gegner in einem bestimmten Radius zurück. Diese
+Fähigkeiten können durch Tastendrücke aktiviert werden. Um jedoch nicht in der
+`Ablity`-Subklasse fest die Taste zu kodieren, kann dem `Ability`-Konstruktor
+ein `Callable<Boolean>`-Objekt übergeben werden, welches in der `update`-Methode
+der `Hero`-Klasse aufgerufen wird, um zu überprüfen, ob eine bestimmte Fähigkeit
+aktiviert werden soll. Aktuell wird bspw. für die "Sprint"-Fähigkeit eine
+Lambda-Funktion für diesen Parameter übergeben, welche überprüft, ob die linke
+"Shift"-Taste gedrückt wird. Prinzipiell kann hier jedoch jede Funktion verwendet
+werden, die einen booleschen Wert zurückgibt. Ein ähnliches Vorgehen wird für
+die Überprüfung, ob persistenten Effekte aus dem `Actor` entfernt werden sollen,
+genutzt.
+
+- 06.05.2021: Konzeptionierung und Implementierung des Erfahrungssystems (3 Std.)
+- 07.05.2021: Konzeptionierung und Implementierung des Fähigkeitensystems (5 Std.)
+- 08.05.2021: Bugfixing, Refactoring, Lerntagebuxh ausfüllen (4 Std.)
 
 ## Fallen
 Durch die immer größer werdenen Anzahl an Entitätsarten wurde ein Spawner implementiert, der alle Factory-Objekte
@@ -129,8 +163,8 @@ Falle im Level gesehen werden.
 Die HoleTrap tötet jede Entity die in das Loch hinein gerät. Läuft der Spieler in das Loch, ist das Spiel beendet
 (Game Over). Die ActivatorTrap spawnt drei zufällige Monster, wenn ein Gegenstand auf sie abgelegt wird.
 
-07.05.2021 14:00 – 22:00 Erste Version Fallen, Spawner
-08.05.2021 8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
+- 07.05.2021 14:00 – 22:00 Erste Version Fallen, Spawner
+- 08.05.2021 8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
 
 # Postmortem
 <!--
@@ -141,7 +175,18 @@ kritisch zurück:
 -   Wie haben Sie die Probleme letztlich gelöst?
 -->
 ## HUD
-## Erfahrung und Skills
+
+## Erfahrung und Fähigkeiten
+
+Die `Actor`-Klasse verwendet die Methoden `schedulePersistentEffectForRemoval`,
+um persistente Effekte aus der Liste der aktiven Effekte zu löschen. Hierfür
+kann ein peristenter Effekt sich selbst in eine Liste für zu entfernende Effekte
+eintragen. Für Effekte, welche in Abhängigkeit eines bestimmten Tastendrucks entfert werden
+sollen, traten selten Fälle auf, in denen Effekte mehrfach entfernt wurden. Dies
+führte meistens zu einer `IndexOutOfBoundsException`. Um dieses Problem zu
+lösen wird überprüft, ob ein Effekt, welcher sich für die Entfernung einträgt,
+bereits in der dafür vorgesehenen Liste eingetragen ist.
+
 ## Fallen
 
 Das Verwenden einer Basisklasse vereinfacht die Implementierung der Fallen erheblich. Bei der Implementierung erwies es
