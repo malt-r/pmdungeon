@@ -311,16 +311,19 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     @Override
     public void update(Inventory inv, boolean fromHero){
         if (fromHero){
-            //TODO - Pointer to current selected inv slot
-            if (inv.getCurrentState() instanceof OwnInventoryOpenState){
-                ((OwnInventoryOpenState)inv.getCurrentState()).register(this);
 
-                invBackground[((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
-            } else {
-                for(int i = 0; i < invBackground.length; i++){
-                    invBackground[i].setDefaultBackgroundTexture();
+            for(int i = 0; i < invBackground.length; i++){
+                invBackground[i].setDefaultBackgroundTexture();
+            }
+
+            if (inv.getCurrentState() instanceof OwnInventoryOpenState) {
+                ((OwnInventoryOpenState) inv.getCurrentState()).register(this);
+                int index = ((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx();
+                if (index >= 0) {
+                    invBackground[index].setPointerTexture();
                 }
             }
+
             for (int i = 0; i < inventory.length; i++){
                 if (i < inv.getCount()){
                     inventory[i].setTexture(inv.getItemAt(i).getTexture());
