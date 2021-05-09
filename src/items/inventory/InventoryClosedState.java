@@ -2,6 +2,9 @@ package items.inventory;
 
 import java.util.logging.Logger;
 
+/**
+ * The state of the closed inventory.
+ */
 public class InventoryClosedState implements IInventoryControlState {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 

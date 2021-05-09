@@ -50,6 +50,7 @@ public class InventorySelectState implements IInventoryControlState {
         return nextState;
     }
 
+    // use the item at current selector index
     private void useItem(Inventory inventory) {
         if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {
             var item = inventory.removeAt(this.selectorIdx);
@@ -61,15 +62,18 @@ public class InventorySelectState implements IInventoryControlState {
         }
     }
 
+    // log selected item
     private void logSelectedItem(Inventory inventory) {
         Item item = inventory.getItemAt(this.selectorIdx);
         mainLogger.info("Selected item: " + item.getName());
     }
 
+    // print usage of current state
     private void printUsage() {
         mainLogger.info("Options: ESC (unselect item); Q (drop); I (inspect item); E (use)");
     }
 
+    // drop an item to the location of parent of inventory
     private void dropItem(Inventory inventory) {
 
         if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {

@@ -40,7 +40,7 @@ Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 ## HUD
 Im ersten Teil des Praktikums soll ein HUD (heads-up display) implementiert werden. Das HUD soll das Leben und das Level des
 Helden dauerhaft anzeigen. Zusätzlich soll das Inventar des Helden dargestellt werden. Das Inventar von Kisten soll angezeigt
-werden, sofern eine geöffnet ist.
+werden, sofern eins geöffnet ist.
 ## Erfahrung und Skills
 
 Es soll außerdem ein Erfahrungssystem implementiert werden, sodass der Held
@@ -52,9 +52,8 @@ hinaus soll der Held neue Fähigkeiten beim Stufenaufstieg erhalten.
 Der letzte Teil des Praktikums war die Implementierung von Fallen. Dabei sollen Fallen durch Gegenstände, Monster oder
 durch den Helden ausgelöst werden. Die Fallen sollen zum Beispiel Schadenspunkte verteilen, den Auslöser teleportieren
 oder zufällige Monster herbeizaubern. Dabei können Fallen sichtbar oder versteckt sein. Versteckte Fallen sollen über
-einen Zaubertrank oder Zauberspruch sichtbar gemacht werden können. Des Weiteren sollen Fallen entweder einmal aktiviert
-werden oder mehrmals aktiviert werden können.
-
+einen Zaubertrank oder Zauberspruch sichtbar gemacht werden können. Des Weiteren sollen Fallen entweder einmal
+oder mehrmals aktiviert werden können.
 
 # Ansatz und Modellierung
 
@@ -66,7 +65,6 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -   Worauf müssen Sie konkret achten?
 -->
 ## HUD
-
 Das Leben des Helden soll in Form von zehn Herzen angezeigt werden. Verliert der Held Leben, werden statt volle Herzen, halbvolle
 bzw. leere Herzen angezeigt. Wenn sich das maximale Leben des Helden erhöht, soll sich die Anzeige verändern. Dann wird ein volles
 Herz mit einer Zahl angezeigt. Die Zahl entspricht der Anzahl an Herzen.
@@ -120,13 +118,13 @@ begrenzte Effekte zu realisieren.
 ## Fallen
 
 Als Fallen sollen folgende Arten implementiert werden:
-- HoleTrap: Ein Loch in das ein Actor fallen kann und stirbt
+- HoleTrap: Ein Loch in das ein Actor fallen kann und stirbt.
 - SpikeTrap: Stacheln die kontinuierlich ein- und ausfahren. Ist unsichtbar, bis sie durch einen Zauberspruch sichtbar
-gemacht werden
-- TeleportTrap: Teleportiert einen Actor an eine zufällige Stelle im Dungeon
+gemacht werden.
+- TeleportTrap: Teleportiert einen Actor an eine zufällige Stelle im Dungeon.
 - ActivatorTrap: Wenn ein Gegenstand auf ihr abgelegt wird, werden drei zufällige Monster gespwant.
 
-Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeugt. Dadurch wird das Erstellen von
+Da es verschiedene Fallenarten gibt, werden die Fallen über die TrapFactory erzeugt. Dadurch wird das Erstellen von
 Fallen vereinfacht. Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern kommen kann, wird ein TrapType
 Enum definiert, welches alle möglichen Fallenarten definiert. Dabei enthält LevelContent Informationen über ein
 spezifisches Level (Monster, Item, Kisten etc.) während LevelInfo die Informationen über alle Level hält und dem
@@ -149,7 +147,7 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 Zu Beginn mussten alle notwenigen HUD-Objekte implementiert werden. Dazu wurden Klassen erzeugt, die neben den notwendigen
 Methoden zum Zurückgeben von Textur und Position, Methoden zum Ändern der Textur besitzen. Beim Start werden alle Objekte
 dem HUD hinzugefügt und im Laufe des Spiels lediglich die Texturen geändert. So können verschiedene Herz- und
-Itemtexturen v erwendet werden. Wenn keine Kiste geöffnet ist, werden die zuständigen Texturen durchsichtig geschaltet.
+Itemtexturen verwendet werden. Wenn keine Kiste geöffnet ist, werden die zuständigen Texturen durchsichtig geschaltet.
 Damit nicht jeden Zyklus Daten vom Inventar und Helden abgefragt werden müssen, werden verschiedene Observer verwendet.
 Zusätzlich wird die Anzeige der Herzen abhängig von der Anzahl der aktuellen Herzen berechnet. Wie oben beschrieben,
 wird die Anzahl an Herzen als Zahl dargestellt, falls ein Wert von mehr als zehn Herzen erreicht ist.
@@ -158,6 +156,7 @@ wird die Anzahl an Herzen als Zahl dargestellt, falls ein Wert von mehr als zehn
 07.05.2021 15:00 - 20:00	Erste Version des HUDs mit Herzen und Grundlagen des Inventars
 08.05.2021 11:00 - 21:00 	Verbessern der Herzenanzeige, Hinzufügen von Levelanzeige, Hinzufügen von Hintergrund von
 							Inventaren, Hinzufügen von Pointer auf ausgewähltes Inventarobjekt
+09.05.2021 11:00 - 15:00    JavaDoc und letzte Bugfixes.
 
 ## Erfahung und Fähigkeiten ##
 
@@ -191,6 +190,7 @@ genutzt.
 - 09.05.2021 11:00 - 15:00 Letzte Bugfixes, Javadoc, Lerntagebuch finalisieren
 
 ## Fallen
+
 Durch die immer größer werdene Anzahl an Entitätsarten wurde ein Spawner implementiert, der alle Factory-Objekte
 zusammenfasst und dem GameController zur Verfügung stellt. Des Weiteren werden die Informationen über die Level über die
 Klassen LevelInfo und LevelContent erstellt.
@@ -202,9 +202,9 @@ Die HoleTrap tötet jede Entity die in das Loch hinein gerät. Läuft ein Actor 
 (Game Over). Die ActivatorTrap spawnt drei zufällige Monster, wenn ein Gegenstand auf sie abgelegt wird. Die
 TeleporterTrap teleportiert den Actor an eine zufällige Stelle im Dungeon.
 
-07.05.2021 14:00 – 22:00 Erste Version Fallen, Spawner
-08.05.2021  8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
-09.05.2021 10:00 - 14:00 JavaDoc und letzte Bugfixes.
+07.05.2021 12:00 – 22:00 Erste Version Fallen, Spawner
+08.05.2021 8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
+09.05.2021 9:00 - 15:00 JavaDoc und letzte Bugfixes.
 
 # Postmortem
 <!--
@@ -215,6 +215,7 @@ kritisch zurück:
 -   Wie haben Sie die Probleme letztlich gelöst?
 -->
 ## HUD
+
 Das Verwenden von Observern sparrt Rechenzeit, da nicht jeden Zyklus Informationen abgefragt werden müssen. Dies hat
 gut funktioniert und ermöglicht das effiziente Steuern des HUD. Da viele Programmteile fürs HUD wichtige Informationen
 bereitstellen, müssen mehrere Observer implementiert werden. Diese besitzen nahezu identischen Code.
@@ -233,6 +234,6 @@ bereits in der dafür vorgesehenen Liste eingetragen ist.
 ## Fallen
 
 Das Verwenden einer Basisklasse vereinfacht die Implementierung der Fallen erheblich. Bei der Implementierung erwies es
-sich problematisch, dass noch kein Verständnis dafür vorlag, wie der offset von der Engine verarbeitet wird, was zu viel
+sich problematisch, dass noch kein Verständnis dafür vorlag, wie der Offset von der Engine verarbeitet wird, was zu viel
 Rumprobieren geführt und viel Zeit gekostet hat. Des Weiteren war es problematisch zu überprüfen, ob ein Actor bereits
 von einer Falle getroffen wurde. Um das zu Lösen werden Schadenspunkte nur beim Zustandswechsel der Falle abgezogen.
