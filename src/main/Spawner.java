@@ -1,7 +1,9 @@
 package main;
 
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.EntityController;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import items.Item;
 import items.ItemFactory;
 import items.ItemType;
@@ -15,6 +17,7 @@ import traps.Trap;
 import traps.TrapFactory;
 import traps.TrapType;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -34,33 +37,29 @@ public class Spawner {
    * @param entityController entityController of the game
    * @throws Exception if creation of an itme or monster fails
    */
-  public static void spawnEntities(LevelContent levelContent, LevelController levelController, EntityController entityController) throws Exception {
+  public static void spawnEntities(LevelContent levelContent, ArrayList<IEntity> listToAdd) throws Exception {
     for(MonsterType monsterType: levelContent.monsters){
       var monster = MonsterFactory.CreateMonster(monsterType);
       mainLogger.info(monsterType.toString()+" spawned");
-      entityController.addEntity(monster);
-      monster.setLevel(levelController.getDungeon());
+      listToAdd.add(monster);
     }
 
     for(var itemType:levelContent.items){
       var item = ItemFactory.CreateItem(itemType);
       mainLogger.info(itemType.toString()+" spawned");
-      entityController.addEntity(item);
-      item.setLevel(levelController.getDungeon());
+      listToAdd.add(item);
     }
 
     for(var chestType:levelContent.chests){
       var chest = ChestFactory.CreateChest(chestType);
       mainLogger.info(chestType.toString()+" spawned");
-      entityController.addEntity(chest);
-      chest.setLevel(levelController.getDungeon());
+      listToAdd.add(chest);
     }
 
     for(var trapType:levelContent.traps){
       var trap = TrapFactory.CreateTrap(trapType);
       mainLogger.info(trapType.toString()+" spawned");
-      entityController.addEntity(trap);
-      trap.setLevel(levelController.getDungeon());
+      listToAdd.add(trap);
     }
   }
 

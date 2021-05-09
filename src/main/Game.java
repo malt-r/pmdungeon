@@ -133,6 +133,19 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         if (entitiesToAdd.size() > 0) {
             for (IEntity entity : entitiesToAdd) {
                 this.entityController.addEntity(entity);
+                entityController.addEntity(entity);
+                if(entity instanceof Actor) {
+                    ((Actor)entity).setLevel(levelController.getDungeon());
+                }
+                if(entity instanceof Item) {
+                    ((Item)entity).setLevel(levelController.getDungeon());
+                }
+                if(entity instanceof Chest) {
+                    ((Chest)entity).setLevel(levelController.getDungeon());
+                }
+                if(entity instanceof Trap) {
+                    ((Trap)entity).setLevel(levelController.getDungeon());
+                }
             }
             entitiesToAdd.clear();
         }
@@ -170,6 +183,14 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             } catch (IllegalAccessException ex) {
                 mainLogger.severe(ex.getMessage());
             }
+            var allEntities = getAllEntities();
+            for(var entity: allEntities){
+                if(!(entity instanceof  Hero)){
+                    entitiesToRemove.add(entity);
+                }
+            }
+
+            //spawnEntitiesOfLevel();
         }
 
         if (entitiesToRemove.size() > 0){
@@ -194,17 +215,20 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         hero.setLevel(levelController.getDungeon());
 
         //test_SpawnAllItemsAndMonster();
+        spawnEntitiesOfLevel();
 
+    }
+
+    private void spawnEntitiesOfLevel(){
         var levelInfo = new LevelInfo();
         var content = levelInfo.getLevelContent(currentLevelIndex);
 
         try {
-            Spawner.spawnEntities(content,levelController,entityController);
+            Spawner.spawnEntities(content,entitiesToAdd);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * Returns all entities from the entityController.
      * This method is used by the combat system to enable ICombatable-instances to scan for attackable targets.
