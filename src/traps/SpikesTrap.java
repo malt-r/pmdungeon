@@ -5,11 +5,20 @@ import main.ICombatable;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
+/**
+ * The base class for any SpikesTrap.
+ * <p>
+ *     Contains all animations, the current position in the DungeonWorld.
+ * </p>
+ */
 public class SpikesTrap extends Trap{
   private float damageValue =50;
   private ArrayList<ICombatable> hitInCurrentState;
 
+  /**
+   * The SpikeTrap does damage on every "pointy" state change.
+   * @return damageValue of the spikestrap
+   */
   public float getDamageValue() {
     return damageValue;
   }
@@ -22,6 +31,12 @@ public class SpikesTrap extends Trap{
   private final Animation littleSpikesAnimation;
   private final Animation middleSpikesAnimation;
   private final Animation bigSpikesAnimation;
+  /**
+   * Constructor of the SpikesTrap class.
+   * <p>
+   *     This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
   public SpikesTrap(){
     super();
     hitInCurrentState = new ArrayList<>();

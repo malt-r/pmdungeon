@@ -124,42 +124,96 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected float evasionChanceModifierScroll = 1.f;
   protected float evasionChanceModifierWeapon = 1.f;
 
+  /**
+   *Gets the health of the actor
+   * @return health of the actor
+   */
   @Override
   public float getHealth() {
     return this.health;
   }
+
+  /**
+   * sets the health of the actor
+   * @param health The new value for the health backing field.
+   */
   @Override
   public void setHealth(float health) {
     this.health = health;
   }
+
+  /**
+   * If the actor is passive
+   * @return if the actor is passive
+   */
   @Override
   public boolean isPassive() {
     return false;
   }
+
+  /**
+   * if the actor has a target for combat
+   * @return if the actor has a target
+   */
   @Override
   public boolean hasTarget() {
     return this.target != null;
   }
+
+  /**
+   * Returns of the actor has a target
+   * @return if the acor ahs a target
+   */
   @Override
   public ICombatable getTarget() {
     return this.target;
   }
+
+  /**
+   * Sets the target of the actor
+   * @param target The ICombatable to cache as a target.
+   */
   @Override
   public void setTarget(ICombatable target) {
     this.target = target;
   }
+
+  /**
+   * Returns of the other is friendly for combat
+   * @param other The other ICombatable.
+   * @return if the other is friendly
+   */
   @Override
   public boolean isOtherFriendly(ICombatable other) {
     return false;
   }
 
+  /**
+   * Gets the Hitchance for combat
+   * @return value of the hitchance
+   */
   @Override
   public float getHitChance() { return baseHitChance * hitChanceModifierWeapon * hitChanceModifierScroll; }
 
+  /**
+   * Gets the evasion rate of the actor
+   * @return evasion rate of the actor
+   */
   @Override
   public float getEvasionChance() { return this.baseEvasionChance * evasionChanceModifierWeapon * evasionChanceModifierScroll; }
+
+  /**
+   * gets the damage value for combat
+   * @return damage value of the actor
+   */
   @Override
   public float getDamage() { return this.baseAttackDamage * this.attackDamageModifierWeapon * this.attackDamageModifierScroll; }
+
+  /**
+   * Attack implementation for combat
+   * @param other The ICombatable to attack.
+   * @return if the attack was sucessfull
+   */
   @Override
   public float attack(ICombatable other) {
     float damage = ICombatable.super.attack(other);
@@ -175,11 +229,21 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     attackTimer.schedule(resetCanAttackTask, attackDelay);
     return damage;
   }
+
+  /**
+   * Resolves if another attack is possible
+   * @return an attack is possible
+   */
   @Override
   public boolean canAttack() {
     return ICombatable.super.canAttack() && canAttack;
   }
 
+  /**
+   * Deals damage to this actor
+   * @param damage The amount to decrease the health by.
+   * @param attacker The ICombatable which deals the damage.
+   */
   @Override
   public void dealDamage(float damage, ICombatable attacker) {
     ICombatable.super.dealDamage(damage, attacker);
@@ -188,6 +252,11 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       initiateKnockBack(attacker);
     }
   }
+
+  /**
+   * Heals the actor
+   * @param amount The amount to increase the health value by.
+   */
   @Override
   public void heal(float amount) {
     //TODO: negative amount on poison?
@@ -345,6 +414,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     this.effectsScheduledForRemoval = new ArrayList<>();
   }
 
+  /**
+   * Generates the animations of the actor
+   */
   protected void generateAnimations(){
     String[] idleLeftFrames = new String[]{
             "tileset/default/default_anim.png",
@@ -524,8 +596,22 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * @return returns the new point where the actor should be moved
    */
   protected abstract Point readMovementInput();
+
+  /**
+   * Has to be overwritten for the hero, monsters do this automaticly
+   * @return if combat imput has been read
+   */
   protected boolean readCombatInput() { return true; }
+
+  /**
+   * Has to be overwritten for the hero, monsters do this automaticly
+   * @return if pickup input has been read
+   */
   protected boolean readPickupInput() { return false; }
+
+  /**
+   * Handles Item picking of the actor
+   */
   protected void handleItemPicking(){}
 
 }
