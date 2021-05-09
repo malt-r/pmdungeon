@@ -63,6 +63,7 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -   Worauf müssen Sie konkret achten?
 -->
 ## HUD
+
 ## Erfahrung und Fähigkeiten ##
 
 Die Logik für das Ansammeln von Erfahrungspunkten und den Stufenaufstieg wird in
@@ -72,8 +73,20 @@ Belohnung für einen Stufenaufstieg soll der Held bei jedem Stufenaufstieg mehr
 Gesundheit erhalten und erhöhten Basisschaden verursachen können. Die Berechnung
 dieser Boni ist ebenfalls in der `Level`-Klasse vorgesehen.
 
+Im folgenden ist das UML-Diagramm der `Level`-Klasse abgebildet:
+![UML Level](./Blatt04/UML_Level.png "UML Diagramm der Level Klasse")
+
+Das Level implementiert zusätzlich das `ObservableLevel`-Interface, um das HUD
+bei Veränderung der aktuellen Erfahrungspunkte oder eines Stufenaufstiegs zu
+benachrichtigen.
+
 Fähigkeiten sollen sowohl den Helden selbst, als auch andere Actor-Instanzen
-(z.B. Monster)
+(z.B. Monster) beeinflussen können. Daher basiert das Fähigkeitensystem auf
+der `Ability`-Klasse, welche bestimmt, wie eine bestimmte Fähigkeit Instanzen
+der `Effect`-Klasse auf `Actor`-Instanzen anwendet. Ein Effekt ist
+beispielsweise die Senkung eines Statusattributs oder das Initiieren eines
+bestimmten Verhaltens. Hierbei wird zwischen peristenten Effekten (die über eine
+längere Dauer angewandt werden) und einmalig angewandten Effekten unterschieden.
 
 ## Fallen
 
@@ -81,7 +94,7 @@ Als Fallen soll einmal eine HoleTrap (Loch in das ein Actor fallen kann und stir
 kontinuierlich ein und ausfahren), die unsichtbar ist und erst durch einen Zauberspruch sichtbar gemacht werden können,
 eine TeleportTrap (die einen Actor an eine zufällige Stelle im Level teleportiert)
 und eine ActivatorTrap (Beim Ablegen einer Gegenstands auf den Altar werden Monster gespawnt).
-Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeigt. Dadurch wird das Erstellen von
+Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeugt. Dadurch wird das Erstellen von
 Fallen vereinfacht. Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern kommen kann, wird ein TrapType
 Enum definiert, welches alle möglichen Fallenarten definiert. Dabei enthält LevelContent Informationen über ein
 spezifisches Level (Monster, Item, Kisten etc.) während LevelInfo die Informationen über alle Level hält und dem
@@ -98,7 +111,13 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 -->
 
 ## HUD
-## Erfahrung und Skills
+## Erfahung und Fähigkeiten ##
+
+Tätigkeiten:
+- 06.05.21: Konzeptionierung und Implementierung des Erfahrungssystems (3 Std.)
+- 07.05.21: Konzeptionierung und Implementierung des Fähigkeitensystems (3 Std.)
+- 08.05.21: Bugfixing, Refactoring, Lerntagebuxh ausfüllen (3 Std.)
+
 ## Fallen
 Durch die immer größer werdenen Anzahl an Entitätsarten wurde ein Spawner implementiert, der alle Factory-Objekte
 zusammenfasst und dem GameController zur Verfügung stellt. Des Weiteren werden die Informationen über die Level über die
