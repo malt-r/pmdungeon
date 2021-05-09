@@ -53,9 +53,9 @@ public class DebugControl {
       entityController.addEntity(sword);
       sword.setLevel(levelController.getDungeon());
 
-      var spear = ItemFactory.CreateItem(ItemType.SPEAR_REGULAR);
-      entityController.addEntity(spear);
-      spear.setLevel(levelController.getDungeon());
+      var swordGold = ItemFactory.CreateItem(ItemType.SWORD_GOLD);
+      entityController.addEntity(swordGold);
+      swordGold.setLevel(levelController.getDungeon());
 
       var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED);
       entityController.addEntity(scroll);

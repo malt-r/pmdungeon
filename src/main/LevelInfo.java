@@ -30,7 +30,7 @@ public class LevelInfo {
     content.add(level1);
     var level2 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
-            new ItemType[]{ItemType.SPEAR_REGULAR},
+            new ItemType[]{ItemType.SWORD_GOLD},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
             new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR});
     content.add(level2);

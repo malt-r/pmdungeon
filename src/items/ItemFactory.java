@@ -7,8 +7,8 @@ import items.scrolls.SpeedScroll;
 import items.scrolls.SupervisionScroll;
 import items.shields.EagleShield;
 import items.shields.WoodShield;
+import items.weapons.GoldenSword;
 import items.weapons.RegularSword;
-import items.weapons.Spear;
 /**
  * Factory for creation of monster
  * <p>
@@ -24,7 +24,7 @@ public class ItemFactory {
    */
   public static Item CreateItem (ItemType itemType) throws Exception{
     if(itemType == ItemType.SWORD_REGULAR)      return new RegularSword();
-    if(itemType == ItemType.SPEAR_REGULAR)      return new Spear();
+    if(itemType == ItemType.SWORD_GOLD)       return new GoldenSword();
     if(itemType == ItemType.POTION_HEAL)        return new HealthPotion();
     if(itemType == ItemType.POTION_POISON)      return new PoisonPotion();
     if(itemType == ItemType.SCROLL_ATTACK)      return new AttackScroll();
