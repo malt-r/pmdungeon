@@ -10,6 +10,7 @@ import items.IInventoryOpener;
 import items.ItemFactory;
 import items.ItemType;
 import items.inventory.Inventory;
+import main.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class Chest implements IAnimatable, IEntity {
 
         this.inventory = new Inventory(this, 10);
         generateContents();
+        this.getInventory().register(Game.getInstance());
     }
 
     private void generateContents() {
