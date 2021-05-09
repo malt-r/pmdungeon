@@ -246,7 +246,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    */
   public void scheduleForRemoval(PersistentEffect effect) {
     mainLogger.info("Scheduling effect for removal: " + effect.toString());
-    effectsScheduledForRemoval.add(effect);
+    if (!effectsScheduledForRemoval.contains(effect)) {
+      effectsScheduledForRemoval.add(effect);
+    }
   }
 
   /**
@@ -265,7 +267,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   public void applyPersistentEffect(PersistentEffect effect) {
     mainLogger.info("Applying persistent effect: " + effect.toString());
     effect.onApply(this);
-    persistentEffects.add(effect);
+    if (!persistentEffects.contains(effect)) {
+      persistentEffects.add(effect);
+    }
   }
 
   // end Abilitysystem implementation --------------------------------------------------------------

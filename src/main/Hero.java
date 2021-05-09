@@ -56,7 +56,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     private Level level;
     public Level getLevel(){ return this.level; }
-    private boolean invincible = false;
+    private boolean invincible = true;
 
     private ArrayList<HeroObserver> observerList = new ArrayList<HeroObserver>();
 
