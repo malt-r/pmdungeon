@@ -153,6 +153,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
 
         if (hero.isDead()) {
+            mainLogger.info("GAME OVER");
+            hero.onGameOver();
             try {
                 levelController.loadDungeon(firstLevel);
                 currentLevelIndex =0;
