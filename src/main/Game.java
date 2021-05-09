@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
+import items.chests.Chest;
 import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
@@ -151,6 +152,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entityController.removeAllFrom(Item.class);
             entityController.removeAllFrom(Monster.class);
             entityController.removeAllFrom(Trap.class);
+            entityController.removeAllFrom(Chest.class);
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
 
@@ -162,6 +164,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             try {
                 levelController.loadDungeon(firstLevel);
                 currentLevelIndex =0;
+                drawTraps=false;
             } catch (InvocationTargetException ex) {
                 mainLogger.severe(ex.getMessage());
             } catch (IllegalAccessException ex) {
