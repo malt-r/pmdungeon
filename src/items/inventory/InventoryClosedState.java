@@ -13,6 +13,9 @@ public class InventoryClosedState implements IInventoryControlState {
     @Override
     public void enter(Inventory inventory) {
         mainLogger.info("Closing inventory");
-        inventory.getOpener().unlock();
+        var opener = inventory.getOpener();
+        if (null != opener) {
+            opener.unlock();
+        }
     }
 }

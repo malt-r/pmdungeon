@@ -4,6 +4,7 @@ package main;
 import GUI.HeroObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
@@ -56,8 +57,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     private Level level;
     public Level getLevel(){ return this.level; }
-    private boolean invincible = false;
-    private ArrayList<Ability> abilities;
+    private boolean invincible = true;
 
     private ArrayList<HeroObserver> observerList = new ArrayList<HeroObserver>();
 
@@ -76,11 +76,11 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     private void grantAbility() {
         switch (this.level.getCurrentLevel()) {
             case 2:
-                this.abilities.add(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
+                this.level.addAbility(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
                 mainLogger.info("You gained the sprint ability! Hold down left shift to sprint");
                 break;
             case 5:
-                this.abilities.add(new KnockbackAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.K)));
+                this.level.addAbility(new KnockbackAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.K)));
                 mainLogger.info("You gained the knockback ability! Press K to knock back enemies!");
                 break;
             default:
@@ -152,9 +152,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
         notifyObservers();
 
-        if (isDead()) {
-            mainLogger.info("GAME OVER");
-        }
     }
     /**
      * Constructor of the Hero class.
@@ -185,10 +182,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
         this.inventory = new Inventory(this, 10);
         this.level = new Level();
-
-        this.abilities = new ArrayList<>();
-        //this.abilities.add(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
-        //this.abilities.add(new KnockbackAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.K)));
     }
 
     /**
@@ -236,11 +229,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         hitAnimation = createAnimation(hitAnimationFrames, 3);
     }
 
-    private void checkForAbilityAcitvation() {
-        for (Ability ability: abilities) {
-            ability.checkForActivation(this);
-        }
-    }
     /**
      * Called each frame, handles movement and the switching to and back from the running animation state.
      */
@@ -254,7 +242,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
                     if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
                         this.inventory.open(this);
                     }
-                    checkForAbilityAcitvation();
+                    this.level.checkForAbilityActivation(this);
                 }
                 break;
             case IS_KNOCKED_BACK:
@@ -266,6 +254,12 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         this.inventory.update();
     }
 
+    @Override
+    public void setLevel(DungeonWorld level) {
+        super.level = level;
+        findRandomPosition();
+    }
+
     /**
      * Resets the combat stats of the hero-
      */
@@ -275,6 +269,13 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         mainLogger.info("Combat stats reset");
         notifyObservers();
     }
+
+    public void onGameOver() {
+        resetCombatStats();
+        this.inventory.clear();
+        this.level.reset();
+    }
+
     /**
      * Generates Movement Input, depending on the pressed key on the keyboard.
      */
