@@ -114,7 +114,7 @@ wird die Anzahl an Herzen als Zahl dargestellt, falls ein Wert von mehr als zehn
 07.05.2021 15:00 - 20:00	Erste Version des HUDs mit Herzen und Grundlagen des Inventars
 08.05.2021 11:00 - 21:00 	Verbessern der Herzenanzeige, Hinzufügen von Levelanzeige, Hinzufügen von Hintergrund von
 							Inventaren, Hinzufügen von Pointer auf ausgewähltes Inventarobjekt
-09.05.2021 11:00 - 15:00 JavaDoc und letzte Bugfixes.
+09.05.2021 11:00 - 15:00    JavaDoc und letzte Bugfixes.
 							
 
 ## Erfahrung und Skills
@@ -130,9 +130,9 @@ Die HoleTrap tötet jede Entity die in das Loch hinein gerät. Läuft ein Actor 
 (Game Over). Die ActivatorTrap spawnt drei zufällige Monster, wenn ein Gegenstand auf sie abgelegt wird. Die
 TeleporterTrap teleportiert den Actor an eine zufällige Stelle im Dungeon.
 
-07.05.2021 14:00 – 22:00 Erste Version Fallen, Spawner
-08.05.2021  8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
-09.05.2021 10:00 - 15:00 JavaDoc und letzte Bugfixes.
+07.05.2021 12:00 – 22:00 Erste Version Fallen, Spawner
+08.05.2021 8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
+09.05.2021 9:00 - 15:00 JavaDoc und letzte Bugfixes.
 
 # Postmortem
 <!--
