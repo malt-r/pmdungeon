@@ -4,6 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IHUDElement;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
+/**
+ * The HeartIcon for the HUD
+ * <p>
+ *     Contains all textures, positions and texture manipulation logic
+ * </p>
+ */
 public class HeartIcon implements IHUDElement {
 
     private Point position;
@@ -13,6 +19,13 @@ public class HeartIcon implements IHUDElement {
     private Texture heartHalf = new Texture("tileset/other/ui_heart_half.png");
     private Texture heartEmpty = new Texture("tileset/other/ui_heart_empty.png");
 
+    /**
+     * Constructor of HeartIcon class.
+     * <p>
+     *     This constructor will instantiate a new HeartIcon, sets ist default texture and position
+     * </p>
+     * @param index of heart
+     */
     public HeartIcon(int index){
         position = new Point((float)index * 0.5f, 4.5f);
         texture = heartFull;
@@ -44,6 +57,9 @@ public class HeartIcon implements IHUDElement {
         return texture;
     }
 
+    /**
+     * Sets the default texture (seethrough)
+     */
     public void setDefaultTexture(){
         texture = defaultTexture;
     }

@@ -126,16 +126,27 @@ public class Level implements ObserveableLevel{
         return level;
     }
 
+    /**
+     * Registers an observer
+     * @param observer to be registered
+     */
     @Override
     public void register(LevelObserver observer) {
         this.observerList.add(observer);
     }
 
+    /**
+     * Unregisters an observer
+     * @param observer to be unregistered
+     */
     @Override
     public void unregister(LevelObserver observer) {
         this.observerList.remove(observer);
     }
 
+    /**
+     * notifies all observers
+     */
     @Override
     public void notifyObservers() {
         for(LevelObserver obs : observerList){
