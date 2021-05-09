@@ -125,14 +125,25 @@ public abstract class InventoryOpenState implements IInventoryControlState, Obse
 
     public int getselectorIdx() { return selectorIdx; }
 
+    /**
+     * Registers an observer
+     * @param observer to be registered
+     */
     public void register(OpenStateObserver observer){
         observerList.add(observer);
     }
 
+    /**
+     * Unregisters an observer
+     * @param observer to be unregistered
+     */
     public void unregister(OpenStateObserver observer){
         observerList.remove(observer);
     }
 
+    /**
+     * notifies all observers
+     */
     public void notifyObservers(){
         for (OpenStateObserver obs : observerList){
             obs.update(this);

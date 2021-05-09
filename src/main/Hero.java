@@ -28,8 +28,6 @@ import progress.ability.SprintAbility;
 
 import java.util.ArrayList;
 
-import java.util.ArrayList;
-
 /**
  * The controllable player character.
  * <p>
@@ -325,6 +323,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         return newPosition;
     }
 
+    /**
+     * Generates pickup input, depending on the pressed key on the keyboard.
+     */
     @Override
     protected boolean readPickupInput(){
         if (!inventoryLock) {
@@ -335,6 +336,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         return false;
     }
 
+    /**
+     * handles picking up an item, from ground into inventory and from chest into inventory
+     */
     @Override
     protected void handleItemPicking(){
         var allEntities = game.getAllEntities();
@@ -358,6 +362,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
     }
 
+    /**
+     * Generates combat input, depending on the pressed key on the keyboard.
+     */
     @Override
     protected boolean readCombatInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -482,16 +489,27 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         return false;
     }
 
+    /**
+     * Registers an observer
+     * @param observer to be registered
+     */
     @Override
     public void register(HeroObserver observer) {
         this.observerList.add(observer);
     }
 
+    /**
+     * Unregisters an observer
+     * @param observer to be unregistered
+     */
     @Override
     public void unregister(HeroObserver observer) {
         this.observerList.remove(observer);
     }
 
+    /**
+     * notifies all observers
+     */
     @Override
     public void notifyObservers() {
         for(HeroObserver obs : observerList){

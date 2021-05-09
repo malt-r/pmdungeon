@@ -141,16 +141,27 @@ public class Inventory<T extends Item> implements ObservableInventory{
 
     public IInventoryControlState getCurrentState() { return currentState; }
 
+    /**
+     * Registers an observer
+     * @param observer to be registered
+     */
     @Override
     public void register(InventoryObserver observer){
         this.observerList.add(observer);
     }
 
+    /**
+     * Unregisters an observer
+     * @param observer to be unregistered
+     */
     @Override
     public void unregister(InventoryObserver observer){
         this.observerList.remove(observer);
     }
 
+    /**
+     * notifies all observers
+     */
     @Override
     public void notifyObservers(){
         for (InventoryObserver obs : observerList){

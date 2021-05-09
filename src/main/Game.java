@@ -47,6 +47,10 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private int currentLevelIndex =0;
     private boolean drawTraps=false;
 
+    /**
+     * Returns current DungeonWorld
+     * @return current dungeon
+     */
     public DungeonWorld getCurrentLevel() {
         return levelController.getDungeon();
     }
@@ -83,35 +87,37 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 
         //GUI
         for (int i = 0; i < 10; i++){
-
+            //Init of background for inventory
             invBackground[i] = new InvBackgroundIcon(i, 0.0f);
             invBackground[i].setDefaultBackgroundTexture();
             hud.addHudElement(invBackground[i]);
-
+            //Init of background for chest
             chestBackground[i] = new InvBackgroundIcon(i, 1.0f);
             hud.addHudElement(chestBackground[i]);
-
+            //Init of hearts
             hearts[i] = new HeartIcon(i);
             hud.addHudElement(hearts[i]);
-
+            //Init of inventory items
             inventory[i] = new InventoryIcon(i, 0.0f);
             hud.addHudElement(inventory[i]);
-
+            //Init of chest items
             chest[i] = new InventoryIcon(i, 1.0f);
             hud.addHudElement(chest[i]);
 
         }
 
+        //Init of hand items of hero
         for (int i = 0; i < 2; i++){
             heroSlots[i] = new InventoryIcon( i + 11, 0.0f);
             hud.addHudElement(heroSlots[i]);
         }
 
+        //Init of exp level text
         expLabel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
                                     hero.getLevel().getCurrentXP() + "/" +
                                     hero.getLevel().getXPForNextLevelTotal(),
                             "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
-
+        //Init of heart label text
         heartLabel = textHUD.drawText("","fonts/Pixeled.ttf",
                                     Color.RED, 20,20,20,50,445);
 
@@ -276,6 +282,9 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         monster.position = position;
     }
 
+    /**
+     * Calculates and sets the heart display
+     */
     private void heartCalc(){
         float health = hero.getHealth();
         int heartHalves = (int) Math.ceil(health/10);
@@ -304,10 +313,15 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             }
 
             heartLabel.setText("" + heartFull);
-
         }
     }
 
+    /**
+     * Function to update inventory display
+     * Gets called by Inventory.notifyObservers()
+     * @param inv inv object from which inventory the function got called
+     * @param fromHero boolean if its inventory of hero
+     */
     @Override
     public void update(Inventory inv, boolean fromHero){
         if (fromHero){
@@ -355,6 +369,11 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
     }
 
+    /**
+     * Function to update hand slot display and calculate heart display
+     * Gets called by Hero.notifyObservers()
+     * @param hero hero object from which hero the function got called
+     */
     @Override
     public void update(Hero hero) {
 
@@ -375,11 +394,21 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         heartCalc();
     }
 
+    /**
+     * Function to update level display
+     * Gets called by Level.notifyObservers()
+     * @param level level object from which level the function got called
+     */
     @Override
     public void update(Level level) {
         expLabel.setText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal());
     }
 
+    /**
+     * Function to update index of inventories
+     * Gets called by InventoryOpenState.notifyObservers()
+     * @param invOp InventoryOpenState object from which the function is called
+     */
     @Override
     public void update(InventoryOpenState invOp) {
         if (invOp instanceof OwnInventoryOpenState){
