@@ -40,6 +40,7 @@ public class Level implements ObserveableLevel{
         this.abilities.clear();
         this.xp = 0;
         this.level = 1;
+        notifyObservers();
     }
 
     /**
