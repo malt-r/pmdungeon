@@ -33,31 +33,34 @@ public class Spawner {
    * Spawns all monsters and items present in the levelContent in the current game-
    *
    * @param levelContent content of a level
-   * @param levelController levelController of the game
-   * @param entityController entityController of the game
+   * @param listToAdd to which list the entities should be added
    * @throws Exception if creation of an itme or monster fails
    */
   public static void spawnEntities(LevelContent levelContent, ArrayList<IEntity> listToAdd) throws Exception {
     for(MonsterType monsterType: levelContent.monsters){
       var monster = MonsterFactory.CreateMonster(monsterType);
+      monster.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info(monsterType.toString()+" spawned");
       listToAdd.add(monster);
     }
 
     for(var itemType:levelContent.items){
       var item = ItemFactory.CreateItem(itemType);
+      item.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info(itemType.toString()+" spawned");
       listToAdd.add(item);
     }
 
     for(var chestType:levelContent.chests){
       var chest = ChestFactory.CreateChest(chestType);
+      chest.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info(chestType.toString()+" spawned");
       listToAdd.add(chest);
     }
 
     for(var trapType:levelContent.traps){
       var trap = TrapFactory.CreateTrap(trapType);
+      trap.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info(trapType.toString()+" spawned");
       listToAdd.add(trap);
     }
