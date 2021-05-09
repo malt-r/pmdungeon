@@ -40,14 +40,14 @@ Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 ## HUD
 Im ersten Teil des Praktikums soll ein HUD (heads-up display) implementiert werden. Das HUD soll das Leben und das Level des
 Helden dauerhaft anzeigen. Zusätzlich soll das Inventar des Helden dargestellt werden. Das Inventar von Kisten soll angezeigt
-werden, sofern eine geöffnet ist.
+werden, sofern eins geöffnet ist.
 ## Erfahrung und Skills
 ## Fallen
 Der letzte Teil des Praktikums war die Implementierung von Fallen. Dabei sollen Fallen durch Gegenstände, Monster oder
 durch den Helden ausgelöst werden. Die Fallen sollen zum Beispiel Schadenspunkte verteilen, den Auslöser teleportieren 
 oder zufällige Monster herbeizaubern. Dabei können Fallen sichtbar oder versteckt sein. Versteckte Fallen sollen über 
-einen Zaubertrank oder Zauberspruch sichtbar gemacht werden können. Des Weiteren sollen Fallen entweder einmal aktiviert
-werden oder mehrmals aktiviert werden können.
+einen Zaubertrank oder Zauberspruch sichtbar gemacht werden können. Des Weiteren sollen Fallen entweder einmal
+oder mehrmals aktiviert werden können.
 # Ansatz und Modellierung
 
 <!--
@@ -76,13 +76,13 @@ Damit nicht zyklisch auf eine Änderung getestet werden muss, werden Observer-Pa
 ## Fallen
 
 Als Fallen sollen folgende Arten implementiert werden:
-- HoleTrap: Ein Loch in das ein Actor fallen kann und stirbt 
+- HoleTrap: Ein Loch in das ein Actor fallen kann und stirbt. 
 - SpikeTrap: Stacheln die kontinuierlich ein- und ausfahren. Ist unsichtbar, bis sie durch einen Zauberspruch sichtbar
-gemacht werden
-- TeleportTrap: Teleportiert einen Actor an eine zufällige Stelle im Dungeon
+gemacht werden.
+- TeleportTrap: Teleportiert einen Actor an eine zufällige Stelle im Dungeon.
 - ActivatorTrap: Wenn ein Gegenstand auf ihr abgelegt wird, werden drei zufällige Monster gespwant.
 
-Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeugt. Dadurch wird das Erstellen von 
+Da es verschiedene Fallenarten gibt, werden die Fallen über die TrapFactory erzeugt. Dadurch wird das Erstellen von 
 Fallen vereinfacht. Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern kommen kann, wird ein TrapType
 Enum definiert, welches alle möglichen Fallenarten definiert. Dabei enthält LevelContent Informationen über ein
 spezifisches Level (Monster, Item, Kisten etc.) während LevelInfo die Informationen über alle Level hält und dem 
@@ -105,7 +105,7 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 Zu Beginn mussten alle notwenigen HUD-Objekte implementiert werden. Dazu wurden Klassen erzeugt, die neben den notwendigen
 Methoden zum Zurückgeben von Textur und Position, Methoden zum Ändern der Textur besitzen. Beim Start werden alle Objekte
 dem HUD hinzugefügt und im Laufe des Spiels lediglich die Texturen geändert. So können verschiedene Herz- und 
-Itemtexturen v erwendet werden. Wenn keine Kiste geöffnet ist, werden die zuständigen Texturen durchsichtig geschaltet.
+Itemtexturen verwendet werden. Wenn keine Kiste geöffnet ist, werden die zuständigen Texturen durchsichtig geschaltet.
 Damit nicht jeden Zyklus Daten vom Inventar und Helden abgefragt werden müssen, werden verschiedene Observer verwendet.
 Zusätzlich wird die Anzeige der Herzen abhängig von der Anzahl der aktuellen Herzen berechnet. Wie oben beschrieben, 
 wird die Anzahl an Herzen als Zahl dargestellt, falls ein Wert von mehr als zehn Herzen erreicht ist.
@@ -131,7 +131,7 @@ TeleporterTrap teleportiert den Actor an eine zufällige Stelle im Dungeon.
 
 07.05.2021 14:00 – 22:00 Erste Version Fallen, Spawner
 08.05.2021  8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
-09.05.2021 10:00 - 14:00 JavaDoc und letzte Bugfixes.
+09.05.2021 10:00 - 15:00 JavaDoc und letzte Bugfixes.
 
 # Postmortem
 <!--
@@ -149,6 +149,6 @@ bereitstellen, müssen mehrere Observer implementiert werden. Diese besitzen nah
 ## Erfahrung und Skills
 ## Fallen
 Das Verwenden einer Basisklasse vereinfacht die Implementierung der Fallen erheblich. Bei der Implementierung erwies es 
-sich problematisch, dass noch kein Verständnis dafür vorlag, wie der offset von der Engine verarbeitet wird, was zu viel
+sich problematisch, dass noch kein Verständnis dafür vorlag, wie der Offset von der Engine verarbeitet wird, was zu viel
 Rumprobieren geführt und viel Zeit gekostet hat. Des Weiteren war es problematisch zu überprüfen, ob ein Actor bereits 
 von einer Falle getroffen wurde. Um das zu Lösen werden Schadenspunkte nur beim Zustandswechsel der Falle abgezogen.
