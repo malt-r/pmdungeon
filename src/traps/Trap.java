@@ -11,8 +11,10 @@ import main.Game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public abstract class Trap implements IAnimatable, IEntity {
+  protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
   protected Animation currentAnimation;
   protected Game game;
   protected Point position;

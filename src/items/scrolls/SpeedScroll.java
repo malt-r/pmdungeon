@@ -10,7 +10,7 @@ import items.IItemVisitor;
 public class SpeedScroll extends Scroll {
   protected float speedMultiplier = 1.5f;
   /**
-   *  Returns the speedMultiplier value of the potion which can be used for display purposes
+   *  Returns the speedMultiplier value of the scroll which can be used for display purposes
    *  @return attackbonus of the scroll
    */
   public float getSpeedMultiplier(){
@@ -25,8 +25,8 @@ public class SpeedScroll extends Scroll {
     return "Speedscroll";
   }
   /**
-   *  Returns the deescription of the potion which can be used for display purposes
-   *  @return description of the potion
+   *  Returns the deescription of the scroll which can be used for display purposes
+   *  @return description of the scroll
    */
   @Override
   protected String getDescription() {

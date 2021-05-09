@@ -4,23 +4,23 @@ import items.IItemVisitor;
 /**
  * Regular sword class.
  * <p>
- *   Contains everything that describes a regular sword.
+ *   Contains everything that describes a golden sword.
  * </p>
  */
-public class RegularSword extends Weapon {
+public class GoldenSword extends Weapon {
   /**
-   * Constructor of the RegularWord class.
+   * Constructor of the GoldenSword class.
    * <p>
    * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public RegularSword(){
+  public GoldenSword(){
     super();
-    this.attackDamageModifier=1.2f;
-    this.hitChanceModifier=1.2f;
+    this.attackDamageModifier=2f;
+    this.hitChanceModifier=0.7f;
     this.condition=100;
     String[] idleLeftFrames = new String[]{
-            "tileset/items/weapon_regular_sword.png"
+            "tileset/items/weapon_golden_sword.png"
     };
     currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
 
@@ -31,7 +31,7 @@ public class RegularSword extends Weapon {
    */
   @Override
   public String getName() {
-    return "Regular Sword";
+    return "Golden Sword";
   }
   /**
    * description of the sword for display purposes
@@ -39,7 +39,7 @@ public class RegularSword extends Weapon {
    */
   @Override
   protected String getDescription() {
-    return "Thicc sword";
+    return "A pretty expensive sword";
   }
   /**
    * Called each frame and draws the regular sword with the right scaling.

@@ -21,6 +21,12 @@ public abstract class Weapon extends EquipableItem {
    */
   public float getHitChanceModifier(){return hitChanceModifier;};
   protected int condition;
+
+  /**
+   * Reduces the condition of the weapon after a sucessfull hit
+   * @param reduce reduceamount which should be deducted from the weapon
+   * @return  returns if the weapon broke
+   */
   public boolean reduceCondition(int reduce) {
     condition -= reduce;
     if (condition <= 0 ){
