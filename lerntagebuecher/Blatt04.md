@@ -75,15 +75,20 @@ Damit nicht zyklisch auf eine Änderung getestet werden muss, werden Observer-Pa
 ## Erfahrung und Skills
 ## Fallen
 
-Als Fallen soll einmal eine HoleTrap (Loch in das ein Actor fallen kann und stirbt), eine SpikeTrap (Stacheln die
-kontinuierlich ein und ausfahren), die unsichtbar ist und erst durch einen Zauberspruch sichtbar gemacht werden können,
-eine TeleportTrap (die einen Actor an eine zufällige Stelle im Level teleportiert)
-und eine ActivatorTrap (Beim Ablegen einer Gegenstands auf den Altar werden Monster gespawnt).
-Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeigt. Dadurch wird das Erstellen von 
+Als Fallen sollen folgende Arten implementiert werden:
+- HoleTrap: Ein Loch in das ein Actor fallen kann und stirbt 
+- SpikeTrap: Stacheln die kontinuierlich ein- und ausfahren. Ist unsichtbar, bis sie durch einen Zauberspruch sichtbar
+gemacht werden
+- TeleportTrap: Teleportiert einen Actor an eine zufällige Stelle im Dungeon
+- ActivatorTrap: Wenn ein Gegenstand auf ihr abgelegt wird, werden drei zufällige Monster gespwant.
+
+Da es verschiedene Fallenarten gibt werden die Fallen über die TrapFactory erzeugt. Dadurch wird das Erstellen von 
 Fallen vereinfacht. Damit es (wie bei der Verwendung eines Strings) zu keinen Tippfehlern kommen kann, wird ein TrapType
 Enum definiert, welches alle möglichen Fallenarten definiert. Dabei enthält LevelContent Informationen über ein
 spezifisches Level (Monster, Item, Kisten etc.) während LevelInfo die Informationen über alle Level hält und dem 
-GameController zur Verfügung stellt.
+GameController zur Verfügung stellt. Die entsprechenden Trap Klassen sind in folgender Abbildung dargestellt.
+
+![ICombatable](./Blatt04/uml_trap.png "Trap Aufbau")
 
 
 # Umsetzung
@@ -113,18 +118,20 @@ wird die Anzahl an Herzen als Zahl dargestellt, falls ein Wert von mehr als zehn
 
 ## Erfahrung und Skills
 ## Fallen
-Durch die immer größer werdenen Anzahl an Entitätsarten wurde ein Spawner implementiert, der alle Factory-Objekte
+Durch die immer größer werdene Anzahl an Entitätsarten wurde ein Spawner implementiert, der alle Factory-Objekte
 zusammenfasst und dem GameController zur Verfügung stellt. Des Weiteren werden die Informationen über die Level über die
-Klassen LevelInfo und LevelContent.
+Klassen LevelInfo und LevelContent erstellt.
 Die SpikeTrap wurde mit einer Statemachine implementiert, die über SpikesTrapState die Zustände wechselt. Dabei teilt 
 die SpikesTrap bei jeder Aufwärtsbewegung der Stacheln (sobald diese über der Oberfläche sind) Schaden an alle Actor 
-Instanten aus. SpikeTraps sind für den Helden nicht sichtbar. Erst wenn eine SupervisionScroll verwendet wird, kann die
-Falle im Level gesehen werden.
-Die HoleTrap tötet jede Entity die in das Loch hinein gerät. Läuft der Spieler in das Loch, ist das Spiel beendet 
-(Game Over). Die ActivatorTrap spawnt drei zufällige Monster, wenn ein Gegenstand auf sie abgelegt wird.
+Instanzen aus, die auf der Falle stehen. SpikeTraps sind für den Helden nicht sichtbar. Erst wenn eine SupervisionScroll
+verwendet wird, kann die Falle im Level gesehen werden.
+Die HoleTrap tötet jede Entity die in das Loch hinein gerät. Läuft ein Actor in das Loch stirbt er.
+(Game Over). Die ActivatorTrap spawnt drei zufällige Monster, wenn ein Gegenstand auf sie abgelegt wird. Die
+TeleporterTrap teleportiert den Actor an eine zufällige Stelle im Dungeon.
 
 07.05.2021 14:00 – 22:00 Erste Version Fallen, Spawner
-08.05.2021 8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
+08.05.2021  8:00 – 20:00 Factories für alle Entities erstellt, ActivatorTrap, Anpassungen der Skalierungen
+09.05.2021 10:00 - 14:00 JavaDoc und letzte Bugfixes.
 
 # Postmortem
 <!--
