@@ -106,6 +106,7 @@ public abstract class InventoryOpenState implements IInventoryControlState, Obse
         logCurrentSelection(inventory);
     };
 
+    // log the currently selected item
     private void logCurrentSelection(Inventory inventory) {
         if (this.selectorIdx >= 0) {
             mainLogger.info("Selected item at index " + this.selectorIdx + " :");
@@ -115,6 +116,9 @@ public abstract class InventoryOpenState implements IInventoryControlState, Obse
         }
     }
 
+    /**
+     * print the usage of this specific state
+     */
     protected void printUsage() {
         mainLogger.info("Usage: Arrow Keys (Move Selection), L (Log Content), ESC (Exit)");
     }
@@ -123,6 +127,10 @@ public abstract class InventoryOpenState implements IInventoryControlState, Obse
         mainLogger.info("Leaving open state");
     };
 
+    /**
+     * the current selector index.
+     * @return
+     */
     public int getselectorIdx() { return selectorIdx; }
 
     /**
