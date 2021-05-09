@@ -8,7 +8,6 @@ import items.IInventoryOpener;
 
 import java.util.logging.Logger;
 
-// TODO: detect that the opener is moving away from this
 public class OtherInventoryOpenState extends InventoryOpenState {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -40,6 +39,7 @@ public class OtherInventoryOpenState extends InventoryOpenState {
         return nextState;
     }
 
+    // transfer item to inventory of opener
     private void transferItemToOpenersInventory(Inventory inventory) {
         if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {
             mainLogger.info("transfering item to openers inventory");
@@ -57,6 +57,7 @@ public class OtherInventoryOpenState extends InventoryOpenState {
         }
     }
 
+    // transfer all items to inventory of opener
     private void takeAll(Inventory inventory) {
         IInventoryOpener opener = inventory.getOpener();
         if (inventory.getCount() > opener.getNumFreeSlotsOfInventory()) {
