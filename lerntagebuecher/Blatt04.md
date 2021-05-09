@@ -41,6 +41,7 @@ Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 Im ersten Teil des Praktikums soll ein HUD (heads-up display) implementiert werden. Das HUD soll das Leben und das Level des
 Helden dauerhaft anzeigen. Zusätzlich soll das Inventar des Helden dargestellt werden. Das Inventar von Kisten soll angezeigt
 werden, sofern eins geöffnet ist.
+
 ## Erfahrung und Skills
 
 Es soll außerdem ein Erfahrungssystem implementiert werden, sodass der Held
@@ -90,6 +91,7 @@ Gesundheit erhalten und erhöhten Basisschaden verursachen können. Die Berechnu
 dieser Boni ist ebenfalls in der `Level`-Klasse vorgesehen.
 
 Im folgenden ist das UML-Diagramm der `Level`-Klasse abgebildet:
+
 ![UML Level](./Blatt04/UML_Level.png "UML Diagramm der Level Klasse")
 
 Das Level implementiert zusätzlich das `ObservableLevel`-Interface, um das HUD
