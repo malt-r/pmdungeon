@@ -3,8 +3,19 @@ package traps;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import main.Actor;
 
-
+/**
+ * The base class for any TeleporterTrap.
+ * <p>
+ *     Contains all animations, the current position in the DungeonWorld.
+ * </p>
+ */
 public class TeleporterTrap extends Trap{
+  /**
+   * Constructor of the TeleporterTrap class.
+   * <p>
+   *     This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
   public TeleporterTrap(){
     super();
     String[] idleLeftFrames = new String[]{

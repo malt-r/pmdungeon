@@ -46,6 +46,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     private boolean inventoryLock = false;
     private Item leftHandSlot = null; //Defence hand
+
     public Item getLeftHandSlot() { return leftHandSlot; }
     private Weapon rightHandSlot = null; //Offence hand
     public Item getRightHandSlot() { return rightHandSlot; }
