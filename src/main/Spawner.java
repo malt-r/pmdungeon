@@ -13,6 +13,7 @@ import items.chests.ChestType;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
+import quests.QuestGiver;
 import traps.Trap;
 import traps.TrapFactory;
 import traps.TrapType;
@@ -64,6 +65,13 @@ public class Spawner {
       mainLogger.info(trapType.toString()+" spawned");
       listToAdd.add(trap);
     }
+
+    //QuestGiver
+    //TODO - Add spawnQuestGiver method
+    var questGiver = new QuestGiver();
+    questGiver.setLevel(Game.getInstance().getCurrentLevel());
+    mainLogger.info("QuestGiver spawned");
+    listToAdd.add(questGiver);
   }
 
   /**

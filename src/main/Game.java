@@ -85,6 +85,19 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
         return Game.instance;
     }
+
+    /**
+     *
+     * @return
+     */
+    public QuestHandler getQuestHandler(){ return this.questHandler; }
+
+    //TODO - Maybe only temporary (who knows)
+    /**
+     *
+     * @return
+     */
+    public Hero getHero(){ return this.hero; }
     /**
      * Setup of the game world.
      * <p>
@@ -97,7 +110,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         hero = new Hero();
         this.questHandler = new QuestHandler(hero);
         // TODO: temporary solution, how to pass hero to quest?
-        this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
+        //this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
 
         firstLevel = null;
         // the entityController will call hero.update each frame
