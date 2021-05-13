@@ -17,6 +17,8 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
 import progress.Level;
+import quests.KillMonstersQuest;
+import quests.QuestHandler;
 import traps.*;
 import java.util.logging.Logger;
 
@@ -41,6 +43,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private Label heartLabel;
 
     private static Game instance;
+    private QuestHandler questHandler;
     private Hero hero;
     private DungeonWorld firstLevel;
     private final ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
@@ -92,6 +95,10 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     @Override
     protected void setup() {
         hero = new Hero();
+        this.questHandler = new QuestHandler(hero);
+        // TODO: temporary solution, how to pass hero to quest?
+        this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
+
         firstLevel = null;
         // the entityController will call hero.update each frame
         entityController.addEntity(hero);

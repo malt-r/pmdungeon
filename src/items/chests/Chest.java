@@ -7,6 +7,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.IInventoryOpener;
+import items.Item;
 import items.ItemFactory;
 import items.ItemType;
 import items.inventory.Inventory;
@@ -60,23 +61,13 @@ public class Chest implements IAnimatable, IEntity {
     }
 
     private void generateContents() {
-        int min = 0;
-        int max = 3;
-        int num = (int)((Math.random() * (max - min)) + min);
+        int min = 2;
+        int max = 5;
 
-        for (int i = 0; i < max; i++) {
-            int iter = (int)((Math.random() * (ItemType.values().length)));
-
-            for (int n = 0; n < ItemType.values().length; n++ ) {
-                if (iter == n) {
-                    try {
-                        this.inventory.addItem(ItemFactory.CreateItem(ItemType.values()[n]));
-                        break;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        int numItems = util.math.Convenience.getRandBetween(min, max);
+        var items = ItemFactory.CreateRandomItems(numItems);
+        for (Item item : items) {
+            this.inventory.addItem(item);
         }
     }
     /**
