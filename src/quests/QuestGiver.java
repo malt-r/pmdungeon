@@ -24,8 +24,9 @@ public class QuestGiver implements IAnimatable, IEntity {
     private DungeonWorld level;
     private boolean waitingForInput;
     private boolean isActivated;
+    private boolean wasOnTile;
     private QuestHandler questHandler;
-    private Quest randomQuest;
+    private Quest quest;
 
     public QuestGiver(){
         //Safe Questhandler?
@@ -33,7 +34,7 @@ public class QuestGiver implements IAnimatable, IEntity {
         questHandler = game.getQuestHandler();
 
         //TODO - Gen random quest
-        randomQuest = new KillMonstersQuest(game.getHero());
+        quest = new KillMonstersQuest(game.getHero());
 
         String[] idleLeftFrames = new String[]{
                 "tileset/default/default_anim.png",
@@ -62,26 +63,18 @@ public class QuestGiver implements IAnimatable, IEntity {
     @Override
     public void update() {
         this.draw();
-        if (!isActivated & !waitingForInput){
-            var allEntities = game.getAllEntities();
-            for(var entity : allEntities){
-                if (waitingForInput) { break; }
-                if (!(entity instanceof Hero)) { continue; }
-                var hero = (Hero) entity;
-                if (!game.checkForIntersection(this, hero, level)){ continue; }
-                System.out.println(randomQuest.getQuestName());
-                System.out.println("\n y/n");
-                waitingForInput = true;
-            }
-        }
 
-        if (waitingForInput){
-            if (Gdx.input.isKeyJustPressed(Input.Keys.Y)){
-                questHandler.requestForNewQuest(randomQuest);
-                waitingForInput = false;
-                isActivated = true;
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.N)){
-                waitingForInput = false;
+        if (!isActivated){
+            if (isHeroOnTile()){
+                if (!waitingForInput & !wasOnTile) {
+                    System.out.println("jao ich werde nicht gespammt!");
+                    questHandler.requestForNewQuest(this.quest); //Give this
+                    waitingForInput = true;
+                }
+                wasOnTile = true;
+            }else{
+                //Abort quest request
+                wasOnTile = false;
             }
         }
     }
@@ -98,5 +91,26 @@ public class QuestGiver implements IAnimatable, IEntity {
 
     public void findRandomPosition() {
         this.position = new Point(level.getRandomPointInDungeon());
+    }
+
+    //Should not be called after status = true
+    public void updateStatus(boolean status){
+        isActivated = status;
+        waitingForInput = false;
+    }
+
+    private boolean isHeroOnTile(){
+        var allEntities = game.getAllEntities();
+        for(var entity : allEntities) {
+            if (!(entity instanceof Hero)) {
+                continue;
+            }
+            var hero = (Hero) entity;
+            if (!game.checkForIntersection(this, hero, level)) {
+                continue;
+            }
+            return true;
+        }
+        return false;
     }
 }
