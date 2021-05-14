@@ -1,12 +1,24 @@
 package quests;
 
 import GUI.HeroObserver;
+import items.ItemFactory;
 import main.Hero;
 
 public class LevelUpQuest extends Quest implements HeroObserver {
     private int startLevel;
+    private int levels;
     private boolean isFinished;
-    private Hero hero;
+    private final Hero hero;
+
+    public LevelUpQuest(Hero hero) {
+        this.hero = hero;
+        int xp = 120;
+
+        this.levels = util.math.Convenience.getRandBetween(2, 4);
+
+        var items = ItemFactory.CreateRandomItems(1);
+        this.reward = new QuestReward(items, xp);
+    }
 
     @Override
     public String getQuestName() {
@@ -15,7 +27,7 @@ public class LevelUpQuest extends Quest implements HeroObserver {
 
     @Override
     public String getProgressString() {
-        return "Level up one level";
+        return "Level up " + this.levels + " level";
     }
 
     @Override

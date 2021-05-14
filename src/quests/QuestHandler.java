@@ -2,14 +2,20 @@ package quests;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import main.Game;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import main.Hero;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class QuestHandler implements IQuestObserver {
+public class QuestHandler implements IQuestObserver, IEntity {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+    protected IQuestHandlerState currentState;
+    protected QuestHandlerIdleState idleState;
+    public IQuestHandlerState getIdleState(){
+        return idleState;
+    }
 
     private Quest currentQuest = null;
     private Hero hero;
@@ -37,29 +43,15 @@ public class QuestHandler implements IQuestObserver {
         this.hero = hero;
     }
 
-    public boolean acceptNewQuest(Quest newQuest) {
+    public void requestForNewQuest(Quest newQuest, QuestGiver giver) {
         mainLogger.info("accept quest? j/n");
         // TODO:
         //Game.getInstance().getQuestDialog().show(newQuest, this.currentQuest);
 
-        boolean choice = false, accept = false;
-        do {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
-                accept = true;
-                choice = true;
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-                choice = true;
-            }
-
-        } while(!choice);
-
-        if (accept) {
-            setupQuest(newQuest);
-        }
-        return accept;
+        switchToState(new QuestHandlerPendingRequestState(giver));
     }
 
-    private void setupQuest(Quest quest) {
+    public void setupQuest(Quest quest) {
         mainLogger.info("Setting new current quest: " + quest.getQuestName());
         mainLogger.info("Description: " + quest.getDescription());
         mainLogger.info(quest.getRewardDescription());
@@ -76,6 +68,10 @@ public class QuestHandler implements IQuestObserver {
         return null != currentQuest;
     }
 
+    public void abortNewQuestRequest() {
+        switchToState(this.idleState);
+    }
+
     @Override
     public void update(Quest quest) {
         // current quest was updated
@@ -90,5 +86,25 @@ public class QuestHandler implements IQuestObserver {
         }
 
         notifyObservers();
+    }
+
+
+    @Override
+    public void update() {
+        var nextState = this.currentState.update(this);
+        if (null != nextState) {
+            switchToState(nextState);
+        }
+    }
+
+    private void switchToState(IQuestHandlerState state) {
+        this.currentState.exit(this);
+        this.currentState = state;
+        this.currentState.enter(this);
+    }
+
+    @Override
+    public boolean deleteable() {
+        return false;
     }
 }
