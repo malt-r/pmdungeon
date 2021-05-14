@@ -29,6 +29,7 @@ import progress.ability.SprintAbility;
 import quests.QuestReward;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 /**
  * The controllable player character.

@@ -1,7 +1,5 @@
 package quests;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
@@ -23,7 +21,7 @@ public class QuestGiver implements IAnimatable, IEntity {
     private Point position;
     private DungeonWorld level;
     private boolean waitingForInput;
-    private boolean isActivated;
+    private boolean questWasAccepted;
     private boolean wasOnTile;
     private QuestHandler questHandler;
     private Quest quest;
@@ -64,19 +62,26 @@ public class QuestGiver implements IAnimatable, IEntity {
     public void update() {
         this.draw();
 
-        if (!isActivated){
+        if (!questWasAccepted) {
             if (isHeroOnTile()){
                 if (!waitingForInput & !wasOnTile) {
                     System.out.println("jao ich werde nicht gespammt!");
-                    questHandler.requestForNewQuest(this.quest); //Give this
+                    questHandler.requestForNewQuest(this.quest, this);
                     waitingForInput = true;
                 }
                 wasOnTile = true;
-            }else{
+            } else {
                 //Abort quest request
                 wasOnTile = false;
+                if (waitingForInput) {
+                    abortPendingQuestRequest();
+                }
             }
         }
+    }
+
+    private void abortPendingQuestRequest() {
+        Game.getInstance().getQuestHandler().abortNewQuestRequest();
     }
 
     @Override
@@ -94,9 +99,11 @@ public class QuestGiver implements IAnimatable, IEntity {
     }
 
     //Should not be called after status = true
-    public void updateStatus(boolean status){
-        isActivated = status;
-        waitingForInput = false;
+    public void questWasAccepted(boolean status) {
+        if (!questWasAccepted) {
+            questWasAccepted = status;
+            waitingForInput = false;
+        }
     }
 
     private boolean isHeroOnTile(){

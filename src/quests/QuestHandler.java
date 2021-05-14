@@ -18,6 +18,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
     }
 
     private Quest currentQuest = null;
+    private boolean removeCurrentQuest = false;
     private Hero hero;
     private ArrayList<IQuestObserver> questObservers;
 
@@ -41,6 +42,9 @@ public class QuestHandler implements IQuestObserver, IEntity {
 
     public QuestHandler(Hero hero) {
         this.hero = hero;
+        this.idleState = new QuestHandlerIdleState();
+        this.currentState = this.idleState;
+        this.questObservers = new ArrayList<>();
     }
 
     public void requestForNewQuest(Quest newQuest, QuestGiver giver) {
@@ -48,7 +52,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
         // TODO:
         //Game.getInstance().getQuestDialog().show(newQuest, this.currentQuest);
 
-        switchToState(new QuestHandlerPendingRequestState(giver));
+        switchToState(new QuestHandlerPendingRequestState(newQuest, giver));
     }
 
     public void setupQuest(Quest quest) {
@@ -72,6 +76,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
         switchToState(this.idleState);
     }
 
+    // IQuestObserver.update
     @Override
     public void update(Quest quest) {
         // current quest was updated
@@ -80,7 +85,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
             var reward = quest.getReward();
             this.hero.applyReward(reward);
             currentQuest.cleanup();
-            currentQuest = null;
+            removeCurrentQuest = true;
         } else {
             mainLogger.info("Quest " + this.currentQuest.getQuestName() + " update: " + this.currentQuest.getProgressString());
         }
@@ -89,8 +94,15 @@ public class QuestHandler implements IQuestObserver, IEntity {
     }
 
 
+    // IEntity.update
     @Override
     public void update() {
+        // do not ever set the currentQuest = null in IQuestObserver.update -> may lead to ConcurrentModificationException
+        if (hasQuest() && this.removeCurrentQuest) {
+            currentQuest = null;
+            this.removeCurrentQuest = false;
+        }
+
         var nextState = this.currentState.update(this);
         if (null != nextState) {
             switchToState(nextState);

@@ -109,6 +109,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     protected void setup() {
         hero = new Hero();
         this.questHandler = new QuestHandler(hero);
+        this.entityController.addEntity(this.questHandler);
         // TODO: temporary solution, how to pass hero to quest?
         //this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
 
