@@ -1,7 +1,11 @@
 package quests;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import main.Game;
 import main.Hero;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class QuestHandler implements IQuestObserver {
@@ -9,19 +13,50 @@ public class QuestHandler implements IQuestObserver {
 
     private Quest currentQuest = null;
     private Hero hero;
+    private ArrayList<IQuestObserver> questObservers;
+
+    public void register(IQuestObserver questObserver) {
+        if (!questObservers.contains(questObserver)) {
+            questObservers.add(questObserver);
+        }
+    }
+
+    public void unregister(IQuestObserver questObserver) {
+        if (questObservers.contains(questObserver)) {
+            questObservers.remove(questObserver);
+        }
+    }
+
+    private void notifyObservers() {
+        for (IQuestObserver questObserver : questObservers) {
+            questObserver.update(this.currentQuest);
+        }
+    }
 
     public QuestHandler(Hero hero) {
         this.hero = hero;
     }
 
-    public void requestForNewQuest(Quest newQuest) {
-        boolean overrideQuest = true;
-        if (hasQuest()) {
-            // TODO: call hud and query for override of current quest
-        }
-        if (overrideQuest) {
+    public boolean acceptNewQuest(Quest newQuest) {
+        mainLogger.info("accept quest? j/n");
+        // TODO:
+        //Game.getInstance().getQuestDialog().show(newQuest, this.currentQuest);
+
+        boolean choice = false, accept = false;
+        do {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+                accept = true;
+                choice = true;
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+                choice = true;
+            }
+
+        } while(!choice);
+
+        if (accept) {
             setupQuest(newQuest);
         }
+        return accept;
     }
 
     private void setupQuest(Quest quest) {
@@ -44,7 +79,6 @@ public class QuestHandler implements IQuestObserver {
     @Override
     public void update(Quest quest) {
         // current quest was updated
-        // TODO: update hud, if status of quest changed
         if (quest.isFinished()) {
             mainLogger.info("Quest " + this.currentQuest.getQuestName() + " is finished");
             var reward = quest.getReward();
@@ -54,5 +88,7 @@ public class QuestHandler implements IQuestObserver {
         } else {
             mainLogger.info("Quest " + this.currentQuest.getQuestName() + " update: " + this.currentQuest.getProgressString());
         }
+
+        notifyObservers();
     }
 }
