@@ -53,9 +53,14 @@ public class LizardMonster  extends Monster {
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
 
-    String[] hitAnimationFrames = new String[]{
-            "tileset/lizard/lizard_m_hit_anim_f0.png"
+    String[] hitLeftFrames = new String[]{
+            "tileset/lizard/lizard_m_idle_left_anim_f0_hit.png"
     };
-    hitAnimation = createAnimation(hitAnimationFrames, 1);
+    hitAnimationLeft = createAnimation(hitLeftFrames, 1);
+
+    String[] hitRightFrames = new String[]{
+            "tileset/lizard/lizard_m_idle_anim_f0_hit.png"
+    };
+    hitAnimationRight = createAnimation(hitRightFrames, 1);
   }
 }
