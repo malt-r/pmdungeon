@@ -1,10 +1,14 @@
 package quests;
 
 import GUI.HeroObserver;
+import GUI.InventoryObserver;
+import GUI.LevelObserver;
 import items.ItemFactory;
+import items.inventory.Inventory;
 import main.Hero;
+import progress.Level;
 
-public class CollectItemsQuest extends Quest implements HeroObserver {
+public class CollectItemsQuest extends Quest implements InventoryObserver {
     private int invCountLastUpdate;
     private int toCollect;
     private int collected;
@@ -26,7 +30,7 @@ public class CollectItemsQuest extends Quest implements HeroObserver {
 
     @Override
     public String getProgressString() {
-        return null;
+        return "Sammle " + this.collected + " / " + this.toCollect + " Items.";
     }
 
     @Override
@@ -36,13 +40,14 @@ public class CollectItemsQuest extends Quest implements HeroObserver {
 
     @Override
     public void setup() {
-        hero.register(this);
+        hero.getInventory().register(this);
+        this.invCountLastUpdate = hero.getInventory().getCount();
     }
 
     @Override
     public void cleanup() {
-        hero.unregister(this);
-
+        super.cleanup();
+        hero.getInventory().unregister(this);
     }
 
     @Override
@@ -51,12 +56,16 @@ public class CollectItemsQuest extends Quest implements HeroObserver {
     }
 
     @Override
-    public void update(Hero hero) {
-        int inventoryCount = hero.getInventory().getCount();
-        if (this.invCountLastUpdate < inventoryCount) {
-            collected += inventoryCount - this.invCountLastUpdate;
-        }
+    public void update(Inventory inv, boolean fromHero) {
+        if (fromHero) {
+            int inventoryCount = inv.getCount();
+            if (this.invCountLastUpdate < inventoryCount) {
+                collected += inventoryCount - this.invCountLastUpdate;
+            }
 
-        this.invCountLastUpdate = inventoryCount;
+            this.invCountLastUpdate = inventoryCount;
+
+            notifyObservers();
+        }
     }
 }

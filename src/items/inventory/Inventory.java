@@ -78,6 +78,7 @@ public class Inventory<T extends Item> implements ObservableInventory{
     private final ArrayList<T> items;
 
     private ArrayList<InventoryObserver> observerList = new ArrayList<InventoryObserver>();
+    private ArrayList<InventoryObserver>  observersToRemove = new ArrayList<>();
 
     /**
      * Constructor
@@ -192,6 +193,8 @@ public class Inventory<T extends Item> implements ObservableInventory{
         if (null != nextState) {
             transitionToNextState(nextState);
         }
+
+        removeObserversToRemove();
     }
 
     // check, if the opener is the parent of this inventory
@@ -281,7 +284,16 @@ public class Inventory<T extends Item> implements ObservableInventory{
      */
     @Override
     public void unregister(InventoryObserver observer){
-        this.observerList.remove(observer);
+        if (this.observerList.contains(observer) && !this.observersToRemove.contains(observer)) {
+            this.observersToRemove.add(observer);
+        }
+    }
+
+    private void removeObserversToRemove() {
+        for (InventoryObserver observer : observersToRemove) {
+            this.observerList.remove(observer);
+        }
+        this.observersToRemove.clear();
     }
 
     /**

@@ -189,7 +189,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         knockBackAble = true;
 
         this.inventory = new Inventory(this, 10);
-        this.level = new Level();
+        this.level = new Level(this::applyLevelUp);
     }
 
     /**
@@ -543,22 +543,24 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     }
 
     public void applyReward(QuestReward reward) {
-        // apply xp
-        this.level.increaseXP(reward.getXp());
+        if (null != reward) {
+            // apply xp
+            this.level.increaseXP(reward.getXp());
 
-        // add items to inventory or drop them on the floor
-        int freeSlots = this.inventory.getNumFreeSlots();
-        var rewardItems = reward.getItems();
-        if (freeSlots < rewardItems.size()) {
-            for (int i = 0; i < freeSlots; i++) {
-                this.inventory.addItem(rewardItems.get(i));
-            }
-            for (int i = freeSlots; i < rewardItems.size(); i++){
-                inventory.dropItem(rewardItems.get(i));
-            }
-        } else {
-            for (Item item : rewardItems) {
-                this.inventory.addItem(item);
+            // add items to inventory or drop them on the floor
+            int freeSlots = this.inventory.getNumFreeSlots();
+            var rewardItems = reward.getItems();
+            if (freeSlots < rewardItems.size()) {
+                for (int i = 0; i < freeSlots; i++) {
+                    this.inventory.addItem(rewardItems.get(i));
+                }
+                for (int i = freeSlots; i < rewardItems.size(); i++){
+                    inventory.dropItem(rewardItems.get(i));
+                }
+            } else {
+                for (Item item : rewardItems) {
+                    this.inventory.addItem(item);
+                }
             }
         }
     }

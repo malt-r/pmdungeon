@@ -7,6 +7,7 @@ public abstract class Quest implements IObservableQuest {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private ArrayList<IQuestObserver> observers;
     protected QuestReward reward;
+    protected boolean rewardIsAvailable = true;
 
     public Quest() {
         observers = new ArrayList<>();
@@ -24,7 +25,9 @@ public abstract class Quest implements IObservableQuest {
 
     public abstract void setup();
 
-    public abstract void cleanup();
+    public void cleanup() {
+        this.rewardIsAvailable = false;
+    };
 
     public abstract boolean isFinished();
 
@@ -49,6 +52,9 @@ public abstract class Quest implements IObservableQuest {
     }
 
     public QuestReward getReward(){
-        return reward;
+        if (this.rewardIsAvailable) {
+            return reward;
+        }
+        return null;
     }
 }

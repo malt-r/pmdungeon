@@ -42,6 +42,7 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
 
     @Override
     public void cleanup() {
+        super.cleanup();
         this.hero.unregister(this);
     }
 

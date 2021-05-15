@@ -19,8 +19,9 @@ public class Level implements ObserveableLevel{
     private float damageScaleConstant = 2.f;
 
     private ArrayList<LevelObserver> observerList = new ArrayList<LevelObserver>();
-
     private ArrayList<Ability> abilities = new ArrayList<>();
+
+    private Runnable levelUpCallback;
 
     public boolean addAbility(Ability ability) {
         if (!abilities.contains(ability)) {
@@ -46,8 +47,9 @@ public class Level implements ObserveableLevel{
     /**
      * constructor.
      */
-    public Level() {
+    public Level(Runnable levelUpCallback) {
         this.level = 1;
+        this.levelUpCallback = levelUpCallback;
     }
 
     /**
@@ -71,6 +73,7 @@ public class Level implements ObserveableLevel{
         if (this.xp >= xpForNextLevel) {
             this.xp -= xpForNextLevel;
             this.level += 1;
+            this.levelUpCallback.run();
             notifyObservers();
             return true;
         } else {

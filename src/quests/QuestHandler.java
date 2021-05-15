@@ -86,11 +86,11 @@ public class QuestHandler implements IQuestObserver, IEntity {
     @Override
     public void update(Quest quest) {
         // current quest was updated
-        if (quest.isFinished()) {
+        if (quest.isFinished() && !removeCurrentQuest) {
             mainLogger.info("Quest " + this.currentQuest.getQuestName() + " is finished");
             var reward = quest.getReward();
-            this.hero.applyReward(reward);
             currentQuest.cleanup();
+            this.hero.applyReward(reward);
             removeCurrentQuest = true;
         } else {
             mainLogger.info("Quest " + this.currentQuest.getQuestName() + " update: " + this.currentQuest.getProgressString());

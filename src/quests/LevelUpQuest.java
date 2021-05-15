@@ -27,12 +27,12 @@ public class LevelUpQuest extends Quest implements HeroObserver {
 
     @Override
     public String getProgressString() {
-        return "Level up " + this.levels + " level";
+        return "Level up " + (this.hero.getLevel().getCurrentLevel() - this.startLevel) + " / " + this.levels + " levels";
     }
 
     @Override
     public String getDescription() {
-        return "Level up one level";
+        return "Levels to level up: " + this.levels;
     }
 
     @Override
@@ -44,6 +44,7 @@ public class LevelUpQuest extends Quest implements HeroObserver {
 
     @Override
     public void cleanup() {
+        super.cleanup();
         this.hero.unregister(this);
     }
 
@@ -54,8 +55,12 @@ public class LevelUpQuest extends Quest implements HeroObserver {
 
     @Override
     public void update(Hero hero) {
-        if (hero.getLevel().getCurrentLevel() > this.startLevel) {
+        mainLogger.info("startLevel: " + this.startLevel);
+        mainLogger.info("levels: " + this.levels);
+
+        if (hero.getLevel().getCurrentLevel() >= this.startLevel + this.levels) {
             this.isFinished = true;
         }
+        notifyObservers();
     }
 }
