@@ -22,6 +22,7 @@ import monsters.Monster;
 import monsters.MonsterType;
 import progress.Level;
 import quests.KillMonstersQuest;
+import quests.QuestGiver;
 import quests.QuestHandler;
 import traps.*;
 import java.util.logging.Logger;
@@ -237,6 +238,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entityController.removeAllFrom(Monster.class);
             entityController.removeAllFrom(Trap.class);
             entityController.removeAllFrom(Chest.class);
+            entityController.removeAllFrom(QuestGiver.class);
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
 
