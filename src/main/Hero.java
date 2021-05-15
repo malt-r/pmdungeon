@@ -62,6 +62,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     private boolean invincible = true;
 
     private ArrayList<HeroObserver> observerList = new ArrayList<HeroObserver>();
+    private ArrayList<HeroObserver> observersToRemove = new ArrayList<>();
 
     public int getKillCount() {
         return killCount;
@@ -262,6 +263,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
 
         this.inventory.update();
+        removeObserversToRemove();
     }
 
     @Override
@@ -518,7 +520,16 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void unregister(HeroObserver observer) {
-        this.observerList.remove(observer);
+        if (this.observerList.contains(observer) && !this.observersToRemove.contains(observer)) {
+            this.observersToRemove.add(observer);
+        }
+    }
+
+    private void removeObserversToRemove() {
+        for (HeroObserver heroObserver : observersToRemove) {
+            this.observerList.remove(heroObserver);
+        }
+        this.observersToRemove.clear();
     }
 
     /**
