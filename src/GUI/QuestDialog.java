@@ -6,6 +6,12 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.HUD;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.TextStage;
 import quests.Quest;
 
+/**
+ * QuestDialog class.
+ * <p>
+ * Defines the GUI Elements for a quest dialog.
+ * </p>
+ */
 public class QuestDialog {
   private HUD hud;
   private TextStage textStage;
@@ -13,7 +19,12 @@ public class QuestDialog {
   private Label lbReward;
   private Label lbMenue;
   private boolean isVisible=false;
-
+  /**
+   * Constructor of the QuestDialog class.
+   * <p>
+   * This constructor will instantiate the text instances of the HUD.
+   * </p>
+   */
   public QuestDialog(HUD hud, TextStage textStage){
     this.hud= hud;
     this.textStage= textStage;
@@ -27,7 +38,12 @@ public class QuestDialog {
             "fonts/Pixeled.ttf", Color.YELLOW, 10,20,20,5,120);
 
   }
-  //TODO: give show a parameter
+
+  /**
+   * display a questdialog
+   * @param newQuest quest which should be drawn
+   * @param currentQuest which is drun currently
+   */
   public void show(Quest newQuest, Quest currentQuest){
       if (null != newQuest) {
           this.isVisible = true;
@@ -41,6 +57,9 @@ public class QuestDialog {
       }
   }
 
+  /**
+   * hides the questdialog
+   */
   public void hide(){
     this.isVisible= false;
     lbText.setText("");
@@ -48,6 +67,10 @@ public class QuestDialog {
     lbMenue.setText("");
   }
 
+  /**
+   * gets the visibility state of the questdialog
+   * @return if the questdialog is visible
+   */
   public boolean getIsVisible(){
     return this.isVisible;
   }

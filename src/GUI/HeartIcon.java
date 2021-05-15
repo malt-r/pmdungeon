@@ -31,6 +31,10 @@ public class HeartIcon implements IHUDElement {
         texture = heartFull;
     }
 
+    /**
+     * Sets the state of the heart Icon
+     * @param state state which should be set
+     */
     public void setState(int state){
         switch (state){
             case 0:
@@ -47,11 +51,19 @@ public class HeartIcon implements IHUDElement {
         }
     }
 
+    /**
+     * returns the position of the hearth for display purposes
+     * @return position of the heartIcon
+     */
     @Override
     public Point getPosition() {
         return position;
     }
 
+    /**
+     * gets the texture of the heartIcon for display purposes
+     * @return texture of the hearthicon
+     */
     @Override
     public Texture getTexture() {
         return texture;
