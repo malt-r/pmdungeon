@@ -3,6 +3,7 @@ package main;
 import items.ItemType;
 import items.chests.ChestType;
 import monsters.MonsterType;
+import quests.QuestGiverType;
 import traps.TrapType;
 
 import java.util.ArrayList;
@@ -26,31 +27,36 @@ public class LevelInfo {
             new MonsterType[]{MonsterType.LIZARD},
             new ItemType[]{ItemType.SWORD_REGULAR,ItemType.SCROL_SUPERVISION},
             new ChestType[]{ChestType.NORMAL},
-            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR,TrapType.TELEPORT});
+            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR,TrapType.TELEPORT},
+            new QuestGiverType[]{QuestGiverType.DEFAULT});
     content.add(level1);
     var level2 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
             new ItemType[]{ItemType.SWORD_GOLD},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
-            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR});
+            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR},
+            new QuestGiverType[]{QuestGiverType.DEFAULT});
     content.add(level2);
     var level3 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
             new ItemType[]{ItemType.POTION_HEAL},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
-            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR});
+            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR},
+            new QuestGiverType[]{QuestGiverType.DEFAULT});
     content.add(level3);
     var level4 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
             new ItemType[]{ItemType.POTION_POISON},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
-            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR});
+            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR},
+            new QuestGiverType[]{QuestGiverType.DEFAULT});
     content.add(level4);
     var level5 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
             new ItemType[]{ItemType.SCROLL_ATTACK},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
-            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR});
+            new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR},
+            new QuestGiverType[]{QuestGiverType.DEFAULT});
     content.add(level5);
   }
 

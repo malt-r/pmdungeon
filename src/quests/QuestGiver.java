@@ -12,6 +12,7 @@ import main.Hero;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class QuestGiver implements IAnimatable, IEntity {
@@ -27,12 +28,27 @@ public class QuestGiver implements IAnimatable, IEntity {
     private Quest quest;
 
     public QuestGiver(){
-        //Safe Questhandler?
-        this.game = Game.getInstance();
-        questHandler = game.getQuestHandler();
 
-        //TODO - Gen random quest
-        quest = new KillMonstersQuest(game.getHero());
+        this.game = Game.getInstance();
+        this.questHandler = game.getQuestHandler();
+
+        Random dice = new Random();
+        var questIndex = dice.nextInt(3);
+        switch (questIndex){
+            case 0:
+                quest = new CollectItemsQuest(game.getHero());
+                break;
+            case 1:
+                quest = new KillMonstersQuest(game.getHero());
+                break;
+            case 2:
+                quest = new LevelUpQuest(game.getHero());
+                break;
+            default:
+                assert(true);
+                break;
+        }
+        mainLogger.info("Spawned with " + quest.toString());
 
         String[] idleLeftFrames = new String[]{
                 "tileset/other/quests/pumpkin_dude_anim1.png",
@@ -68,7 +84,6 @@ public class QuestGiver implements IAnimatable, IEntity {
         if (!questWasAccepted) {
             if (isHeroOnTile()){
                 if (!waitingForInput & !wasOnTile) {
-                    System.out.println("jao ich werde nicht gespammt!");
                     questHandler.requestForNewQuest(this.quest, this);
                     waitingForInput = true;
                 }

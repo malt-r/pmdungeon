@@ -66,12 +66,12 @@ public class Spawner {
       listToAdd.add(trap);
     }
 
-    //QuestGiver
-    //TODO - Add spawnQuestGiver method
-    var questGiver = new QuestGiver();
-    questGiver.setLevel(Game.getInstance().getCurrentLevel());
-    mainLogger.info("QuestGiver spawned");
-    listToAdd.add(questGiver);
+    for (var questGiverType:levelContent.questGivers){
+      var questGiver = new QuestGiver();
+      questGiver.setLevel(Game.getInstance().getCurrentLevel());
+      mainLogger.info(questGiverType.toString() + " spawned");
+      listToAdd.add(questGiver);
+    }
   }
 
   /**
