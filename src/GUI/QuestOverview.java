@@ -13,10 +13,10 @@ public class QuestOverview {
   public QuestOverview(HUD hud, TextStage textStage){
     this.hud= hud;
     this.textStage= textStage;
-    lbName = textStage.drawText("",
+    lbName = textStage.drawText("Juicy watermelons", //TODO: Standard text should be empty
             "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,300,400);
 
-    lbProgress = textStage.drawText("",
+    lbProgress = textStage.drawText("1/10 Watermelons",
             "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,300,360);
   }
   //TODO: give show a parameter
