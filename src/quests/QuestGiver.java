@@ -35,9 +35,12 @@ public class QuestGiver implements IAnimatable, IEntity {
         quest = new KillMonstersQuest(game.getHero());
 
         String[] idleLeftFrames = new String[]{
-                "tileset/default/default_anim.png",
+                "tileset/other/quests/pumpkin_dude_anim1.png",
+                "tileset/other/quests/pumpkin_dude_anim2.png",
+                "tileset/other/quests/pumpkin_dude_anim3.png",
+                "tileset/other/quests/pumpkin_dude_anim4.png"
         };
-        currentAnimation = createAnimation(idleLeftFrames, 6);
+        currentAnimation = createAnimation(idleLeftFrames, 4);
     }
 
     private Animation createAnimation(String[] texturePaths, int frameTime) {
@@ -60,7 +63,7 @@ public class QuestGiver implements IAnimatable, IEntity {
 
     @Override
     public void update() {
-        this.draw();
+        this.draw(-1.0F, -0.7F);
 
         if (!questWasAccepted) {
             if (isHeroOnTile()){
@@ -82,6 +85,7 @@ public class QuestGiver implements IAnimatable, IEntity {
 
     private void abortPendingQuestRequest() {
         Game.getInstance().getQuestHandler().abortNewQuestRequest();
+        //Oder Questhandler.abortNewQuestRequest();
     }
 
     @Override
@@ -98,7 +102,6 @@ public class QuestGiver implements IAnimatable, IEntity {
         this.position = new Point(level.getRandomPointInDungeon());
     }
 
-    //Should not be called after status = true
     public void questWasAccepted(boolean status) {
         if (!questWasAccepted) {
             questWasAccepted = status;
