@@ -53,10 +53,15 @@ public class DemonMonster extends Monster{
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
 
-    String[] hitAnimationFrames = new String[]{
-            "tileset/default/default_anim.png"
+    String[] hitLeftFrames = new String[]{
+            "tileset/demon/big_demon_idle_left_anim_f0_hit.png"
     };
-    hitAnimation = createAnimation(hitAnimationFrames, 1);
+    hitAnimationLeft = createAnimation(hitLeftFrames, 1);
+
+    String[] hitRightFrames = new String[]{
+            "tileset/demon/big_demon_idle_anim_f0.png"
+    };
+    hitAnimationRight = createAnimation(hitRightFrames, 1);
   }
 
   /**

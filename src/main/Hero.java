@@ -228,12 +228,15 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         };
         runAnimationRight = createAnimation(runRightFrames, 4);
 
-        String[] hitAnimationFrames = new String[]{
-                "tileset/hero/knight_m_hit_anim_f0.png",
-                "tileset/hero/knight_m_hit_anim_f0.png",
-                "tileset/hero/knight_m_hit_anim_f0.png"
+        String[] hitLeftFrames = new String[]{
+                "tileset/hero/knight_m_idle_left_anim_f0_hit.png"
         };
-        hitAnimation = createAnimation(hitAnimationFrames, 3);
+        hitAnimationLeft = createAnimation(hitLeftFrames, 1);
+
+        String[] hitRightFrames = new String[]{
+                "tileset/hero/knight_m_idle_anim_f0_hit.png"
+        };
+        hitAnimationRight = createAnimation(hitRightFrames, 1);
     }
 
     /**
@@ -376,11 +379,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
     }
 
-    /**
-     * Generates combat input, depending on the pressed key on the keyboard.
-     */
     @Override
-    protected boolean readCombatInput(){
+    public boolean attackOnInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             return true;
         }

@@ -1,8 +1,12 @@
 package main;
 
 import GUI.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -41,7 +45,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private InvBackgroundIcon[] chestBackground = new InvBackgroundIcon[10];
     private Label expLabel;
     private Label heartLabel;
-
+    private QuestDialog questDialog;
+    private QuestOverview questOverview;
     private static Game instance;
     private QuestHandler questHandler;
     private Hero hero;
@@ -119,6 +124,9 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         mainLogger.info("Hero created");
         // attach camera to hero
         camera.follow(hero);
+        questDialog = new QuestDialog(hud,textHUD);
+        questOverview = new QuestOverview(hud,textHUD);
+
 
         //GUI
         for (int i = 0; i < 10; i++){
@@ -187,6 +195,21 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 //                }
             }
             entitiesToAdd.clear();
+        }
+
+        //Y in German keyboard
+        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            questDialog.show();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            questDialog.hide();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+            questOverview.show();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.V)) {
+            questOverview.hide();
         }
     }
     /**

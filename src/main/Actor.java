@@ -33,6 +33,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected enum MovementState {
     CAN_MOVE,
     IS_KNOCKED_BACK,
+    HIT,
     SUSPENDED
   };
 
@@ -43,7 +44,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected Animation idleAnimationLeft;
   protected Animation runAnimationLeft;
   protected Animation runAnimationRight;
-  protected Animation hitAnimation;
+  protected Animation hitAnimationLeft;
+  protected Animation hitAnimationRight;
   protected Animation currentAnimation;
   private enum AnimationState {
     IDLE,
@@ -94,6 +96,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   // implementation of ICombatable -----------------------------------------------------------------------------------
 
   private final Timer attackTimer;
+  private final Timer hitTimer;
   protected long attackDelay = 1000;
   protected boolean canAttack;
   protected float movementSpeed = 0.1f;
@@ -217,7 +220,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   @Override
   public float attack(ICombatable other) {
     float damage = ICombatable.super.attack(other);
-    animationState = AnimationState.HIT;
     // delay next attack by attackDelay ms
     this.canAttack = false;
     TimerTask resetCanAttackTask = new TimerTask() {
@@ -247,7 +249,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   @Override
   public void dealDamage(float damage, ICombatable attacker) {
     ICombatable.super.dealDamage(damage, attacker);
-
+    this.movementState = MovementState.HIT;
     if (isKnockBackAble() && attacker != null) {
       initiateKnockBack(attacker);
     }
@@ -409,6 +411,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     lookLeft = false;
     canAttack = true;
     attackTimer = new Timer();
+    hitTimer = new Timer();
     movementState = MovementState.CAN_MOVE;
     this.persistentEffects = new ArrayList<>();
     this.effectsScheduledForRemoval = new ArrayList<>();
@@ -438,10 +441,15 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     };
     runAnimationRight = createAnimation(runRightFrames, 4);
 
-    String[] hitAnimationFrames = new String[]{
+    String[] hitLeftFrames = new String[]{
             "tileset/default/default_anim.png"
     };
-    hitAnimation = createAnimation(hitAnimationFrames, 3);
+    hitAnimationLeft = createAnimation(hitLeftFrames, 1);
+
+    String[] hitRightFrames = new String[]{
+            "tileset/default/default_anim.png"
+    };
+    hitAnimationRight = createAnimation(hitRightFrames, 1);
   }
 
   /**
@@ -474,9 +482,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       case RUN:
         this.currentAnimation = lookLeft ? this.runAnimationLeft : this.runAnimationRight;
         break;
-        //TODO - Animation for left and right
+      case KNOCK_BACK:
       case HIT:
-        this.currentAnimation = this.hitAnimation;
+        this.currentAnimation = lookLeft ? this.hitAnimationLeft : this.hitAnimationRight;
         break;
       case IDLE:
       default:
@@ -529,9 +537,8 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
           lookLeft=false;
         }
 
-        if (readCombatInput()) {
-          attackTargetIfReachable(this.position, level, game.getAllEntities());
-        }
+        attackTargetIfReachable(this.position, level, game.getAllEntities());
+
 
         if (readPickupInput()){
           handleItemPicking();
@@ -540,6 +547,16 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       case IS_KNOCKED_BACK:
         this.position = calculateKnockBackTarget();
         animationState = AnimationState.KNOCK_BACK;
+        break;
+      case HIT:
+        animationState = AnimationState.HIT;
+        TimerTask resetMovementState = new TimerTask() {
+          @Override
+          public void run() {
+            movementState = MovementState.CAN_MOVE;
+          }
+        };
+        hitTimer.schedule(resetMovementState, 300);
         break;
       case SUSPENDED:
         break;
@@ -596,12 +613,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * @return returns the new point where the actor should be moved
    */
   protected abstract Point readMovementInput();
-
-  /**
-   * Has to be overwritten for the hero, monsters do this automaticly
-   * @return if combat imput has been read
-   */
-  protected boolean readCombatInput() { return true; }
 
   /**
    * Has to be overwritten for the hero, monsters do this automaticly

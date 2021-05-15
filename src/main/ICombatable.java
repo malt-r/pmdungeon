@@ -1,5 +1,7 @@
 package main;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
@@ -118,11 +120,11 @@ public interface ICombatable {
             setTarget(null);
         }
         if (!isPassive() && canAttack()) {
-            if (hasTarget()) {
+            if (hasTarget() && attackOnInput()) {
                 attack(getTarget());
             } else {
                 setTarget(findTarget(ownPosition, entities, level));
-                if (hasTarget()) {
+                if (hasTarget() && attackOnInput()) {
                     attack(getTarget());
                 }
             }
@@ -227,5 +229,9 @@ public interface ICombatable {
         } else {
             return 0.0f;
         }
+    }
+
+    default boolean attackOnInput(){
+        return true;
     }
 }
