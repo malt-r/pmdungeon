@@ -4,11 +4,19 @@ import items.Item;
 
 import java.util.ArrayList;
 
+/**
+ * Rewards of a quest. Encapsulates list of items and amount of xp.
+ */
 public class QuestReward {
     private ArrayList<Item> items;
     private int xp;
     private String desc;
 
+    /**
+     * constructor
+     * @param items itemlist to encapsulate
+     * @param xp amount of xp to encapsulate
+     */
     public QuestReward(ArrayList<Item> items, int xp) {
         this.items = new ArrayList<>(items);
         this.xp = xp;
@@ -16,6 +24,7 @@ public class QuestReward {
         this.desc = generateDesc();
     }
 
+    // generates a description of the rewards
     private String generateDesc() {
         StringBuilder builder = new StringBuilder();
         builder.append("Reward: ");
@@ -28,14 +37,26 @@ public class QuestReward {
         return builder.toString();
     }
 
+    /**
+     * Getter for the encapsulated item-list
+     * @return the encapsulated item list
+     */
     public ArrayList<Item> getItems() {
         return this.items;
     }
 
+    /**
+     * Getter for the amount of encapsulated xp.
+     * @return xp-amount.
+     */
     public int getXp() {
         return this.xp;
     }
 
+    /**
+     * Getter for the reward description.
+     * @return reward description.
+     */
     public String getRewardDescription() {
         return desc;
     }

@@ -3,18 +3,30 @@ package quests;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+/**
+ * State in which user input is queried to handle a pending request for a new quest of the quest handler.
+ */
 public class QuestHandlerPendingRequestState implements IQuestHandlerState{
 
     private QuestGiver giver;
     private Quest pendingQuest;
     private boolean receivedInput;
 
+    /**
+     * constructor
+     * @param pendingQuest the requested new quest.
+     * @param giver the giver, which started the request for the new quest.
+     */
     public QuestHandlerPendingRequestState(Quest pendingQuest, QuestGiver giver) {
         this.giver = giver;
         this.receivedInput = false;
         this.pendingQuest = pendingQuest;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param handler the QuestHandler of the state machine
+     */
     @Override
     public void enter(QuestHandler handler) {
         // call HUD
@@ -22,6 +34,11 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState{
         main.Game.getInstance().getQuestDialog().show(pendingQuest, handler.getCurrentQuest());
     }
 
+    /**
+     * {@inheritDoc}
+     * @param handler the QuestHandler of the state machine
+     * @return
+     */
     @Override
     public IQuestHandlerState update(QuestHandler handler) {
         IQuestHandlerState nextState = null;
@@ -39,6 +56,10 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState{
         return nextState;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param handler the QuestHandler of the state machine
+     */
     @Override
     public void exit(QuestHandler handler) {
         if (!this.receivedInput) {

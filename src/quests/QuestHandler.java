@@ -8,11 +8,29 @@ import main.Hero;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+/**
+ * Managerclass for the currently activated quest.
+ */
 public class QuestHandler implements IQuestObserver, IEntity {
+    /**
+     * A logger.
+     */
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+    /**
+     * Current state of the statemachine
+     */
     protected IQuestHandlerState currentState;
+
+    /**
+     * Idle state of the statemachine
+     */
     protected QuestHandlerIdleState idleState;
+
+    /**
+     * Gets the idle state of the state machine
+     * @return
+     */
     public IQuestHandlerState getIdleState(){
         return idleState;
     }
@@ -22,28 +40,47 @@ public class QuestHandler implements IQuestObserver, IEntity {
     private Hero hero;
     private ArrayList<IQuestObserver> questObservers;
 
+    /**
+     * Getter of the currently activated quest.
+     * @return The currently activated quest.
+     */
     public Quest getCurrentQuest() {
         return currentQuest;
     }
 
+    /**
+     * Register a questObserver.
+     * @param questObserver The observer to register.
+     */
     public void register(IQuestObserver questObserver) {
         if (!questObservers.contains(questObserver)) {
             questObservers.add(questObserver);
         }
     }
 
+    /**
+     * unregister a questobserver.
+     * @param questObserver the observer to unregister.
+     */
     public void unregister(IQuestObserver questObserver) {
         if (questObservers.contains(questObserver)) {
             questObservers.remove(questObserver);
         }
     }
 
+    /**
+     * notify all registered questobservers about changes in currently activated quest.
+     */
     private void notifyObservers() {
         for (IQuestObserver questObserver : questObservers) {
             questObserver.update(this.currentQuest);
         }
     }
 
+    /**
+     * constructor
+     * @param hero the hero to manage quests for and apply rewards to.
+     */
     public QuestHandler(Hero hero) {
         this.hero = hero;
         this.idleState = new QuestHandlerIdleState();
@@ -51,14 +88,21 @@ public class QuestHandler implements IQuestObserver, IEntity {
         this.questObservers = new ArrayList<>();
     }
 
+    /**
+     * Handle request for a new quest. Set statemachine to QuestHandlerPendingRequestState
+     * @param newQuest the new quest.
+     * @param giver The questgiver, which started the request.
+     */
     public void requestForNewQuest(Quest newQuest, QuestGiver giver) {
         mainLogger.info("accept quest? j/n");
-        // TODO:
-        //Game.getInstance().getQuestDialog().show(newQuest, this.currentQuest);
 
         switchToState(new QuestHandlerPendingRequestState(newQuest, giver));
     }
 
+    /**
+     * Setup new quest. Cleans up old quest.
+     * @param quest
+     */
     public void setupQuest(Quest quest) {
         mainLogger.info("Setting new current quest: " + quest.getQuestName());
         mainLogger.info("Description: " + quest.getDescription());
@@ -74,15 +118,25 @@ public class QuestHandler implements IQuestObserver, IEntity {
         notifyObservers();
     }
 
+    /**
+     * Has this handler a quest?
+     * @return True, if this handler has a quest.
+     */
     public boolean hasQuest() {
         return null != currentQuest;
     }
 
+    /**
+     * Abort pending request for new quest.
+     */
     public void abortNewQuestRequest() {
         switchToState(this.idleState);
     }
 
-    // IQuestObserver.update
+    /**
+     * {@inheritDoc}
+     * @param quest the quest, which sends the update
+     */
     @Override
     public void update(Quest quest) {
         // current quest was updated
@@ -100,7 +154,9 @@ public class QuestHandler implements IQuestObserver, IEntity {
     }
 
 
-    // IEntity.update
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update() {
         // do not ever set the currentQuest = null in IQuestObserver.update -> may lead to ConcurrentModificationException
@@ -121,6 +177,10 @@ public class QuestHandler implements IQuestObserver, IEntity {
         this.currentState.enter(this);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public boolean deleteable() {
         return false;
