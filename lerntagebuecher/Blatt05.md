@@ -61,9 +61,33 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -->
 
 ##Quests
+Es werden drei Quests implementiert. Eine Quest befasst sich mit dem Einsammeln von Items, eine 
+weitere mit dem Töten einer bestimmten Anzahl an Gegnern und die letzte mit dem Aufsteigen des
+Erfahrungslevels. Dazu wird eine abstrakte Klasse Quest implementiert von der jede spezifische 
+Questklasse erbt. Um den Fortschritt der Quests aktualisieren zu können, wird das Observer-Pattern
+verwendet. Nur bei Änderungen wichtiger Parameter (wie beispielsweise das Aufheben von Items oder das
+Töten eines Gegners) wird der Fortschritt angepasst.
 
+Die Klasse Questhandler ist für das Handhaben der aktuellen Quest zuständig. Die Klasse regelt das 
+Aktivieren einer ausgewählten Quest. Dazu wird eine bestimmte Tastatureingabe erwartet. Wenn eine
+neue Quest angenommen wird, wird die alte Quest überschrieben. Zusätzlich ist der Questhandler
+für die Übertragung der jewiligen Questbelohnungen zuständig.
+Intern wird eine Statemachine imlpementiert um Zustände wie beispielsweise das Abfragen auf Tastatureingabe
+abzubilden.
+
+Die Klasse QuestGiver ist eine zeichenbare Entität. Pro Level wird ein QuestGiver mit einer zufälligen
+Quest initialisiert und gespawnt. Der Questgiver erwartet, dass sich der Held auf den gleichen Koordinaten
+befindet, um ihm eine Quest vorschlagen zu können. Dazu wird dem Handler eine Anfrage gestellt, die
+Quest zu starten. Wird die Koordinate des Questgivers verlassen, wird die Anfrage an den Handler abgebrochen.
+
+Das HUD registriert sich am QuestHandler (Observer-Pattern). Bei Updates wird das HUD benachrichtigt. Beim
+Vorstellen einer Quest erscheint die Beschreibung der Quest und die Belohnung. Die Erwarteten Tasten zum
+Annehmen oder Ablehnen der Quest werden angezeigt. Wenn eine Quest angenommen wird, erscheint eine
+Statusanzeige im rechten, oberen Bereich des Fensters. Beim erfolgreichen Abschließen einer Quest
+wird dies angezeigt und die Farbe der Statusanzeige auf grün geändert.
 
 ##jUnit
+Jede Quest wird getestet.
 
 # Umsetzung
 
@@ -77,7 +101,17 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 
 ##Quests
 
+13.05.2021 15:00 - 17:00	Erste Implementierung des Questgivers
+13.05.2021 15:00 - 19:00	Erste Implementierung des Questhandlers und Hinzufügen einer ersten Quest
+13.05.2021 15:00 - 17:00	Erste Implementierung des Anzeige der Quests auf dem HUD
+
+14.05.2021 15:00 - 17:00	Anpassen des Questgivers, Verknüpfung mit dem QuestHandler
+
+15.05.2021 12:00 - 15:00	Lerntagebuch
+
 ##jUnit
+
+
 
 # Postmortem
 <!--
@@ -90,4 +124,14 @@ kritisch zurück:
 
 ##Quests
 
+Durch den Aufbau des Questgivers und des Questhandlers können weitere Quests einfach erstellt werden.
+
+Die Statemachine im Questhandler ermöglicht eine saubere Abbildung der möglichen Zustände und vereinfacht
+so die Programmierung. 
+
+Das Verwenden vom Observer-Pattern ermöglicht eine Programmierung ohne Polling und reduziert die Rechenzeit
+pro Zyklus.
+
 ##jUnit
+
+???
