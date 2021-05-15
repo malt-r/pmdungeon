@@ -42,7 +42,7 @@ public class QuestDialog {
   /**
    * display a questdialog
    * @param newQuest quest which should be drawn
-   * @param currentQuest which is drun currently
+   * @param currentQuest which is drawn currently
    */
   public void show(Quest newQuest, Quest currentQuest){
       if (null != newQuest) {
