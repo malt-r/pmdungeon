@@ -22,6 +22,10 @@ public class QuestHandler implements IQuestObserver, IEntity {
     private Hero hero;
     private ArrayList<IQuestObserver> questObservers;
 
+    public Quest getCurrentQuest() {
+        return currentQuest;
+    }
+
     public void register(IQuestObserver questObserver) {
         if (!questObservers.contains(questObserver)) {
             questObservers.add(questObserver);
@@ -66,6 +70,8 @@ public class QuestHandler implements IQuestObserver, IEntity {
         this.currentQuest = quest;
         this.currentQuest.register(this);
         this.currentQuest.setup();
+
+        notifyObservers();
     }
 
     public boolean hasQuest() {

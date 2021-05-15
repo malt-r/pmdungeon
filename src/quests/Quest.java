@@ -19,7 +19,7 @@ public abstract class Quest implements IObservableQuest {
     public abstract String getDescription();
 
     public String getRewardDescription() {
-        return this.reward.getRewardDescription();
+        return null != this.reward ? this.reward.getRewardDescription() : "";
     }
 
     public abstract void setup();

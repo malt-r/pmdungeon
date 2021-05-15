@@ -97,6 +97,14 @@ public class Game extends MainController implements InventoryObserver, HeroObser
      */
     public QuestHandler getQuestHandler(){ return this.questHandler; }
 
+    public QuestDialog getQuestDialog() {
+        return this.questDialog;
+    }
+
+    public QuestOverview getQuestOverview() {
+        return this.questOverview;
+    }
+
     //TODO - Maybe only temporary (who knows)
     /**
      *
@@ -197,20 +205,21 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entitiesToAdd.clear();
         }
 
+        // TODO: this still needed?
         //Y in German keyboard
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            questDialog.show();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-            questDialog.hide();
-        }
+       // if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+       //     questDialog.show();
+       // }
+       // if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+       //     questDialog.hide();
+       // }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-            questOverview.show();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.V)) {
-            questOverview.hide();
-        }
+       // if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+       //     questOverview.show();
+       // }
+       // if (Gdx.input.isKeyPressed(Input.Keys.V)) {
+       //     questOverview.hide();
+       // }
     }
     /**
      * Implements logic executed at the end of a frame.

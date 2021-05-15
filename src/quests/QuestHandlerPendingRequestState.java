@@ -19,6 +19,7 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState{
     public void enter(QuestHandler handler) {
         // call HUD
         mainLogger.info("Enter pending request");
+        main.Game.getInstance().getQuestDialog().show(pendingQuest, handler.getCurrentQuest());
     }
 
     @Override
@@ -43,5 +44,6 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState{
         if (!this.receivedInput) {
             giver.questWasAccepted(false);
         }
+        main.Game.getInstance().getQuestDialog().hide();
     }
 }
