@@ -77,7 +77,7 @@ Die Klasse `QuestHandler` ist für die Speicherung und Überwachung der aktuelle
 Quest zuständig. Die Klasse regelt das Aktivieren einer neuen `Quest`. Dazu wird
 eine bestimmte Tastatureingabe erwartet. Wenn eine neue Quest angenommen wird,
 wird die alte Quest überschrieben. Zusätzlich ist der `QuestHandler` für die
-Übertragung der jeweiligen Questbelohnungen an den `Hero` zuständig.  Intern
+Übertragung der jeweiligen Questbelohnungen an den `Hero` zuständig. Intern
 wird eine Statemachine implementiert, um beispielsweise das Abfragen der
 Tastatureingabe in Zustände auszulagern und vom `QuestHandler` zu isolieren. Die
 Statemachine ist in folgender Abbildung dargestellt.
@@ -102,7 +102,7 @@ grün geändert.
 ## jUnit
 
 Es werden Tests für alle Quests erstellt. Dazu müssen vorerst Mockups von
-bestimmten Klassen implementiert werden.  Um die Quests zum Testen
+bestimmten Klassen implementiert werden. Um die Quests zum Testen
 initialisieren zu können, wird je ein Object der Klasse `Hero`, `ICombatable` und
 `Item` benötigt. Die Mockups überschreiben bestimmte Funktionen wie
 beispielsweise die Erstellung einer Animation, um die Abhängigkeit von
@@ -135,12 +135,10 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 15.05.2021 19:00 - 20:00	Zusammenführung von HUD und QuestHandler
 15.05.2021 12:00 - 15:00	Lerntagebuch
 
-16.05.2021 10:00 - 13:00	Implementierung von Testfällen für Quests
-
 
 ## jUnit
 
-16.05.2021 10:00 - 13:00	Implementieren Mockups und Tests
+16.05.2021 10:00 - 13:00	Implementierung von Testfällen für Quests
 
 # Postmortem
 <!--
@@ -150,8 +148,6 @@ kritisch zurück:
 -   Welche Probleme sind bei der Umsetzung Ihres Lösungsansatzes aufgetreten?
 -   Wie haben Sie die Probleme letztlich gelöst?
 -->
-
-## Quests
 
 Durch den Aufbau des Questgivers und des Questhandlers können weitere Quests einfach erstellt werden.
 
@@ -174,8 +170,3 @@ temporären Liste gespeichert. Die Observer aus dieser Liste werden im nächsten
 `notifyObservers`-Methode wird zusätzlich überprüft, ob ein Observer bereits in
 der temporären Liste ist und wird in diesem Fall nicht mehr über
 Zustandsänderungen benachrichtigt.
-
-## jUnit
-
-???
-
