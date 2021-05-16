@@ -1,9 +1,12 @@
 package quests;
 
 import GUI.InventoryObserver;
+import items.Item;
 import items.ItemFactory;
 import items.inventory.Inventory;
 import main.Hero;
+
+import java.util.ArrayList;
 
 /**
  * Quest to collect random number of items
@@ -13,6 +16,10 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
     private int toCollect;
     private int collected;
     private Hero hero;
+
+    public int getCollected() {
+        return this.collected;
+    }
 
     /**
      * constructor
@@ -25,6 +32,14 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
 
         var items = ItemFactory.CreateRandomItems(1);
         this.reward = new QuestReward(items, xp);
+    }
+
+    public CollectItemsQuest(Hero hero, ArrayList<Item> rewardItems, int toCollect) {
+        this.hero = hero;
+        this.toCollect = toCollect;
+        int xp = this.toCollect * 10;
+
+        this.reward = new QuestReward(rewardItems, xp);
     }
 
     /**

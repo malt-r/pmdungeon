@@ -55,7 +55,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     // TODO: this should be packaged in an unified handler of stats and modifiers
     private float bonusHealth = 0.0f;
     private float bonusDamage = 0.0f;
-    private int killCount = 0;
+    protected int killCount = 0;
 
     private Level level;
     public Level getLevel(){ return this.level; }
@@ -538,7 +538,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     @Override
     public void notifyObservers() {
         for(HeroObserver obs : observerList){
-            obs.update(this);
+            if (!observersToRemove.contains(obs)) {
+                obs.update(this);
+            }
         }
     }
 

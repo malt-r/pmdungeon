@@ -302,7 +302,9 @@ public class Inventory<T extends Item> implements ObservableInventory{
     @Override
     public void notifyObservers(){
         for (InventoryObserver obs : observerList){
-            obs.update(this, this.parent instanceof Hero);
+            if (!observersToRemove.contains(obs)) {
+                obs.update(this, this.parent instanceof Hero);
+            }
         }
     }
 }

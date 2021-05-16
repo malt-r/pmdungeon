@@ -1,13 +1,18 @@
 package quests;
 
 import GUI.HeroObserver;
+import GUI.LevelObserver;
+import items.Item;
 import items.ItemFactory;
 import main.Hero;
+import progress.Level;
+
+import java.util.ArrayList;
 
 /**
  * Quest to level up random amount of levels.
  */
-public class LevelUpQuest extends Quest implements HeroObserver {
+public class LevelUpQuest extends Quest implements LevelObserver {
     private int startLevel;
     private int levels;
     private boolean isFinished;
@@ -25,6 +30,14 @@ public class LevelUpQuest extends Quest implements HeroObserver {
 
         var items = ItemFactory.CreateRandomItems(1);
         this.reward = new QuestReward(items, xp);
+    }
+
+    public LevelUpQuest(Hero hero, ArrayList<Item> rewardItems, int levelsToLevel) {
+        this.hero = hero;
+        int xp = 120;
+
+        this.levels = levelsToLevel;
+        this.reward = new QuestReward(rewardItems, xp);
     }
 
     /**
@@ -60,7 +73,7 @@ public class LevelUpQuest extends Quest implements HeroObserver {
      */
     @Override
     public void setup() {
-        this.hero.register(this);
+        this.hero.getLevel().register(this);
         this.startLevel = this.hero.getLevel().getCurrentLevel();
         this.isFinished = false;
     }
@@ -72,7 +85,7 @@ public class LevelUpQuest extends Quest implements HeroObserver {
     @Override
     public void cleanup() {
         super.cleanup();
-        this.hero.unregister(this);
+        this.hero.getLevel().unregister(this);
     }
 
     /**
@@ -89,11 +102,11 @@ public class LevelUpQuest extends Quest implements HeroObserver {
      * @return
      */
     @Override
-    public void update(Hero hero) {
+    public void update(Level level) {
         mainLogger.info("startLevel: " + this.startLevel);
         mainLogger.info("levels: " + this.levels);
 
-        if (hero.getLevel().getCurrentLevel() >= this.startLevel + this.levels) {
+        if (level.getCurrentLevel() >= this.startLevel + this.levels) {
             this.isFinished = true;
         }
         notifyObservers();
