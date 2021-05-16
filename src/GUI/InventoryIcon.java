@@ -29,17 +29,27 @@ public class InventoryIcon implements IHUDElement {
         position = new Point((float)index * 0.5f, height);
         texture = defaultTexture;
     }
-
+    /**
+     * Returns the texture of the icon for display purposes
+     * @return texture of the icon
+     */
     @Override
     public Point getPosition() {
         return position;
     }
-
+    /**
+     * Returns the texture of the icon for display purposes
+     * @return texture of the icon
+     */
     @Override
     public Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Sets the texture of the icon for display pruposes
+     * @param texture which should be used for the icon
+     */
     public void setTexture(Texture texture){
         this.texture = texture;
     }

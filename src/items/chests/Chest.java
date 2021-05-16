@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 /**
- * Constructor of the chest class.
+ * chest class
  * <p>
- * This constructor will instantiate the animations and read all required texture data.
+ *     Defines a basic default chest.
  * </p>
  */
 public class Chest implements IAnimatable, IEntity {

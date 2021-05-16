@@ -8,12 +8,23 @@ import main.Game;
 import quests.IQuestObserver;
 import quests.Quest;
 
+/**
+ * QuestOvervoew class.
+ * <p>
+ * Defines the GUI Elements for a quest overview.
+ * </p>
+ */
 public class QuestOverview implements IQuestObserver {
   private HUD hud;
   private TextStage textStage;
   private Label lbName;
   private Label lbProgress;
-
+  /**
+   * Constructor of the QuestOverview class.
+   * <p>
+   * This constructor will instantiate the text instances of the HUD.
+   * </p>
+   */
   public QuestOverview(HUD hud, TextStage textStage){
     this.hud= hud;
     this.textStage= textStage;
@@ -25,6 +36,10 @@ public class QuestOverview implements IQuestObserver {
     Game.getInstance().getQuestHandler().register(this);
   }
 
+  /**
+   * Displays information of the current quest with progress
+   * @param quest which should be displayed
+   */
   public void show(Quest quest) {
       if (quest.isFinished()) {
           showFinishedQuest(quest);
@@ -33,6 +48,10 @@ public class QuestOverview implements IQuestObserver {
       }
   }
 
+  /**
+   * Displays a quest which has not be finished
+   * @param quest which should be displayed
+   */
   public void showQuest(Quest quest) {
       lbName.setColor(Color.YELLOW);
       lbName.setText(quest.getQuestName());
@@ -40,6 +59,10 @@ public class QuestOverview implements IQuestObserver {
       lbProgress.setText(quest.getProgressString());
   }
 
+  /**
+   * Display a finished quest
+   * @param quest which should be displayed
+   */
   public void showFinishedQuest(Quest quest) {
       lbName.setColor(Color.GREEN);
       lbName.setText(quest.getQuestName());
@@ -47,11 +70,18 @@ public class QuestOverview implements IQuestObserver {
       lbProgress.setText("Abgeschlossen!");
   }
 
+  /**
+   * Hides the questoverview
+   */
   public void hide(){
     lbName.setText("");
     lbProgress.setText("");
   }
 
+  /**
+   * Updates the quest overview
+   * @param quest the quest, which sends the update
+   */
   @Override
   public void update(Quest quest) {
     show(quest);
