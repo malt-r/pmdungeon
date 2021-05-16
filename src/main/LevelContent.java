@@ -3,6 +3,7 @@ package main;
 import items.ItemType;
 import items.chests.ChestType;
 import monsters.MonsterType;
+import quests.QuestGiverType;
 import traps.TrapType;
 
 /**
@@ -16,16 +17,18 @@ public class LevelContent {
   public ItemType[] items;
   public ChestType[] chests;
   public TrapType[] traps;
+  public QuestGiverType[] questGivers;
   /**
    * Constructor of the LevelContent class.
    * <p>
    *  Instantiates A LevelContent instance
    * </p>
    */
-  public LevelContent(MonsterType[] monsters, ItemType[] items, ChestType[] chestTypes, TrapType[] trapType) {
+  public LevelContent(MonsterType[] monsters, ItemType[] items, ChestType[] chestTypes, TrapType[] trapType, QuestGiverType[] questGiverType) {
     this.monsters= monsters;
     this.items=items;
     this.chests= chestTypes;
     this.traps= trapType;
+    this.questGivers = questGiverType;
   }
 }

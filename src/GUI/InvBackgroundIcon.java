@@ -32,11 +32,19 @@ public class InvBackgroundIcon implements IHUDElement {
         texture = defaultTexture;
     }
 
+    /**
+     * Returns the position of the icon for display purposes
+     * @return position of the icon
+     */
     @Override
     public Point getPosition() {
         return position;
     }
 
+    /**
+     * Returns the texture of the icon for display purposes
+     * @return texture of the icon
+     */
     @Override
     public Texture getTexture() {
         return texture;

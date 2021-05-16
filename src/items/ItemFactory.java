@@ -9,6 +9,9 @@ import items.shields.EagleShield;
 import items.shields.WoodShield;
 import items.weapons.GoldenSword;
 import items.weapons.RegularSword;
+
+import java.util.ArrayList;
+
 /**
  * Factory for creation of monster
  * <p>
@@ -33,5 +36,18 @@ public class ItemFactory {
     if(itemType == ItemType.SHIELD_WOOD)        return new WoodShield();
     if(itemType == ItemType.SHIELD_EAGLE)       return new EagleShield();
     throw new Exception("ItemType no supported");
+  }
+
+  public static ArrayList<Item> CreateRandomItems(int count) {
+    ArrayList<Item> items = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+      int idx = util.math.Convenience.getRandBetween(0, ItemType.values().length);
+      try {
+        items.add(ItemFactory.CreateItem(ItemType.values()[idx]));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return items;
   }
 }

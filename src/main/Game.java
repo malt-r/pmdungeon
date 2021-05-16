@@ -21,6 +21,9 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
 import progress.Level;
+import quests.KillMonstersQuest;
+import quests.QuestGiver;
+import quests.QuestHandler;
 import traps.*;
 import java.util.logging.Logger;
 
@@ -46,6 +49,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private QuestDialog questDialog;
     private QuestOverview questOverview;
     private static Game instance;
+    private QuestHandler questHandler;
     private Hero hero;
     private DungeonWorld firstLevel;
     private final ArrayList <IEntity> entitiesToRemove = new ArrayList<>();
@@ -87,6 +91,27 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
         return Game.instance;
     }
+
+    /**
+     *
+     * @return
+     */
+    public QuestHandler getQuestHandler(){ return this.questHandler; }
+
+    public QuestDialog getQuestDialog() {
+        return this.questDialog;
+    }
+
+    public QuestOverview getQuestOverview() {
+        return this.questOverview;
+    }
+
+    //TODO - Maybe only temporary (who knows)
+    /**
+     *
+     * @return
+     */
+    public Hero getHero(){ return this.hero; }
     /**
      * Setup of the game world.
      * <p>
@@ -97,6 +122,11 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     @Override
     protected void setup() {
         hero = new Hero();
+        this.questHandler = new QuestHandler(hero);
+        this.entityController.addEntity(this.questHandler);
+        // TODO: temporary solution, how to pass hero to quest?
+        //this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
+
         firstLevel = null;
         // the entityController will call hero.update each frame
         entityController.addEntity(hero);
@@ -176,20 +206,21 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entitiesToAdd.clear();
         }
 
+        // TODO: this still needed?
         //Y in German keyboard
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            questDialog.show();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-            questDialog.hide();
-        }
+       // if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+       //     questDialog.show();
+       // }
+       // if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+       //     questDialog.hide();
+       // }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-            questOverview.show();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.V)) {
-            questOverview.hide();
-        }
+       // if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+       //     questOverview.show();
+       // }
+       // if (Gdx.input.isKeyPressed(Input.Keys.V)) {
+       //     questOverview.hide();
+       // }
     }
     /**
      * Implements logic executed at the end of a frame.
@@ -207,6 +238,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entityController.removeAllFrom(Monster.class);
             entityController.removeAllFrom(Trap.class);
             entityController.removeAllFrom(Chest.class);
+            entityController.removeAllFrom(QuestGiver.class);
             levelController.triggerNextStage();
             mainLogger.info("Next stage loaded");
 

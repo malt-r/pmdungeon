@@ -77,21 +77,10 @@ public class InventorySelectState implements IInventoryControlState {
     private void dropItem(Inventory inventory) {
 
         if (this.selectorIdx < inventory.getCount() && null != inventory.getItemAt(this.selectorIdx)) {
-            var item = inventory.removeAt(this.selectorIdx);
-            item.setPosition(inventory.parent.getPosition());
-
-            var parentPos = inventory.parent.getPosition();
-            var finalX = Math.round(parentPos.x);
-            var finalY = Math.round(parentPos.y);
-            var tile = Game.getInstance().getCurrentLevel().getTileAt(finalX,finalY);
-            var point = new Point(finalX,finalY);
-            item.setPosition(point);
-            Game.getInstance().addEntity(item);
-            this.selectorIdx -= 1;
-            //inventory.dropItem(item);
-
-            mainLogger.info("Dropped " + item.getName() + " from inventory");
-
+            boolean successfullyDropped = inventory.dropItemFromIdx(this.selectorIdx);
+            if (successfullyDropped) {
+                this.selectorIdx -= 1;
+            }
         }
     }
 }

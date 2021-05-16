@@ -28,4 +28,8 @@ public class Convenience {
     static public Vec scaleDelta(Point p1, Point p2, float scale) {
         return scaleDelta(new Vec(p1), new Vec(p2), scale);
     }
+
+    static public int getRandBetween(int min, int max) {
+        return (int)((Math.random() * (max - min)) + min);
+    }
 }

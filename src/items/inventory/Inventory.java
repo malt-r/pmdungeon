@@ -1,9 +1,11 @@
 package items.inventory;
 
 import GUI.InventoryObserver;
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.*;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 
+import main.Game;
 import main.Hero;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -76,6 +78,7 @@ public class Inventory<T extends Item> implements ObservableInventory{
     private final ArrayList<T> items;
 
     private ArrayList<InventoryObserver> observerList = new ArrayList<InventoryObserver>();
+    private ArrayList<InventoryObserver>  observersToRemove = new ArrayList<>();
 
     /**
      * Constructor
@@ -129,14 +132,36 @@ public class Inventory<T extends Item> implements ObservableInventory{
         } else {
             // this will shift all indices after 'index' to the left (minus 1)
             T item = items.remove(index);
-            dropItem(item);
+            //dropItem(item);
             notifyObservers();
             return item;
         }
     }
 
-    private void dropItem(Item item){
-        item.setPosition(parent.getPosition());
+    public boolean dropItem(Item itemToDrop) {
+        try {
+            var parentPos = this.parent.getPosition();
+            var finalX = Math.round(parentPos.x);
+            var finalY = Math.round(parentPos.y);
+            var point = new Point(finalX,finalY);
+            itemToDrop.setPosition(point);
+            Game.getInstance().addEntity(itemToDrop);
+        } catch(Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean dropItemFromIdx(int idx){
+        Item item = null;
+        try {
+            item = this.removeAt(idx);
+        } catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+        dropItem(item);
+        mainLogger.info("Dropped " + item.getName() + " from inventory");
+        return true;
     }
 
     /**
@@ -168,6 +193,8 @@ public class Inventory<T extends Item> implements ObservableInventory{
         if (null != nextState) {
             transitionToNextState(nextState);
         }
+
+        removeObserversToRemove();
     }
 
     // check, if the opener is the parent of this inventory
@@ -257,7 +284,16 @@ public class Inventory<T extends Item> implements ObservableInventory{
      */
     @Override
     public void unregister(InventoryObserver observer){
-        this.observerList.remove(observer);
+        if (this.observerList.contains(observer) && !this.observersToRemove.contains(observer)) {
+            this.observersToRemove.add(observer);
+        }
+    }
+
+    private void removeObserversToRemove() {
+        for (InventoryObserver observer : observersToRemove) {
+            this.observerList.remove(observer);
+        }
+        this.observersToRemove.clear();
     }
 
     /**
@@ -266,7 +302,9 @@ public class Inventory<T extends Item> implements ObservableInventory{
     @Override
     public void notifyObservers(){
         for (InventoryObserver obs : observerList){
-            obs.update(this, this.parent instanceof Hero);
+            if (!observersToRemove.contains(obs)) {
+                obs.update(this, this.parent instanceof Hero);
+            }
         }
     }
 }

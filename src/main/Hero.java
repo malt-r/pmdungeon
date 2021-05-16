@@ -26,8 +26,10 @@ import progress.ability.Ability;
 import progress.Level;
 import progress.ability.KnockbackAbility;
 import progress.ability.SprintAbility;
+import quests.QuestReward;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 /**
  * The controllable player character.
@@ -53,12 +55,18 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     // TODO: this should be packaged in an unified handler of stats and modifiers
     private float bonusHealth = 0.0f;
     private float bonusDamage = 0.0f;
+    protected int killCount = 0;
 
     private Level level;
     public Level getLevel(){ return this.level; }
     private boolean invincible = false;
 
     private ArrayList<HeroObserver> observerList = new ArrayList<HeroObserver>();
+    private ArrayList<HeroObserver> observersToRemove = new ArrayList<>();
+
+    public int getKillCount() {
+        return killCount;
+    }
 
     // TODO: turn this into an ability
     private void RandomHealOnKill() {
@@ -123,15 +131,16 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
             // TODO: specify xp amount based on monster kind
             boolean levelIncrease = this.level.increaseXP(50);
 
-
             mainLogger.info("Current XP: " + level.getCurrentXP());
             mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
             if (levelIncrease) {
                 applyLevelUp();
             }
 
-            // here would the hero gain experience...
             RandomHealOnKill();
+
+            this.killCount++;
+            notifyObservers();
         }
         return damage;
     }
@@ -180,7 +189,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         knockBackAble = true;
 
         this.inventory = new Inventory(this, 10);
-        this.level = new Level();
+        this.level = new Level(this::applyLevelUp);
     }
 
     /**
@@ -254,6 +263,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
 
         this.inventory.update();
+        removeObserversToRemove();
     }
 
     @Override
@@ -274,6 +284,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     public void onGameOver() {
         resetCombatStats();
+        this.killCount = 0;
         this.rightHandSlot = null;
         this.leftHandSlot = null;
         this.inventory.clear();
@@ -509,7 +520,16 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void unregister(HeroObserver observer) {
-        this.observerList.remove(observer);
+        if (this.observerList.contains(observer) && !this.observersToRemove.contains(observer)) {
+            this.observersToRemove.add(observer);
+        }
+    }
+
+    private void removeObserversToRemove() {
+        for (HeroObserver heroObserver : observersToRemove) {
+            this.observerList.remove(heroObserver);
+        }
+        this.observersToRemove.clear();
     }
 
     /**
@@ -518,7 +538,32 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     @Override
     public void notifyObservers() {
         for(HeroObserver obs : observerList){
-            obs.update(this);
+            if (!observersToRemove.contains(obs)) {
+                obs.update(this);
+            }
+        }
+    }
+
+    public void applyReward(QuestReward reward) {
+        if (null != reward) {
+            // apply xp
+            this.level.increaseXP(reward.getXp());
+
+            // add items to inventory or drop them on the floor
+            int freeSlots = this.inventory.getNumFreeSlots();
+            var rewardItems = reward.getItems();
+            if (freeSlots < rewardItems.size()) {
+                for (int i = 0; i < freeSlots; i++) {
+                    this.inventory.addItem(rewardItems.get(i));
+                }
+                for (int i = freeSlots; i < rewardItems.size(); i++){
+                    inventory.dropItem(rewardItems.get(i));
+                }
+            } else {
+                for (Item item : rewardItems) {
+                    this.inventory.addItem(item);
+                }
+            }
         }
     }
 }
