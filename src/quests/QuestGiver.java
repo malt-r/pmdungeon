@@ -15,6 +15,9 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Logger;
 
+/**
+ * Implementation of a QuestFiver that gives an qust.
+ */
 public class QuestGiver implements IAnimatable, IEntity {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private Animation currentAnimation;
@@ -27,6 +30,10 @@ public class QuestGiver implements IAnimatable, IEntity {
     private QuestHandler questHandler;
     private Quest quest;
 
+    /**
+     * constructor
+     * Initializes the questgiver with a random quest.
+     */
     public QuestGiver(){
 
         this.game = Game.getInstance();
@@ -67,16 +74,27 @@ public class QuestGiver implements IAnimatable, IEntity {
         return new Animation(textureList, frameTime);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public Animation getActiveAnimation() {
         return currentAnimation;
     }
-
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public Point getPosition() {
         return position;
     }
 
+    /**
+     * Draws the questgiver with right scaling and checks if the hero is on the same tile as well as
+     * checking if the quest was accepted.
+     */
     @Override
     public void update() {
         this.draw(-1.0F, -0.7F);
@@ -102,21 +120,35 @@ public class QuestGiver implements IAnimatable, IEntity {
         Game.getInstance().getQuestHandler().abortNewQuestRequest();
         //Oder Questhandler.abortNewQuestRequest();
     }
-
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     public boolean deleteable() {
         return false;
     }
 
+    /**
+     * sets the level of the questgiver
+     * @param level in which the questgiver is in
+     */
     public void setLevel(DungeonWorld level) {
         this.level = level;
         findRandomPosition();
     }
 
+    /**
+     * Sets the position of the questgiver to a random position in the dungeon.
+     */
     public void findRandomPosition() {
         this.position = new Point(level.getRandomPointInDungeon());
     }
 
+    /**
+     * Disables the waiting procedure if the quest has been accepted.
+     * @param status
+     */
     public void questWasAccepted(boolean status) {
         if (!questWasAccepted) {
             questWasAccepted = status;
