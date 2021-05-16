@@ -91,7 +91,18 @@ Statusanzeige im rechten, oberen Bereich des Fensters. Beim erfolgreichen Abschl
 wird dies angezeigt und die Farbe der Statusanzeige auf grün geändert.
 
 ##jUnit
-Jede Quest wird getestet.
+
+Es werden Tests für alle Quests erstellt. Dazu müssen vorerst Mockups von bestimmten Klassen implementiert werden.
+Um die Quests zum Testen initialisieren zu können, wird je ein Object der Klasse Hero, ICombatable und Item benötigt.
+Die Mockups überschreiben bestimmte Funktionen wie beispielsweise die Erstellung einer Animation, um keine Abhängigkeit von
+Texturen zu haben.
+
+Zusätzlich wird den Quests ein weiterer Konstruktor hinzugefügt. Der Standard-Konstruktor erzeugt eine zufällige
+Menge an Items. Dem neuen Konstruktor zum Testen kann man eine Menge an Items übergeben. So wird die Testbarkeit der
+Quest-Klassen erhöht.
+
+
+-Tests für Questhandler
 
 # Umsetzung
 
@@ -105,17 +116,19 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 
 ##Quests
 
-13.05.2021 15:00 - 17:00	Erste Implementierung des Questgivers
+13.05.2021 15:00 - 18:00	Erste Implementierung des Questgivers
 13.05.2021 15:00 - 19:00	Erste Implementierung des Questhandlers und Hinzufügen einer ersten Quest
-13.05.2021 15:00 - 17:00	Erste Implementierung des Anzeige der Quests auf dem HUD
+13.05.2021 15:00 - 17:00	Erste Implementierung der Anzeige der Quests auf dem HUD
 
-14.05.2021 15:00 - 17:00	Anpassen des Questgivers, Verknüpfung mit dem QuestHandler
+14.05.2021 15:00 - 17:00	Anpassen des Questgivers
+14.05.2021 17:00 - 19:00    Verknüpfung des Questgivers und des QuestHandlers
 
 15.05.2021 12:00 - 15:00	Lerntagebuch
 
+
 ##jUnit
 
-
+16.05.2021 10:00 - 13:00	Implementieren Mockups und Tests
 
 # Postmortem
 <!--
@@ -134,8 +147,12 @@ Die Statemachine im Questhandler ermöglicht eine saubere Abbildung der möglich
 so die Programmierung. 
 
 Das Verwenden vom Observer-Pattern ermöglicht eine Programmierung ohne Polling und reduziert die Rechenzeit
-pro Zyklus.
+pro Zyklus. Beim Benachrichtigen der Observer wurde eine „Concurrent modification exception" geworfen. Dieser
+Fehler trat nach dem Abschließen einer Quest, beim Durchlaufen der "foreach"-Schleife zum Benachrichtigen aller Observer
+auf. Dies lag daran, dass die Liste der Observer während des Durchlaufs verändert wurde. Behoben wurde der Fehler,
+indem die Liste der Observer erst nach dem Benachrichtigen verändert wird. ???
 
 ##jUnit
 
 ???
+
