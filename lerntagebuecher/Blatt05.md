@@ -39,16 +39,16 @@ Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 -->
 
 ## Quests
-Es soll ein Questsystem implementiert werden. Verschidene Quests sollen
+Es soll ein Questsystem implementiert werden. Verschiedene Quests sollen
 vom Helden annehmbar sein und nach Abschluss den Helden entlohnen. Die Entlohnung
-soll in Form von Gegenständen und Erfahrungspunkten sein. Ein Geist soll beispielsweise
-eine Quest vorschlagen, welche vom Helden an- oder abgelehnt werden kann. Questinformationen
+soll die Form von Items und Erfahrungspunkten haben. Ein Geist soll beispielsweise
+eine Quest vorschlagen, welche vom Helden angenommen oder abgelehnt werden kann. Questinformationen
 sollen vor dem Auswählen auf dem HUD angezeigt werden. Wenn die Quest angenommen wurde, soll
 der Fortschritt der aktuellen Quest ebenfalls auf dem HUD angezeigt werden. Mindestens eine
 Quest soll dabei kampfunabhängig sein.
 
 ## jUnit
-Es sollen sich systematisch geeignete Testfälle für die Quests überlegt und implementiert werden.
+Für die Quests sollen systematisch geeignete Testfälle entwickelt werden.
 
 # Ansatz und Modellierung
 
@@ -61,48 +61,57 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -->
 
 ## Quests
+
 Es werden drei Quests implementiert. Eine Quest befasst sich mit dem Einsammeln von Items, eine
 weitere mit dem Töten einer bestimmten Anzahl an Gegnern und die letzte mit dem Aufsteigen des
-Erfahrungslevels. Dazu wird eine abstrakte Klasse Quest implementiert von der jede spezifische
+Erfahrungslevels. Dazu wird eine abstrakte Klasse `Quest` implementiert, von der jede spezifische
 Questklasse erbt. Das UML-Diagramm für die Quests ist in folgender Abbildung dargestellt.
+
 ![UML Level](./Blatt05/uml_quest.png "UML Diagramm der Quest Klasse")
 
 Um den Fortschritt der Quests aktualisieren zu können, wird das Observer-Pattern
 verwendet. Nur bei Änderungen wichtiger Parameter (wie beispielsweise das Aufheben von Items oder das
 Töten eines Gegners) wird der Fortschritt angepasst.
 
-Die Klasse Questhandler ist für das Handhaben der aktuellen Quest zuständig. Die Klasse regelt das
-Aktivieren einer ausgewählten Quest. Dazu wird eine bestimmte Tastatureingabe erwartet. Wenn eine
-neue Quest angenommen wird, wird die alte Quest überschrieben. Zusätzlich ist der Questhandler
-für die Übertragung der jewiligen Questbelohnungen zuständig.
-Intern wird eine Statemachine imlpementiert, um Zustände wie beispielsweise das Abfragen der Tastatureingabe
-abzubilden. Die Statemachine ist in folgender Abbildung dargestellt.
+Die Klasse `QuestHandler` ist für die Speicherung und Überwachung der aktuellen
+Quest zuständig. Die Klasse regelt das Aktivieren einer neuen `Quest`. Dazu wird
+eine bestimmte Tastatureingabe erwartet. Wenn eine neue Quest angenommen wird,
+wird die alte Quest überschrieben. Zusätzlich ist der `QuestHandler` für die
+Übertragung der jeweiligen Questbelohnungen an den `Hero` zuständig.  Intern
+wird eine Statemachine implementiert, um beispielsweise das Abfragen der
+Tastatureingabe in Zustände auszulagern und vom `QuestHandler` zu isolieren. Die
+Statemachine ist in folgender Abbildung dargestellt.
+
 ![UML Level](./Blatt05/uml_questhandler_statemachine.png "UML Diagramm Statemachine vom Questhandler")
 
-Die Klasse QuestGiver ist eine zeichenbare Entität. Pro Level wird ein QuestGiver mit einer zufälligen
-Quest initialisiert und gespawnt. Der Questgiver erwartet, dass sich der Held auf den gleichen Koordinaten
-befindet, um ihm eine Quest vorschlagen zu können. Dazu wird dem Handler eine Anfrage gestellt, die
-Quest zu starten. Wird die Koordinate des Questgivers verlassen, wird die Anfrage an den Handler abgebrochen.
+Die Klasse `QuestGiver` implementiert `IDrawable` und `IEntity`.  Pro Level wird
+ein `QuestGiver` mit einer zufälligen Quest initialisiert und gespawnt. Der
+`QuestGiver` überprüft, ob sich der Held auf dem gleichen `Tile` befindet,
+und schlägt ihm in diesem Fall die Quest vor. Dazu wird dem `QuestHandler` eine Anfrage
+gestellt, die Quest zu starten. Wird das `Tile` des `QuestGivers` verlassen,
+wird die Anfrage an den `QuestHandlers` abgebrochen.
 
-Das HUD registriert sich am QuestHandler (Observer-Pattern). Bei Updates wird das HUD benachrichtigt. Beim
-Vorstellen einer Quest erscheint die Beschreibung der Quest und die Belohnung. Die erwarteten Tasten zum
-Annehmen oder Ablehnen der Quest werden angezeigt. Wenn eine Quest angenommen wird, erscheint eine
-Statusanzeige im rechten, oberen Bereich des Fensters. Beim erfolgreichen Abschließen einer Quest
-wird dies angezeigt und die Farbe der Statusanzeige auf grün geändert.
+Das HUD registriert sich am `QuestHandler` (Observer-Pattern). Bei Updates wird
+das HUD benachrichtigt. Beim Vorstellen einer Quest erscheint die Beschreibung
+der Quest und die Belohnung. Die erwarteten Tasten zum Annehmen oder Ablehnen
+der Quest werden angezeigt. Wenn eine Quest durch den Nutzer angenommen wird, erscheint eine
+Statusanzeige im rechten, oberen Bereich des Fensters. Beim erfolgreichen
+Abschließen einer Quest wird dies angezeigt und die Farbe der Statusanzeige auf
+grün geändert.
 
 ## jUnit
 
-Es werden Tests für alle Quests erstellt. Dazu müssen vorerst Mockups von bestimmten Klassen implementiert werden.
-Um die Quests zum Testen initialisieren zu können, wird je ein Object der Klasse Hero, ICombatable und Item benötigt.
-Die Mockups überschreiben bestimmte Funktionen wie beispielsweise die Erstellung einer Animation, um keine Abhängigkeit von
-Texturen zu haben.
+Es werden Tests für alle Quests erstellt. Dazu müssen vorerst Mockups von
+bestimmten Klassen implementiert werden.  Um die Quests zum Testen
+initialisieren zu können, wird je ein Object der Klasse `Hero`, `ICombatable` und
+`Item` benötigt. Die Mockups überschreiben bestimmte Funktionen wie
+beispielsweise die Erstellung einer Animation, um die Abhängigkeit von
+Texturen aus dem `assets`-Ordner aufzulösen.
 
-Zusätzlich wird den Quests ein weiterer Konstruktor hinzugefügt. Der Standard-Konstruktor erzeugt eine zufällige
-Menge an Items. Dem neuen Konstruktor zum Testen kann man eine Menge an Items übergeben. So wird die Testbarkeit der
-Quest-Klassen erhöht.
-
-
--Tests für Questhandler
+Zusätzlich wird den Quests ein weiterer Konstruktor hinzugefügt. Der
+Standard-Konstruktor erzeugt eine zufällige Menge an Items. Dem neuen
+Konstruktor zum Testen kann man eine Liste an `MockItems` übergeben. So wird die
+Testbarkeit der Quest-Klassen erhöht.
 
 # Umsetzung
 
