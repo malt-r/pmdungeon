@@ -19,6 +19,7 @@ public class Level implements ObserveableLevel{
     private float damageScaleConstant = 2.f;
 
     private ArrayList<LevelObserver> observerList = new ArrayList<LevelObserver>();
+
     private ArrayList<Ability> abilities = new ArrayList<>();
 
     private Runnable levelUpCallback;
@@ -153,8 +154,13 @@ public class Level implements ObserveableLevel{
      */
     @Override
     public void notifyObservers() {
-        for(LevelObserver obs : observerList){
-            obs.update(this);
+        int numObservers = observerList.size();
+        for (int i = 0; i < observerList.size(); i++) {
+            observerList.get(i).update(this);
+            if (observerList.size() < numObservers) {
+                i--;
+                numObservers = this.observerList.size();
+            }
         }
     }
 }

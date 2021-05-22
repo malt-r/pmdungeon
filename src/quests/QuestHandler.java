@@ -141,6 +141,9 @@ public class QuestHandler implements IQuestObserver, IEntity {
     public void update(Quest quest) {
         // current quest was updated
         if (quest.isFinished() && !removeCurrentQuest) {
+            if (quest != this.currentQuest) {
+                mainLogger.warning("Quest from update " + quest.toString() + " does not match this.currentQuest " + this.currentQuest.toString());
+            }
             mainLogger.info("Quest " + this.currentQuest.getQuestName() + " is finished");
             var reward = quest.getReward();
             currentQuest.cleanup();
@@ -161,7 +164,8 @@ public class QuestHandler implements IQuestObserver, IEntity {
     public void update() {
         // do not ever set the currentQuest = null in IQuestObserver.update -> may lead to ConcurrentModificationException
         if (hasQuest() && this.removeCurrentQuest) {
-            currentQuest = null;
+            this.currentQuest.unregister(this);
+            this.currentQuest = null;
             this.removeCurrentQuest = false;
         }
 
