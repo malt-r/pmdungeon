@@ -37,14 +37,12 @@ import java.util.logging.Logger;
 public class Game extends MainController implements LevelObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    private HeartIcon[] hearts = new HeartIcon[10];
-
     private Label expLabel;
-    private Label heartLabel;
     private QuestDialog questDialog;
     private QuestOverview questOverview;
     private InventoryOverview inventoryOverview;
     public InventoryOverview getInventoryOverview(){ return this.inventoryOverview; }
+    private HeartOverview heartOverview;
     private static Game instance;
     private QuestHandler questHandler;
     private Hero hero;
@@ -132,34 +130,16 @@ public class Game extends MainController implements LevelObserver {
         camera.follow(hero);
 
 
-        questDialog = new QuestDialog(hud,textHUD);
-        questOverview = new QuestOverview(hud,textHUD);
+        questDialog = new QuestDialog(hud, textHUD);
+        questOverview = new QuestOverview(hud, textHUD);
         inventoryOverview = new InventoryOverview(hud);
-
-
-
-        //GUI
-        for (int i = 0; i < 10; i++){
-
-
-            //Init of hearts
-            hearts[i] = new HeartIcon(i);
-            hud.addHudElement(hearts[i]);
-
-
-        }
-
+        heartOverview = new HeartOverview(hud, textHUD);
 
         //Init of exp level text
         expLabel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
                                     hero.getLevel().getCurrentXP() + "/" +
                                     hero.getLevel().getXPForNextLevelTotal(),
                             "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
-        //Init of heart label text
-        heartLabel = textHUD.drawText("","fonts/Pixeled.ttf",
-                                    Color.RED, 20,20,20,50,445);
-
-        heartCalc();
 
         hero.getLevel().register(this);
 
@@ -374,42 +354,6 @@ public class Game extends MainController implements LevelObserver {
         monster.setLevel(levelController.getDungeon());
         monster.position = position;
     }
-
-    /**
-     * Calculates and sets the heart display
-     */
-    private void heartCalc(){
-        float health = hero.getHealth();
-        int heartHalves = (int) Math.ceil(health/10);
-        int heartFull = (int)heartHalves/2;
-
-        heartLabel.setText("");
-
-
-        if (health <= 200.0f){
-            int i = 0;
-
-            for (i = 0; i < heartFull; i++){
-                hearts[i].setState(2);
-            }
-            if (heartHalves%2 == 1){
-                hearts[i].setState(1);
-                i++;
-            }
-            for (int j = i; j < 10; j++){
-                hearts[j].setState(0);
-            }
-        }else{
-            hearts[0].setState(2);
-            for (int i = 1; i < hearts.length; i++){
-                hearts[i].setDefaultTexture();
-            }
-
-            heartLabel.setText("" + heartFull);
-        }
-    }
-
-
 
     /**
      * Function to update level display

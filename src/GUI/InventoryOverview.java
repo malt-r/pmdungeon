@@ -26,6 +26,7 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
         chestBackgroundInit();
         inventoryInit();
         chestInit();
+        heroSlotsInit();
 
         game.getHero().getInventory().register(this);
         game.getHero().register(this);
@@ -163,7 +164,5 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
         }else{
             heroSlots[1].setDefaultTexture();
         }
-
-        //heartCalc();
     }
 }
