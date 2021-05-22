@@ -34,15 +34,16 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController implements LevelObserver {
+public class Game extends MainController {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    private Label expLabel;
+
     private QuestDialog questDialog;
     private QuestOverview questOverview;
     private InventoryOverview inventoryOverview;
     public InventoryOverview getInventoryOverview(){ return this.inventoryOverview; }
     private HeartOverview heartOverview;
+    private LevelOverview levelOverview;
     private static Game instance;
     private QuestHandler questHandler;
     private Hero hero;
@@ -134,15 +135,7 @@ public class Game extends MainController implements LevelObserver {
         questOverview = new QuestOverview(hud, textHUD);
         inventoryOverview = new InventoryOverview(hud);
         heartOverview = new HeartOverview(hud, textHUD);
-
-        //Init of exp level text
-        expLabel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
-                                    hero.getLevel().getCurrentXP() + "/" +
-                                    hero.getLevel().getXPForNextLevelTotal(),
-                            "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
-
-        hero.getLevel().register(this);
-
+        levelOverview = new LevelOverview(textHUD);
     }
 
     /**
@@ -354,13 +347,5 @@ public class Game extends MainController implements LevelObserver {
         monster.position = position;
     }
 
-    /**
-     * Function to update level display
-     * Gets called by Level.notifyObservers()
-     * @param level level object from which level the function got called
-     */
-    @Override
-    public void update(Level level) {
-        expLabel.setText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal());
-    }
+
 }
