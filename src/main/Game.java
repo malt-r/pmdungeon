@@ -34,20 +34,17 @@ import java.util.logging.Logger;
  *     setup method and calling of the game loop.
  * </p>
  */
-public class Game extends MainController implements InventoryObserver, HeroObserver, LevelObserver, OpenStateObserver {
+public class Game extends MainController implements LevelObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    //GUI
     private HeartIcon[] hearts = new HeartIcon[10];
-    private InventoryIcon[] inventory = new InventoryIcon[10];
-    private InventoryIcon[] chest = new InventoryIcon[10];
-    private InventoryIcon[] heroSlots = new InventoryIcon[2];
-    private InvBackgroundIcon[] invBackground = new InvBackgroundIcon[10];
-    private InvBackgroundIcon[] chestBackground = new InvBackgroundIcon[10];
+
     private Label expLabel;
     private Label heartLabel;
     private QuestDialog questDialog;
     private QuestOverview questOverview;
+    private InventoryOverview inventoryOverview;
+    public InventoryOverview getInventoryOverview(){ return this.inventoryOverview; }
     private static Game instance;
     private QuestHandler questHandler;
     private Hero hero;
@@ -133,36 +130,25 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         mainLogger.info("Hero created");
         // attach camera to hero
         camera.follow(hero);
+
+
         questDialog = new QuestDialog(hud,textHUD);
         questOverview = new QuestOverview(hud,textHUD);
+        inventoryOverview = new InventoryOverview(hud);
+
 
 
         //GUI
         for (int i = 0; i < 10; i++){
-            //Init of background for inventory
-            invBackground[i] = new InvBackgroundIcon(i, 0.0f);
-            invBackground[i].setDefaultBackgroundTexture();
-            hud.addHudElement(invBackground[i]);
-            //Init of background for chest
-            chestBackground[i] = new InvBackgroundIcon(i, 1.0f);
-            hud.addHudElement(chestBackground[i]);
+
+
             //Init of hearts
             hearts[i] = new HeartIcon(i);
             hud.addHudElement(hearts[i]);
-            //Init of inventory items
-            inventory[i] = new InventoryIcon(i, 0.0f);
-            hud.addHudElement(inventory[i]);
-            //Init of chest items
-            chest[i] = new InventoryIcon(i, 1.0f);
-            hud.addHudElement(chest[i]);
+
 
         }
 
-        //Init of hand items of hero
-        for (int i = 0; i < 2; i++){
-            heroSlots[i] = new InventoryIcon( i + 11, 0.0f);
-            hud.addHudElement(heroSlots[i]);
-        }
 
         //Init of exp level text
         expLabel = textHUD.drawText(hero.getLevel().getCurrentLevel() + "    " +
@@ -175,9 +161,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
 
         heartCalc();
 
-        //Register Observer
-        hero.getInventory().register(this);
-        hero.register(this);
         hero.getLevel().register(this);
 
     }
@@ -425,83 +408,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         }
     }
 
-    /**
-     * Function to update inventory display
-     * Gets called by Inventory.notifyObservers()
-     * @param inv inv object from which inventory the function got called
-     * @param fromHero boolean if its inventory of hero
-     */
-    @Override
-    public void update(Inventory inv, boolean fromHero){
-        if (fromHero){
 
-            for(int i = 0; i < invBackground.length; i++){
-                invBackground[i].setDefaultBackgroundTexture();
-            }
-
-            if (inv.getCurrentState() instanceof OwnInventoryOpenState) {
-                ((OwnInventoryOpenState) inv.getCurrentState()).register(this);
-                int index = ((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx();
-                if (index >= 0) {
-                    invBackground[index].setPointerTexture();
-                }
-            }
-
-            for (int i = 0; i < inventory.length; i++){
-                if (i < inv.getCount()){
-                    inventory[i].setTexture(inv.getItemAt(i).getTexture());
-                } else {
-                    inventory[i].setDefaultTexture();
-                }
-            }
-        }else{
-            if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
-                for (int i = 0; i < chest.length; i++){
-                    chestBackground[i].setDefaultBackgroundTexture();
-                }
-                ((OtherInventoryOpenState)inv.getCurrentState()).register(this);
-                chestBackground[((OtherInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
-
-                for (int i = 0; i < chest.length; i++){
-                    if (i < inv.getCount()){
-                        chest[i].setTexture(inv.getItemAt(i).getTexture());
-                    } else {
-                        chest[i].setDefaultTexture();
-                    }
-                }
-            }else {//if (inv.getCurrentState() instanceof InventoryClosedState){
-                for (int i = 0; i < chest.length; i++) {
-                    chest[i].setDefaultTexture();
-                    chestBackground[i].setDefaultTexture();
-                }
-            }
-        }
-    }
-
-    /**
-     * Function to update hand slot display and calculate heart display
-     * Gets called by Hero.notifyObservers()
-     * @param hero hero object from which hero the function got called
-     */
-    @Override
-    public void update(Hero hero) {
-
-        Item leftHand = hero.getLeftHandSlot();
-        Item rightHand = hero.getRightHandSlot();
-        if (leftHand != null){
-            heroSlots[0].setTexture(leftHand.getTexture());
-        }else{
-            heroSlots[0].setDefaultTexture();
-        }
-
-        if (rightHand != null){
-            heroSlots[1].setTexture(rightHand.getTexture());
-        }else{
-            heroSlots[1].setDefaultTexture();
-        }
-
-        heartCalc();
-    }
 
     /**
      * Function to update level display
@@ -511,26 +418,5 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     @Override
     public void update(Level level) {
         expLabel.setText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal());
-    }
-
-    /**
-     * Function to update index of inventories
-     * Gets called by InventoryOpenState.notifyObservers()
-     * @param invOp InventoryOpenState object from which the function is called
-     */
-    @Override
-    public void update(InventoryOpenState invOp) {
-        if (invOp instanceof OwnInventoryOpenState){
-            for(int i = 0; i < invBackground.length; i++){
-                invBackground[i].setDefaultBackgroundTexture();
-            }
-            invBackground[invOp.getselectorIdx()].setPointerTexture();
-        }else if (invOp instanceof OtherInventoryOpenState){
-            for(int i = 0; i < invBackground.length; i++){
-                chestBackground[i].setDefaultBackgroundTexture();
-            }
-            chestBackground[invOp.getselectorIdx()].setPointerTexture();
-        }
-
     }
 }

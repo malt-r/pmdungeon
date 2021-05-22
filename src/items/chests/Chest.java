@@ -57,7 +57,7 @@ public class Chest implements IAnimatable, IEntity {
 
         this.inventory = new Inventory(this, 10);
         generateContents();
-        this.getInventory().register(Game.getInstance());
+        this.getInventory().register(Game.getInstance().getInventoryOverview());
     }
 
     private void generateContents() {
