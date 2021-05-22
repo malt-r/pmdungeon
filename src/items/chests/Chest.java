@@ -36,7 +36,7 @@ public class Chest extends DrawableEntity {
 
         this.inventory = new Inventory(this, 10);
         generateContents();
-        this.getInventory().register(Game.getInstance());
+        this.getInventory().register(Game.getInstance().getInventoryOverview());
     }
 
     private void generateContents() {
