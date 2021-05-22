@@ -6,6 +6,7 @@ package items;
  * </p>
  */
 public abstract class EquipableItem extends Item{
+
   /**
    * Constructor of the EquipableItem class.
    * <p>
@@ -20,8 +21,4 @@ public abstract class EquipableItem extends Item{
    * Defines if an item in the inventory ist stackable
    * @return Returns if an item is stackable
    */
-  @Override
-  public boolean isStackable() {
-    return false;
-  }
 }

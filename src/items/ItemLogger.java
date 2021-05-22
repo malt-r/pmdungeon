@@ -7,7 +7,6 @@ import items.scrolls.SpeedScroll;
 import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
-
 import java.util.logging.Logger;
 
 /**
