@@ -21,6 +21,7 @@ public class ActivatorTrap extends Trap{
   public boolean isActivated() {
     return isActivated;
   }
+
   /**
    * Constructor of the Activator Trap class.
    * <p>
@@ -30,6 +31,13 @@ public class ActivatorTrap extends Trap{
   public ActivatorTrap(){
     super();
     isActivated=false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void generateAnimations(){
     String[] idleLeftFrames = new String[]{
             "tileset/traps/trap-activator/column_top.png",
     };
