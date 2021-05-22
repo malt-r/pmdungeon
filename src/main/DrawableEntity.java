@@ -1,0 +1,121 @@
+package main;
+
+import com.badlogic.gdx.graphics.Texture;
+import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
+import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import progress.effect.OneShotEffect;
+import progress.effect.PersistentEffect;
+import util.math.Vec;
+
+import java.util.*;
+import java.util.logging.Logger;
+
+import static util.math.Convenience.scaleDelta;
+
+/**
+ * An base class entity which can be drawn.
+ * <p>
+ *     Contains all animations, the current position in the DungeonWorld and movement logic.
+ * </p>
+ */
+public abstract class DrawableEntity implements IAnimatable, IEntity {
+  protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+  protected Point position;
+  protected DungeonWorld level;
+  protected Animation currentAnimation;
+  // cache a reference to the game to be able to scan all entities for possible attack targets
+  public static Game game;
+
+  /**
+   * Constructor of the DrawableEntity class.
+   * <p>
+   * This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
+  public DrawableEntity() {
+    this.game = Game.getInstance();
+    generateAnimations();
+  }
+
+  /**
+   * Generates the animations of the actor
+   */
+  protected void generateAnimations(){
+    String[] defaultFrame = new String[]{"tileset/default/default_anim.png"};
+    currentAnimation = createAnimation(defaultFrame, Integer.MAX_VALUE);
+    }
+
+  /**
+   *
+   * @param texturePaths array of textures that should be added to the animation
+   * @param frameTime time between two textures
+   * @return Animation containing the textures from texturePat
+   */
+  protected Animation createAnimation(String[] texturePaths, int frameTime) {
+    List<Texture> textureList = new ArrayList<>();
+    for (var frame : texturePaths) {
+      textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
+    }
+    return new Animation(textureList, frameTime);
+  }
+  7
+  /**
+   * Determine the active animation which should be played.
+   *
+   * @return The active animation.
+   */
+
+  @Override
+  public Animation getActiveAnimation() {
+    return this.currentAnimation;
+  }
+
+  /**
+   * Get the current position in the DungeonWorld.
+   *
+   * @return the current position in the DungeonWorld.
+   */
+  @Override
+  public Point getPosition() {
+    return position;
+  }
+
+  /**
+   * Called each frame, handles movement and the switching to and back from the running animation state.
+   */
+  @Override
+  public void update() {
+    this.draw();
+  }
+
+  /**
+   * Override IEntity.deletable and return false for the actor.
+   *
+   * @return false
+   */
+
+  @Override
+  public boolean deleteable() {
+    return false;
+  }
+
+  /**
+   * Set reference to DungeonWorld and spawn player at random position in the level.
+   */
+  public void setLevel(DungeonWorld level) {
+    this.level = level;
+    findRandomPosition();
+  }
+  
+  /**
+   * Sets the current position of the Hero to a random position inside the DungeonWorld.
+   */
+  public void findRandomPosition() {
+    this.position = new Point(level.getRandomPointInDungeon());
+  }
+}
