@@ -4,17 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import progress.effect.OneShotEffect;
-import progress.effect.PersistentEffect;
-import util.math.Vec;
-
 import java.util.*;
 import java.util.logging.Logger;
-
-import static util.math.Convenience.scaleDelta;
 
 /**
  * An base class entity which can be drawn.
@@ -27,9 +20,9 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
 
   protected Point position;
   protected DungeonWorld level;
-  protected Animation currentAnimation;
   // cache a reference to the game to be able to scan all entities for possible attack targets
   public static Game game;
+  protected Animation currentAnimation;
 
   /**
    * Constructor of the DrawableEntity class.
@@ -38,7 +31,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
    * </p>
    */
   public DrawableEntity() {
-    this.game = Game.getInstance();
+    game = Game.getInstance();
     generateAnimations();
   }
 
@@ -46,7 +39,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
    * Generates the animations of the actor
    */
   protected void generateAnimations(){
-    String[] defaultFrame = new String[]{"tileset/default/default_anim.png"};
+    String[] defaultFrame = new String[]{"tileset/default/default_anim.png",};
     currentAnimation = createAnimation(defaultFrame, Integer.MAX_VALUE);
     }
 
@@ -63,7 +56,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
     }
     return new Animation(textureList, frameTime);
   }
-  
+
   /**
    * Determine the active animation which should be played.
    *

@@ -1,19 +1,13 @@
 package main;
 
-import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import progress.effect.OneShotEffect;
 import progress.effect.PersistentEffect;
 import util.math.Vec;
-
 import java.util.*;
-import java.util.logging.Logger;
-
 import static util.math.Convenience.scaleDelta;
 
 /**
@@ -22,8 +16,25 @@ import static util.math.Convenience.scaleDelta;
  *     Contains all animations, the current position in the DungeonWorld and movement logic.
  * </p>
  */
-public abstract class Actor implements IAnimatable, IEntity, ICombatable {
-  protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+public abstract class Actor extends DrawableEntity implements ICombatable {
+
+  /**
+   * Constructor of the Actor class.
+   * <p>
+   * This constructor will instantiate the animations and read all required texture data.
+   * </p>
+   */
+  public Actor() {
+    lookLeft = false;
+    canAttack = true;
+    attackTimer = new Timer();
+    hitTimer = new Timer();
+    movementState = MovementState.CAN_MOVE;
+    this.persistentEffects = new ArrayList<>();
+    this.effectsScheduledForRemoval = new ArrayList<>();
+    this.generateAnimations();
+  }
+
   /**
    * MovementState switches between different movement-characteristics
    * of the actor.
@@ -35,24 +46,23 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     IS_KNOCKED_BACK,
     HIT,
     SUSPENDED
-  };
-
-  protected Point position;
-  protected DungeonWorld level;
-
+  }
+  /**
+   * Animation types
+   */
   protected Animation idleAnimationRight;
   protected Animation idleAnimationLeft;
   protected Animation runAnimationLeft;
   protected Animation runAnimationRight;
   protected Animation hitAnimationLeft;
   protected Animation hitAnimationRight;
-  protected Animation currentAnimation;
   private enum AnimationState {
     IDLE,
     RUN,
     KNOCK_BACK,
     HIT
   }
+  protected AnimationState animationState = AnimationState.IDLE;
 
   // currently only two looking directions are supported (left and right),
   // therefore a boolean is sufficient to represent the
@@ -101,8 +111,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   protected boolean canAttack;
   protected float movementSpeed = 0.1f;
   protected float movementSpeedMultiplier = 1.f;
-  // cache a reference to the game to be able to scan all entities for possible attack targets
-  public static Game game;
   private ICombatable target;
   // TODO: temporary solution
   public void applyMovementSpeedMultiplier(float multiplier) {
@@ -302,8 +310,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
       effect.update(this);
     }
 
-    for (int i = 0; i < effectsScheduledForRemoval.size(); i++) {
-      var effect = effectsScheduledForRemoval.get(i);
+    for (PersistentEffect effect : effectsScheduledForRemoval) {
       mainLogger.info("Removing persistent effect" + effect);
       effect.onRemoval(this);
       persistentEffects.remove(effect);
@@ -400,26 +407,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   /**
-   * Constructor of the Actor class.
-   * <p>
-   * This constructor will instantiate the animations and read all required texture data.
-   * </p>
-   */
-  public Actor() {
-    this.game = Game.getInstance();
-    generateAnimations();
-    lookLeft = false;
-    canAttack = true;
-    attackTimer = new Timer();
-    hitTimer = new Timer();
-    movementState = MovementState.CAN_MOVE;
-    this.persistentEffects = new ArrayList<>();
-    this.effectsScheduledForRemoval = new ArrayList<>();
-  }
-
-  /**
    * Generates the animations of the actor
    */
+  @Override
   protected void generateAnimations(){
     String[] idleLeftFrames = new String[]{
             "tileset/default/default_anim.png",
@@ -453,29 +443,9 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   /**
-   *
-   * @param texturePaths array of textures that should be added to the animation
-   * @param frameTime time between two textures
-   * @return
+   * Sets the current animation
+   * @param animationState animation state which the actor is currently in
    */
-  protected Animation createAnimation(String[] texturePaths, int frameTime) {
-    List<Texture> textureList = new ArrayList<>();
-    for (var frame : texturePaths) {
-      textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
-    }
-    return new Animation(textureList, frameTime);
-  }
-
-  /**
-   * Determine the active animation which should be played.
-   *
-   * @return The active animation.
-   */
-  @Override
-  public Animation getActiveAnimation() {
-    return this.currentAnimation;
-  }
-
   private void setCurrentAnimation(AnimationState animationState) {
     // TODO: play hit animation on knockback
     switch (animationState) {
@@ -491,18 +461,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
         this.currentAnimation = lookLeft ? this.idleAnimationLeft : this.idleAnimationRight;
     }
   }
-
-  /**
-   * Get the current position in the DungeonWorld.
-   *
-   * @return the current position in the DungeonWorld.
-   */
-  @Override
-  public Point getPosition() {
-    return position;
-  }
-
-  AnimationState animationState = AnimationState.IDLE;
 
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
@@ -566,16 +524,6 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   }
 
   /**
-   * Override IEntity.deletable and return false for the actor.
-   *
-   * @return false
-   */
-  @Override
-  public boolean deleteable() {
-    return false;
-  }
-
-  /**
    * Rests tje combat stats of the actor. E.g. after the actor died.
    */
   protected void resetCombatStats() {
@@ -587,17 +535,10 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
   /**
    * Set reference to DungeonWorld and spawn player at random position in the level.
    */
+  @Override
   public void setLevel(DungeonWorld level) {
+    super.setLevel(level);
     this.resetCombatStats();
-    this.level = level;
-    findRandomPosition();
-  }
-
-  /**
-   * Sets the current position of the Hero to a random position inside the DungeonWorld.
-   */
-  public void findRandomPosition() {
-    this.position = new Point(level.getRandomPointInDungeon());
   }
 
   private Vec calculateMovementDelta() {
@@ -624,5 +565,4 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
    * Handles Item picking of the actor
    */
   protected void handleItemPicking(){}
-
 }
