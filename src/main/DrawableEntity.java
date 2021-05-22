@@ -63,7 +63,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
     }
     return new Animation(textureList, frameTime);
   }
-  7
+  
   /**
    * Determine the active animation which should be played.
    *
@@ -111,7 +111,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
     this.level = level;
     findRandomPosition();
   }
-  
+
   /**
    * Sets the current position of the Hero to a random position inside the DungeonWorld.
    */
