@@ -303,7 +303,7 @@ public abstract class Actor implements IAnimatable, IEntity, ICombatable {
     }
 
     for (int i = 0; i < effectsScheduledForRemoval.size(); i++) {
-      var effect = persistentEffects.get(i);
+      var effect = effectsScheduledForRemoval.get(i);
       mainLogger.info("Removing persistent effect" + effect);
       effect.onRemoval(this);
       persistentEffects.remove(effect);
