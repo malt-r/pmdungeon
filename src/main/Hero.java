@@ -81,6 +81,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     public boolean[] movementLog = new boolean[4];
 
     private void grantAbility() {
+        // TODO: this only works, if the level hits exactly the case
         switch (this.level.getCurrentLevel()) {
             case 2:
                 this.level.addAbility(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
@@ -129,7 +130,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
             mainLogger.info("Other has been slain!");
 
             // TODO: specify xp amount based on monster kind
-            boolean levelIncrease = this.level.increaseXP(50);
+            boolean levelIncrease = this.level.increaseXP(75);
 
             mainLogger.info("Current XP: " + level.getCurrentXP());
             mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
