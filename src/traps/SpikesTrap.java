@@ -2,7 +2,6 @@ package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import main.ICombatable;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 /**
@@ -12,8 +11,7 @@ import java.util.TimerTask;
  * </p>
  */
 public class SpikesTrap extends Trap{
-  private float damageValue =50;
-  private ArrayList<ICombatable> hitInCurrentState;
+  private float damageValue =10;
 
   /**
    * The SpikeTrap does damage on every "pointy" state change.
@@ -27,10 +25,10 @@ public class SpikesTrap extends Trap{
   private boolean animationRunsForward = true;
   private SpikesTrapState spikesTrapState = SpikesTrapState.NO_SPIKES;
   private final Timer nextFrameTimer;
-  private final Animation noSpikesAnimation;
-  private final Animation littleSpikesAnimation;
-  private final Animation middleSpikesAnimation;
-  private final Animation bigSpikesAnimation;
+  private Animation noSpikesAnimation;
+  private Animation littleSpikesAnimation;
+  private Animation middleSpikesAnimation;
+  private Animation bigSpikesAnimation;
   /**
    * Constructor of the SpikesTrap class.
    * <p>
@@ -39,8 +37,14 @@ public class SpikesTrap extends Trap{
    */
   public SpikesTrap(){
     super();
-    hitInCurrentState = new ArrayList<>();
     nextFrameTimer = new Timer();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void generateAnimations() {
     String[] noSpikes = new String[]{
             "tileset/traps/spikes/floor_spikes_anim_f0.png",
     };
@@ -63,9 +67,9 @@ public class SpikesTrap extends Trap{
 
     currentAnimation= bigSpikesAnimation;
   }
-
   /**
-   * Called each frame, handles movement and the switching to and back from the running animation state.
+   * {@inheritDoc}
+   * Manages the state change between the spikes.
    */
   @Override
   public void update() {
@@ -120,15 +124,14 @@ public class SpikesTrap extends Trap{
 
     }
   }
+
   private void dealDamage(){
     if(game.checkForTrigger(this.position)){
         // TODO: why is only the hero affected by this trap?!
       ICombatable hero = game.getHero();
       if(spikesTrapState==SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES){
-        hero.dealDamage(10,null);
+        hero.dealDamage(getDamageValue(),null);
       }
     }
   }
-
-
 }

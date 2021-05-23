@@ -41,35 +41,35 @@ public class Spawner {
     for(MonsterType monsterType: levelContent.monsters){
       var monster = MonsterFactory.CreateMonster(monsterType);
       monster.setLevel(Game.getInstance().getCurrentLevel());
-      mainLogger.info(monsterType.toString()+" spawned");
+      mainLogger.info("Monster "+monsterType.toString()+" spawned");
       listToAdd.add(monster);
     }
 
     for(var itemType:levelContent.items){
       var item = ItemFactory.CreateItem(itemType);
       item.setLevel(Game.getInstance().getCurrentLevel());
-      mainLogger.info(itemType.toString()+" spawned");
+      mainLogger.info("Item "+itemType.toString()+" spawned");
       listToAdd.add(item);
     }
 
     for(var chestType:levelContent.chests){
       var chest = ChestFactory.CreateChest(chestType);
       chest.setLevel(Game.getInstance().getCurrentLevel());
-      mainLogger.info(chestType.toString()+" spawned");
+      mainLogger.info("Chest "+chestType.toString()+" spawned");
       listToAdd.add(chest);
     }
 
     for(var trapType:levelContent.traps){
       var trap = TrapFactory.CreateTrap(trapType);
       trap.setLevel(Game.getInstance().getCurrentLevel());
-      mainLogger.info(trapType.toString()+" spawned");
+      mainLogger.info("Trap "+trapType.toString()+" spawned");
       listToAdd.add(trap);
     }
 
     for (var questGiverType:levelContent.questGivers){
       var questGiver = new QuestGiver();
       questGiver.setLevel(Game.getInstance().getCurrentLevel());
-      mainLogger.info(questGiverType.toString() + " spawned");
+      mainLogger.info("Questgiver "+questGiverType.toString() + " spawned");
       listToAdd.add(questGiver);
     }
   }
@@ -81,7 +81,7 @@ public class Spawner {
    * @throws Exception  if monsterType is no supported
    */
   public static Monster spawnMonster(MonsterType monsterType) throws Exception {
-    mainLogger.info(monsterType.toString()+" spawned");
+    mainLogger.info("Monster "+monsterType.toString()+" spawned");
     return MonsterFactory.CreateMonster(monsterType);
   }
   /**
@@ -91,7 +91,7 @@ public class Spawner {
    * @throws Exception  if itemType is no supported
    */
   public static Item spawnItem(ItemType itemType) throws Exception {
-    mainLogger.info(itemType.toString()+" spawned");
+    mainLogger.info("Item "+itemType.toString()+" spawned");
     return ItemFactory.CreateItem(itemType);
   }
   /**
@@ -101,7 +101,7 @@ public class Spawner {
    * @throws Exception  if trap is no supported
    */
   public static Trap spawnTrap(TrapType trapType) throws Exception {
-    mainLogger.info(trapType.toString()+" spawned");
+    mainLogger.info("Trap "+trapType.toString()+" spawned");
     return TrapFactory.CreateTrap(trapType);
   }
 
@@ -112,7 +112,7 @@ public class Spawner {
    * @throws Exception  if chest is no supported
    */
   public static Chest spawnChest(ChestType chestType) throws Exception {
-    mainLogger.info(chestType.toString()+" spawned");
+    mainLogger.info("Chest "+chestType.toString()+" spawned");
     return ChestFactory.CreateChest(chestType);
   }
 }

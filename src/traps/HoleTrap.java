@@ -9,6 +9,7 @@ import main.ICombatable;
  * </p>
  */
 public class HoleTrap extends Trap{
+
   /**
    * Constructor of the HoleTrap class.
    * <p>
@@ -17,11 +18,19 @@ public class HoleTrap extends Trap{
    */
   public HoleTrap(){
     super();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void generateAnimations(){
     String[] idleLeftFrames = new String[]{
             "tileset/traps/hole/hole.png",
     };
     currentAnimation = createAnimation(idleLeftFrames, 6);
   }
+
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
