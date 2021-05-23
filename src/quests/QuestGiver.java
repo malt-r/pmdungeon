@@ -62,7 +62,7 @@ public class QuestGiver extends DrawableEntity {
                 "tileset/other/quests/pumpkin_dude_anim3.png",
                 "tileset/other/quests/pumpkin_dude_anim4.png"
         };
-        currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
+        currentAnimation = createAnimation(idleLeftFrames, 4);
     }
 
     /**
