@@ -6,6 +6,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import main.DrawableEntity;
 import main.Game;
 
 import java.util.ArrayList;
@@ -18,86 +19,25 @@ import java.util.logging.Logger;
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public abstract class Trap implements IAnimatable, IEntity {
-  protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-  protected Animation currentAnimation;
-  protected Game game;
-  protected Point position;
-  protected DungeonWorld level;
+public abstract class Trap extends DrawableEntity {
   /**
    * Constructor of the Trap base class.
    * <p>
-   *     This constructor will instantiate the animations and read all required texture data.
+   * This constructor will instantiate the animations and read all required texture data.
    * </p>
    */
-  public Trap(){
-    this.game = Game.getInstance();
+  public Trap() {
+
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void generateAnimations() {
     String[] idleLeftFrames = new String[]{
-            "tileset/default/default_anim.png",
+            "tileset/default/default_anim.png"
     };
-    currentAnimation = createAnimation(idleLeftFrames, 6);
-  }
-
-  /**
-   *
-   * @param texturePaths array of textures that should be added to the animation
-   * @param frameTime time between two textures
-   * @return returns an Animation containing the specifed textures
-   */
-  protected Animation createAnimation(String[] texturePaths, int frameTime) {
-    List<Texture> textureList = new ArrayList<>();
-    for (var frame : texturePaths) {
-      textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
-    }
-    return new Animation(textureList, frameTime);
-  }
-  /**
-   * Get the current position in the DungeonWorld.
-   *
-   * @return the current position in the DungeonWorld.
-   */
-  @Override
-  public Point getPosition() {
-    return position;
-  }
-
-  /**
-   * Returns the active animation which can be used to draw the trap
-   * @return current Animation of the trap
-   */
-  @Override
-  public Animation getActiveAnimation() {
-    return currentAnimation;
-  }
-
-  /**
-   * Called each frame, handles movement and the switching to and back from the running animation state.
-   */
-  @Override
-  public void update() {
-      this.draw();
-  }
-  /**
-   * Override IEntity.deletable and return false for the actor.
-   *
-   * @return false
-   */
-  @Override
-  public boolean deleteable() {
-    return false;
-  }
-
-  /**
-   * Set reference to DungeonWorld and spawn player at random position in the level.
-   */
-  public void setLevel(DungeonWorld level) {
-    this.level = level;
-    findRandomPosition();
-  }
-  /**
-   * Sets the current position of the Hero to a random position inside the DungeonWorld.
-   */
-  public void findRandomPosition() {
-    this.position = new Point(level.getRandomPointInDungeon());
+    currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
   }
 }

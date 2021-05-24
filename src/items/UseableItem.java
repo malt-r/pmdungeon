@@ -4,6 +4,7 @@ package items;
  * Abstract UseableItem base class which is the base class for every usaable item
  */
 public abstract class UseableItem extends Item{
+
   /**
    * Constructor of the item class.
    * <p>
@@ -12,14 +13,5 @@ public abstract class UseableItem extends Item{
    */
   public UseableItem() {
 
-  }
-
-  /**
-   * Returns if the item is stackable
-   * @return if the item is stackable
-   */
-  @Override
-  public boolean isStackable() {
-    return true;
   }
 }

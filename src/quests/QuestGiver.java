@@ -6,6 +6,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import main.DrawableEntity;
 import main.Game;
 import main.Hero;
 
@@ -18,16 +19,11 @@ import java.util.logging.Logger;
 /**
  * Implementation of a QuestFiver that gives an qust.
  */
-public class QuestGiver implements IAnimatable, IEntity {
-    private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    private Animation currentAnimation;
-    private Game game;
-    private Point position;
-    private DungeonWorld level;
+public class QuestGiver extends DrawableEntity {
     private boolean waitingForInput;
     private boolean questWasAccepted;
     private boolean wasOnTile;
-    private QuestHandler questHandler;
+    private final QuestHandler questHandler;
     private Quest quest;
 
     /**
@@ -35,8 +31,6 @@ public class QuestGiver implements IAnimatable, IEntity {
      * Initializes the questgiver with a random quest.
      */
     public QuestGiver(){
-
-        this.game = Game.getInstance();
         this.questHandler = game.getQuestHandler();
 
         Random dice = new Random();
@@ -56,7 +50,12 @@ public class QuestGiver implements IAnimatable, IEntity {
                 break;
         }
         mainLogger.info("Spawned with " + quest.toString());
-
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void generateAnimations() {
         String[] idleLeftFrames = new String[]{
                 "tileset/other/quests/pumpkin_dude_anim1.png",
                 "tileset/other/quests/pumpkin_dude_anim2.png",
@@ -64,31 +63,6 @@ public class QuestGiver implements IAnimatable, IEntity {
                 "tileset/other/quests/pumpkin_dude_anim4.png"
         };
         currentAnimation = createAnimation(idleLeftFrames, 4);
-    }
-
-    private Animation createAnimation(String[] texturePaths, int frameTime) {
-        List<Texture> textureList = new ArrayList<>();
-        for (var frame : texturePaths) {
-            textureList.add(new Texture(Objects.requireNonNull(this.getClass().getClassLoader().getResource(frame)).getPath()));
-        }
-        return new Animation(textureList, frameTime);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @return
-     */
-    @Override
-    public Animation getActiveAnimation() {
-        return currentAnimation;
-    }
-    /**
-     * {@inheritDoc}
-     * @return
-     */
-    @Override
-    public Point getPosition() {
-        return position;
     }
 
     /**
@@ -119,30 +93,6 @@ public class QuestGiver implements IAnimatable, IEntity {
     private void abortPendingQuestRequest() {
         Game.getInstance().getQuestHandler().abortNewQuestRequest();
         //Oder Questhandler.abortNewQuestRequest();
-    }
-    /**
-     * {@inheritDoc}
-     * @return
-     */
-    @Override
-    public boolean deleteable() {
-        return false;
-    }
-
-    /**
-     * sets the level of the questgiver
-     * @param level in which the questgiver is in
-     */
-    public void setLevel(DungeonWorld level) {
-        this.level = level;
-        findRandomPosition();
-    }
-
-    /**
-     * Sets the position of the questgiver to a random position in the dungeon.
-     */
-    public void findRandomPosition() {
-        this.position = new Point(level.getRandomPointInDungeon());
     }
 
     /**

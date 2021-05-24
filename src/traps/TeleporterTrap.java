@@ -10,6 +10,7 @@ import main.Actor;
  * </p>
  */
 public class TeleporterTrap extends Trap{
+
   /**
    * Constructor of the TeleporterTrap class.
    * <p>
@@ -18,16 +19,24 @@ public class TeleporterTrap extends Trap{
    */
   public TeleporterTrap(){
     super();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void generateAnimations() {
     String[] idleLeftFrames = new String[]{
             "tileset/traps/teleporter/teleporter.png",
             "tileset/traps/teleporter/teleporter_2.png",
             "tileset/traps/teleporter/teleporter_3.png",
             "tileset/traps/teleporter/teleporter_4.png",
-
     };
-    currentAnimation = createAnimation(idleLeftFrames, 6);
+    currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
   }
+
   /**
+   * {@inheritDoc}
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
   @Override
@@ -40,6 +49,5 @@ public class TeleporterTrap extends Trap{
         if(!game.checkForIntersection(this, (IDrawable) entitiy,level)){continue;}
           actor.findRandomPosition();
     }
-
   }
 }

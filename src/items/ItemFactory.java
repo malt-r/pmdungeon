@@ -9,7 +9,6 @@ import items.shields.EagleShield;
 import items.shields.WoodShield;
 import items.weapons.GoldenSword;
 import items.weapons.RegularSword;
-
 import java.util.ArrayList;
 
 /**
@@ -19,6 +18,7 @@ import java.util.ArrayList;
  * </p>
  */
 public class ItemFactory {
+
   /**
    *
    * @param   itemType    Type of the item
@@ -38,6 +38,11 @@ public class ItemFactory {
     throw new Exception("ItemType no supported");
   }
 
+  /**
+   * Creates a list of random items
+   * @param count amount of random items
+   * @return a list of random items
+   */
   public static ArrayList<Item> CreateRandomItems(int count) {
     ArrayList<Item> items = new ArrayList<>();
     for (int i = 0; i < count; i++) {

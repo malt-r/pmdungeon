@@ -200,9 +200,12 @@ public class Game extends MainController {
 
         }
 
+        // TODO: refactor
         if (hero.isDead()) {
             mainLogger.info("GAME OVER");
             hero.onGameOver();
+            this.questOverview.hide();
+            this.questDialog.hide();
             try {
                 levelController.loadDungeon(firstLevel);
                 currentLevelIndex =0;
@@ -214,12 +217,10 @@ public class Game extends MainController {
             }
             var allEntities = getAllEntities();
             for(var entity: allEntities){
-                if(!(entity instanceof  Hero)){
+                if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
                     entitiesToRemove.add(entity);
                 }
             }
-
-            //spawnEntitiesOfLevel();
         }
 
         if (entitiesToRemove.size() > 0){
