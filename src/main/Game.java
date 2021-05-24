@@ -346,6 +346,4 @@ public class Game extends MainController {
         monster.setLevel(levelController.getDungeon());
         monster.position = position;
     }
-
-
 }
