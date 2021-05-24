@@ -35,7 +35,6 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
     private void invBackgroundInit(){
         for (int i = 0; i < 10; i++) {
             invBackground[i] = new InvBackgroundIcon(i, 0.0f);
-            //TODO - Defaultbackground in Konstruktor
             invBackground[i].setDefaultBackgroundTexture();
             hud.addHudElement(invBackground[i]);
         }
