@@ -18,11 +18,15 @@ import java.util.logging.Logger;
 public abstract class DrawableEntity implements IAnimatable, IEntity {
   protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  protected Point position;
+  private Point position;
+  private Point lastPosition;
+  static final public Point LAST_POSITION_NOT_SET = new Point(-1,-1);
   protected DungeonWorld level;
   // cache a reference to the game to be able to scan all entities for possible attack targets
   public static Game game;
   protected Animation currentAnimation;
+  protected ArrayList<IDrawableEntityObserver> observers = new ArrayList<>();
+  protected ArrayList<IDrawableEntityObserver> observerToRemove = new ArrayList<>();
 
   /**
    * Constructor of the DrawableEntity class.
@@ -33,6 +37,8 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
   public DrawableEntity() {
     game = Game.getInstance();
     generateAnimations();
+    this.lastPosition = LAST_POSITION_NOT_SET;
+    this.position = new Point(0,0);
   }
 
   /**
@@ -78,12 +84,24 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
     return position;
   }
 
+  public Point getLastPosition() {
+    return this.lastPosition;
+  }
+
+  protected void setPosition(Point position) {
+    if (this.lastPosition.equals(LAST_POSITION_NOT_SET)) {
+      this.lastPosition = this.position;
+    }
+    this.position = position;
+  }
+
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
   @Override
   public void update() {
     this.draw();
+    this.removeObservers();
   }
 
   /**
@@ -110,5 +128,49 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
    */
   public void findRandomPosition() {
     this.position = new Point(level.getRandomPointInDungeon());
+  }
+
+  /**
+   * Will be called to notify observers about state change
+   */
+  protected void notifyObservers() {
+    for(var observer : observers) {
+      observer.update(this);
+    }
+    this.lastPosition = LAST_POSITION_NOT_SET;
+  }
+
+  /**
+   * Register observer to add to notification list.
+   * @param observer The observer to register.
+   */
+  public void register(IDrawableEntityObserver observer) {
+      if (!this.observers.contains(observer)) {
+          this.observers.add(observer);
+      }
+  }
+
+  /**
+   * Schedule observer for removal from notification list. Will be removed in next update.
+   * @param observer The observer to remove from notification list.
+   */
+  public void unregister(IDrawableEntityObserver observer) {
+      if (this.observers.contains(observer) && !this.observerToRemove.contains(observer)) {
+          this.observerToRemove.add(observer);
+      }
+  }
+
+  /**
+   * Effectively remove the observers from notification list,
+   * which were scheduled for removal since last call
+   */
+  protected void removeObservers() {
+      for (var observer : observerToRemove) {
+          if (this.observers.contains(observer)) {
+              this.observers.remove(observer);
+          }
+      }
+      observerToRemove.clear();
+
   }
 }

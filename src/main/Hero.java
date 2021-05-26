@@ -162,6 +162,23 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         notifyObservers();
 
     }
+
+    private void CoordHelper() {
+        mainLogger.info("Hero Coord: (" + this.getPosition().x + "|" + this.getPosition().y + ")" );
+    }
+
+    private void PrintNearEntities() {
+        CoordHelper();
+
+        Point lowerBound = new Point(this.getPosition().x - 1, this.getPosition().y - 1);
+        Point upperBound = new Point(this.getPosition().x + 1, this.getPosition().y + 1);
+        var entities = Game.getInstance().getEntitiesInCoordRange(lowerBound, upperBound);
+
+        for (var entity : entities) {
+            mainLogger.info("Found entity " + entity.toString() + " at position (" + entity.getPosition().x + "|" + entity.getPosition().y + ")" );
+        }
+    }
+
     /**
      * Constructor of the Hero class.
      * <p>
@@ -265,6 +282,13 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
         this.inventory.update();
         removeObserversToRemove();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
+            CoordHelper();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
+            PrintNearEntities();
+        }
     }
 
     @Override
@@ -298,7 +322,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     protected Point readMovementInput(){
-        var newPosition = new Point(this.position);
+        var newPosition = new Point(this.getPosition());
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             newPosition.y += movementSpeed;
         }else{
