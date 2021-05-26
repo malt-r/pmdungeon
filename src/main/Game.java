@@ -244,8 +244,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     @Override
     protected void endFrame() {
 
-        //spatialMap.updateEntityPositions();
-
         // check, if current position of hero is on the trigger to load a new level
         if (levelController.checkForTrigger(hero.getPosition()) ) {
             currentLevelIndex++;

@@ -81,6 +81,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
 
         boolean removedEntry = removeEntityFromEntry(entity, entry);
         if (removedEntry && entry.getValues().size() == 0) { // remove entry
+            entity.unregister(this);
             removeEntry(hash, entry);
         }
         return removedEntry;
