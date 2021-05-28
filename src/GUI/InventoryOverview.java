@@ -112,7 +112,7 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
                         chest[i].setDefaultTexture();
                     }
                 }
-            }else {//if (inv.getCurrentState() instanceof InventoryClosedState){
+            }else {
                 for (int i = 0; i < chest.length; i++) {
                     chest[i].setDefaultTexture();
                     chestBackground[i].setDefaultTexture();
@@ -139,7 +139,6 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
             }
             chestBackground[invOp.getselectorIdx()].setPointerTexture();
         }
-
     }
 
     /**
