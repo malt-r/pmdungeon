@@ -3,11 +3,15 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import progress.effect.OneShotEffect;
 import progress.effect.PersistentEffect;
 import util.math.Vec;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import static util.math.Convenience.scaleDelta;
 
 /**
@@ -282,9 +286,9 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   protected void lookAtTarget() {
     if (this.target instanceof IDrawable) {
       Point targetPosition = ((IDrawable)this.target).getPosition();
-      if (this.position.x > targetPosition.x) {
+      if (this.getPosition().x > targetPosition.x) {
         lookLeft = true;
-      } else if (this.position.x < targetPosition.x) {
+      } else if (this.getPosition().x < targetPosition.x) {
         lookLeft = false;
       }
     }
@@ -372,8 +376,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   // TODO: this should use a falloff function so that the knockback-distance gets smaller dependent of the distance from the point
   public void initiateKnockBackFromPoint(Point point, float knockBackDistance) {
-    var diff = scaleDelta(this.position, point, knockBackDistance);
-    this.knockBackTargetPoint = (new Vec(this.position)).subtract(diff).toPoint();
+    var diff = scaleDelta(this.getPosition(), point, knockBackDistance);
+    this.knockBackTargetPoint = (new Vec(this.getPosition())).subtract(diff).toPoint();
     this.movementState = MovementState.IS_KNOCKED_BACK;
   }
 
@@ -386,20 +390,20 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @return The target point for a knock back in the current frame.
    */
   protected Point calculateKnockBackTarget() {
-    var positionVec = new Vec(this.position);
+    var positionVec = new Vec(this.getPosition());
     var knockBackTargetVec = new Vec(this.knockBackTargetPoint);
 
     var diffMagnitude = positionVec.subtract(knockBackTargetVec).magnitude();
     if (diffMagnitude < knockBackSpeed) {
       movementState = MovementState.CAN_MOVE;
-      return this.position;
+      return this.getPosition();
     } else {
-      var normalizedDiff = scaleDelta(this.position, this.knockBackTargetPoint, knockBackSpeed);
+      var normalizedDiff = scaleDelta(this.getPosition(), this.knockBackTargetPoint, knockBackSpeed);
       var targetPoint = positionVec.add(normalizedDiff).toPoint();
 
       if (!level.isTileAccessible(targetPoint)) {
         movementState = MovementState.CAN_MOVE;
-        return this.position;
+        return this.getPosition();
       } else {
         return targetPoint;
       }
@@ -474,10 +478,10 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     switch (movementState) {
       case CAN_MOVE:
         var movementDelta = calculateMovementDelta();
-        var newPosition = (movementDelta.add(new Vec(this.position))).toPoint();
+        var newPosition = (movementDelta.add(new Vec(this.getPosition()))).toPoint();
 
         if (level.isTileAccessible(newPosition)) {
-          this.position = newPosition;
+          this.setPosition(newPosition);
 
           // is the actor moving?
           if (movementDelta.magnitude() > 0.0f) {
@@ -495,15 +499,17 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
           lookLeft=false;
         }
 
-        attackTargetIfReachable(this.position, level, game.getAllEntities());
+        BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder = (p1, p2) -> Game.getInstance().getEntitiesInCoordRange(p1, p2);
+        Function<Point, Boolean> inRange = (p) -> new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < 1.0f;
 
+        attackTargetIfReachable(this.getPosition(), inRange, entityFinder);
 
         if (readPickupInput()){
           handleItemPicking();
         }
         break;
       case IS_KNOCKED_BACK:
-        this.position = calculateKnockBackTarget();
+        this.setPosition(calculateKnockBackTarget());
         animationState = AnimationState.KNOCK_BACK;
         break;
       case HIT:
@@ -545,7 +551,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     Point newPosition = readMovementInput();
     // calculate normalized delta of this.position and the calculated
     // new position to avoid increased diagonal movement speed
-    return scaleDelta(this.position, newPosition, movementSpeed * movementSpeedMultiplier);
+    return scaleDelta(this.getPosition(), newPosition, movementSpeed * movementSpeedMultiplier);
   }
 
   /**

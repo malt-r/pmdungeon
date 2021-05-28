@@ -50,6 +50,6 @@ public abstract class Item extends DrawableEntity {
    * @param newPosition the position where the itme should be moved to
    */
   public void setPosition(Point newPosition){
-    this.position = newPosition;
+    super.setPosition(newPosition);
   }
 }

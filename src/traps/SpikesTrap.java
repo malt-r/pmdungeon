@@ -126,7 +126,7 @@ public class SpikesTrap extends Trap{
   }
 
   private void dealDamage(){
-    if(game.checkForTrigger(this.position)){
+    if(game.checkForTrigger(this.getPosition())){
         // TODO: why is only the hero affected by this trap?!
       ICombatable hero = game.getHero();
       if(spikesTrapState==SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES){

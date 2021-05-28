@@ -4,9 +4,7 @@ import GUI.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -21,10 +19,11 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
 import progress.Level;
-import quests.KillMonstersQuest;
 import quests.QuestGiver;
 import quests.QuestHandler;
 import traps.*;
+import util.SpatialHashMap;
+
 import java.util.logging.Logger;
 
 /**
@@ -36,6 +35,8 @@ import java.util.logging.Logger;
  */
 public class Game extends MainController implements InventoryObserver, HeroObserver, LevelObserver, OpenStateObserver {
     private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+    private SpatialHashMap spatialMap = new SpatialHashMap(100);
 
     //GUI
     private HeartIcon[] hearts = new HeartIcon[10];
@@ -56,6 +57,14 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     private final ArrayList <IEntity> entitiesToAdd = new ArrayList<>();
     private int currentLevelIndex =0;
     private boolean drawTraps=false;
+
+    public ArrayList<DrawableEntity> getEntitiesAtPoint(Point p) {
+        return this.spatialMap.getAt(p);
+    }
+
+    public ArrayList<DrawableEntity> getEntitiesInCoordRange(Point lowerBound, Point upperBound) {
+        return this.spatialMap.getInRange(lowerBound, upperBound);
+    }
 
     /**
      * Gets the current level where the hero is
@@ -190,6 +199,9 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         if (entitiesToAdd.size() > 0) {
             for (IEntity entity : entitiesToAdd) {
                 this.entityController.addEntity(entity);
+                if (entity instanceof DrawableEntity) {
+                    this.spatialMap.insert((DrawableEntity)entity);
+                }
 //                if(entity instanceof Actor) {
 //                    ((Actor)entity).setLevel(levelController.getDungeon());
 //                }
@@ -231,6 +243,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
      */
     @Override
     protected void endFrame() {
+
         // check, if current position of hero is on the trigger to load a new level
         if (levelController.checkForTrigger(hero.getPosition()) ) {
             currentLevelIndex++;
@@ -240,6 +253,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             entityController.removeAllFrom(Chest.class);
             entityController.removeAllFrom(QuestGiver.class);
             levelController.triggerNextStage();
+            spatialMap.clear();
             mainLogger.info("Next stage loaded");
 
         }
@@ -270,8 +284,15 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         if (entitiesToRemove.size() > 0){
             for(IEntity entity : entitiesToRemove){
                 this.entityController.removeEntity(entity);
+                if (entity instanceof DrawableEntity) {
+                    this.spatialMap.remove((DrawableEntity)entity);
+                }
             }
             entitiesToRemove.clear();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+            printHashMapStats();
         }
     }
 
@@ -281,6 +302,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
      */
     @Override
     public void  onLevelLoad() {
+
         // cache the first level to be able to spawn hero back in after game over
         if (null == firstLevel) {
             firstLevel = levelController.getDungeon();
@@ -288,9 +310,11 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
 
+        this.spatialMap.remove(this.hero);
+        this.spatialMap.insert(this.hero);
+
         //test_SpawnAllItemsAndMonster();
         spawnEntitiesOfLevel();
-
     }
 
     private void spawnEntitiesOfLevel(){
@@ -321,8 +345,8 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     public boolean checkForTrigger(Point p) {
         //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
         var level = levelController.getDungeon();
-        int ownX = Math.round(hero.position.x);
-        int ownY = Math.round(hero.position.y);
+        int ownX = Math.round(hero.getPosition().x);
+        int ownY = Math.round(hero.getPosition().y);
         var ownTile = level.getTileAt(ownX, ownY);
 
         int otherX = Math.round(p.x);
@@ -389,7 +413,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         var monster = Spawner.spawnMonster(monsterType);
         addEntity(monster);
         monster.setLevel(levelController.getDungeon());
-        monster.position = position;
+        monster.setPosition(position);
     }
 
     /**
@@ -532,6 +556,11 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             }
             chestBackground[invOp.getselectorIdx()].setPointerTexture();
         }
+
+    }
+
+    private void printHashMapStats() {
+        spatialMap.printStats();
 
     }
 }

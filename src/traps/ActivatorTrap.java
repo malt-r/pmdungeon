@@ -79,10 +79,10 @@ public class ActivatorTrap extends Trap{
       for(int i =0;i<3;i++){
         int int_random = rand.nextInt(upperbound);
       if(int_random %2==0){
-        game.spawnMonster(MonsterType.LIZARD,this.position);
+        game.spawnMonster(MonsterType.LIZARD,this.getPosition());
       }
       else{
-        game.spawnMonster(MonsterType.DEMON,this.position);
+        game.spawnMonster(MonsterType.DEMON,this.getPosition());
       }
       }
     } catch (Exception e) {
