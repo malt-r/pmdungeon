@@ -1,5 +1,6 @@
 package util;
 
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.DrawableEntity;
 import main.IDrawableEntityObserver;
@@ -7,15 +8,19 @@ import main.IDrawableEntityObserver;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+// TODO: document
 public class SpatialHashMap implements IDrawableEntityObserver {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     final float UPPER_LOADFACTOR_THRESHOLD = 0.8f;
     final float LOWER_LOADFACTOR_THRESHOLD = 0.25f;
 
-    ArrayList<ArrayList<SpatialHashMapEntry>> buckets;
+    private ArrayList<ArrayList<SpatialHashMapEntry>> buckets;
 
     int filledBuckets;
+    public int getFilledBuckets() {
+        return filledBuckets;
+    }
 
     public SpatialHashMap(int targetSize) {
         int capacity = findNearestPrime(targetSize);
@@ -55,6 +60,8 @@ public class SpatialHashMap implements IDrawableEntityObserver {
                 this.filledBuckets++;
                 entry = insertEntry(h, key);
             }
+
+            mainLogger.info("inserted " + entity + " for bucket of key (" + key.x + "|" + key.y + ")");
 
             entry.addToValues(entity);
             entity.register(this);
@@ -107,10 +114,10 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         ArrayList<DrawableEntity> returnList = new ArrayList<>();
 
         for (int x = (int)Math.floor(lowerBound.x);
-             x <= (int)Math.ceil(upperBound.x);
+             x <= (int)Math.floor(upperBound.x);
              x++) {
             for (int y = (int)Math.floor(lowerBound.y);
-                 y <= (int)Math.ceil(upperBound.y);
+                 y <= (int)Math.floor(upperBound.y);
                  y++) {
                 returnList.addAll(getAt(new Point(x, y)));
             }
@@ -124,8 +131,10 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return new ArrayList<>();
     }
 
-    public int hash(Point pos) {
-        return (int)(((long)Math.floor(pos.x) << 8 + (long)Math.floor(pos.y)) % this.buckets.size());
+    private int hash(Point pos) {
+        long flooredX = (long)Math.floor(pos.x);
+        long flooredY = (long)Math.floor(pos.y);
+        return (int)((flooredX << 8 + flooredY) % this.buckets.size());
     }
 
     private float calcLoadFactor() {
@@ -159,6 +168,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         ArrayList<SpatialHashMapEntry> entriesForHash;
         entriesForHash = this.buckets.get(hash);
 
+        // TODO: remove
         if (entriesForHash.size() != 0) { // search linearly for key
             for (var entry : entriesForHash) {
                 if (areFlooredPointsEqual(entry.getKey(), key)) {

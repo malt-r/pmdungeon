@@ -93,6 +93,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
       this.lastPosition = this.position;
     }
     this.position = position;
+    notifyDrawableEntityObservers();
   }
 
   /**
@@ -127,13 +128,13 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
    * Sets the current position of the Hero to a random position inside the DungeonWorld.
    */
   public void findRandomPosition() {
-    this.position = new Point(level.getRandomPointInDungeon());
+    setPosition(new Point(level.getRandomPointInDungeon()));
   }
 
   /**
    * Will be called to notify observers about state change
    */
-  protected void notifyObservers() {
+  private void notifyDrawableEntityObservers() {
     for(var observer : observers) {
       observer.update(this);
     }

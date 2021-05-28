@@ -3,11 +3,15 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
+import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import progress.effect.OneShotEffect;
 import progress.effect.PersistentEffect;
 import util.math.Vec;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import static util.math.Convenience.scaleDelta;
 
 /**
@@ -477,13 +481,16 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         var newPosition = (movementDelta.add(new Vec(this.getPosition()))).toPoint();
 
         if (level.isTileAccessible(newPosition)) {
+          if (this instanceof  Hero && movementDelta.magnitude()> 0.0f) {
+            boolean bDebug= true;
+          }
           this.setPosition(newPosition);
 
           // is the actor moving?
           if (movementDelta.magnitude() > 0.0f) {
             animationState = AnimationState.RUN;
           }
-          super.notifyObservers();
+          //super.notifyObservers();
         }
 
         // set look direction
@@ -496,8 +503,10 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
           lookLeft=false;
         }
 
-        attackTargetIfReachable(this.getPosition(), level, game.getAllEntities());
+        BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder = (p1, p2) -> Game.getInstance().getEntitiesInCoordRange(p1, p2);
+        Function<Point, Boolean> inRange = (p) -> new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < 1.0f;
 
+        attackTargetIfReachable(this.getPosition(), inRange, entityFinder);
 
         if (readPickupInput()){
           handleItemPicking();
@@ -506,7 +515,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
       case IS_KNOCKED_BACK:
         this.setPosition(calculateKnockBackTarget());
         animationState = AnimationState.KNOCK_BACK;
-        super.notifyObservers();
+        //super.notifyObservers();
         break;
       case HIT:
         animationState = AnimationState.HIT;
