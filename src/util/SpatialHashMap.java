@@ -8,6 +8,9 @@ import main.IDrawableEntityObserver;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import static util.math.Convenience.getFlooredPoint;
+import static util.math.Convenience.areFlooredPointsEqual;
+
 // TODO: document
 public class SpatialHashMap implements IDrawableEntityObserver {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -203,17 +206,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return newEntry;
     }
 
-    private boolean areFlooredPointsEqual(Point p1, Point p2) {
-        if (Math.floor(p1.x) == Math.floor(p2.x) &&
-            Math.floor(p1.y) == Math.floor(p2.y)) {
-            return true;
-        }
-        return false;
-    }
 
-    private Point getFlooredPoint(Point toFloor) {
-        return new Point((float)Math.floor(toFloor.x), (float)Math.floor(toFloor.y));
-    }
 
     private void updateEntityPosition(DrawableEntity entity) {
         boolean noUpdateRequired =

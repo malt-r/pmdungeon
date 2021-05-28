@@ -32,4 +32,16 @@ public class Convenience {
     static public int getRandBetween(int min, int max) {
         return (int)((Math.random() * (max - min)) + min);
     }
+
+    static public Point getFlooredPoint(Point toFloor) {
+        return new Point((float)Math.floor(toFloor.x), (float)Math.floor(toFloor.y));
+    }
+
+    static public boolean areFlooredPointsEqual(Point p1, Point p2) {
+        if (Math.floor(p1.x) == Math.floor(p2.x) &&
+                Math.floor(p1.y) == Math.floor(p2.y)) {
+            return true;
+        }
+        return false;
+    }
 }
