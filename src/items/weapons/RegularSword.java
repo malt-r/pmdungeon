@@ -18,6 +18,7 @@ public class RegularSword extends Weapon {
     super();
     this.attackDamageModifier=1.2f;
     this.hitChanceModifier=1.2f;
+    this.range=1.0f;
     this.condition=100;
     String[] idleLeftFrames = new String[]{
             "tileset/items/weapon_regular_sword.png"

@@ -18,6 +18,7 @@ public class Spear extends Weapon{
     super();
     this.attackDamageModifier=1.5f;
     this.hitChanceModifier=0.7f;
+    this.range=1.0f;
     this.condition=100;
 
     String[] idleLeftFrames = new String[]{

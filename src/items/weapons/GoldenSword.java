@@ -18,6 +18,7 @@ public class GoldenSword extends Weapon {
     super();
     this.attackDamageModifier=2f;
     this.hitChanceModifier=0.7f;
+    this.range=1.0f;
     this.condition=100;
     String[] idleLeftFrames = new String[]{
             "tileset/items/weapon_golden_sword.png"
