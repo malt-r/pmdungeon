@@ -9,8 +9,6 @@ public class SpatialHashMapEntry {
     private Point key;
     private ArrayList<DrawableEntity> values;
 
-    private boolean isTombstone;
-
     public SpatialHashMapEntry(Point key, ArrayList<DrawableEntity> values) {
         this.key = key;
         if (null != values) {
@@ -25,17 +23,6 @@ public class SpatialHashMapEntry {
     }
 
     public void reset() {
-        this.isTombstone = false;
-        this.key = null;
-        this.values.clear();
-    }
-
-    public boolean isTombstone() {
-        return this.isTombstone;
-    }
-
-    public void makeTombstone() {
-        this.isTombstone = true;
         this.key = null;
         this.values.clear();
     }
@@ -46,7 +33,6 @@ public class SpatialHashMapEntry {
 
     public void setKey(Point key) {
         this.key = key;
-        this.isTombstone = false;
     }
 
     public void removeFromValues(DrawableEntity entity) {
@@ -54,7 +40,8 @@ public class SpatialHashMapEntry {
     }
 
     public void addToValues(DrawableEntity entity) {
-        this.values.add(entity);
-        this.isTombstone = false;
+        if (!this.values.contains(entity)){
+            this.values.add(entity);
+        }
     }
 }
