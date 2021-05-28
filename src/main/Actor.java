@@ -481,16 +481,12 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         var newPosition = (movementDelta.add(new Vec(this.getPosition()))).toPoint();
 
         if (level.isTileAccessible(newPosition)) {
-          if (this instanceof  Hero && movementDelta.magnitude()> 0.0f) {
-            boolean bDebug= true;
-          }
           this.setPosition(newPosition);
 
           // is the actor moving?
           if (movementDelta.magnitude() > 0.0f) {
             animationState = AnimationState.RUN;
           }
-          //super.notifyObservers();
         }
 
         // set look direction
@@ -515,7 +511,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
       case IS_KNOCKED_BACK:
         this.setPosition(calculateKnockBackTarget());
         animationState = AnimationState.KNOCK_BACK;
-        //super.notifyObservers();
         break;
       case HIT:
         animationState = AnimationState.HIT;

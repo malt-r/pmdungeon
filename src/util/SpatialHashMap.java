@@ -16,6 +16,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
     final float LOWER_LOADFACTOR_THRESHOLD = 0.25f;
 
     private ArrayList<ArrayList<SpatialHashMapEntry>> buckets;
+    private boolean log;
 
     int filledBuckets;
     public int getFilledBuckets() {
@@ -61,7 +62,9 @@ public class SpatialHashMap implements IDrawableEntityObserver {
                 entry = insertEntry(h, key);
             }
 
-            mainLogger.info("inserted " + entity + " for bucket of key (" + key.x + "|" + key.y + ")");
+            if (log) {
+                mainLogger.info("inserted " + entity + " for bucket of key (" + key.x + "|" + key.y + ")");
+            }
 
             entry.addToValues(entity);
             entity.register(this);
