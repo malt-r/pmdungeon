@@ -208,12 +208,13 @@ public interface ICombatable {
         ArrayList<DrawableEntity> entities = entityFinder.apply(lowerBound, upperBound);
         entities.remove(this);
         if (this instanceof Hero && entities.size() > 0) {
-            System.out.println("Iterating over " + entities.size() + " entities");
+            //System.out.println("Iterating over " + entities.size() + " entities");
             if (entities.contains(this)) {
                 ArrayList<DrawableEntity> testEntities = entityFinder.apply(lowerBound, upperBound);
             }
         }
 
+        //Todo - find nearest target
         for (DrawableEntity entity : entities) {
             if (!entity.equals(this) && entity instanceof ICombatable) {
                 var combatable = (ICombatable) entity;

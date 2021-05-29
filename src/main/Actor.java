@@ -224,6 +224,10 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   @Override
   public float getDamage() { return this.baseAttackDamage * this.attackDamageModifierWeapon * this.attackDamageModifierScroll; }
 
+  protected boolean inRangeFunc(Point p){
+    return new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < 1.0f;
+  }
+
   /**
    * Attack implementation for combat
    * @param other The ICombatable to attack.
@@ -500,7 +504,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         }
 
         BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder = (p1, p2) -> Game.getInstance().getEntitiesInCoordRange(p1, p2);
-        Function<Point, Boolean> inRange = (p) -> new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < 1.0f;
+        Function<Point, Boolean> inRange = (p) -> inRangeFunc(p);
 
         attackTargetIfReachable(this.getPosition(), inRange, entityFinder);
 
