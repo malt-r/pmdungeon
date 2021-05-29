@@ -303,6 +303,5 @@ public class Game extends MainController {
 
     private void printHashMapStats() {
         spatialMap.printStats();
-
     }
 }
