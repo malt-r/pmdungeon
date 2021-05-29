@@ -441,8 +441,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     protected void handleItemPicking(){
-        var allEntities = game.getAllEntities();
-        for (IEntity entity : allEntities) {
+        var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+        for (IEntity entity : nearEntities) {
             if (entity instanceof Item) {
                 var item = (Item) entity;
                 if(Convenience.checkForIntersection(this.getPosition(), item.getPosition())) {

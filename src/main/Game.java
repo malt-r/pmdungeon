@@ -280,7 +280,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
             } catch (IllegalAccessException ex) {
                 mainLogger.severe(ex.getMessage());
             }
-            var allEntities = getAllEntities();
+            var allEntities = entityController.getList();
             for(var entity: allEntities){
                 if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
                     entitiesToRemove.add(entity);
@@ -333,14 +333,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    /**
-     * Returns all entities from the entityController.
-     * This method is used by the combat system to enable ICombatable-instances to scan for attackable targets.
-     * @return List of all entities in the game.
-     */
-    public ArrayList<IEntity> getAllEntities() {
-        return this.entityController.getList();
     }
 
     /**

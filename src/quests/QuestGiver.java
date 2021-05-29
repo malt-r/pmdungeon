@@ -109,8 +109,8 @@ public class QuestGiver extends DrawableEntity {
     }
 
     private boolean isHeroOnTile(){
-        var allEntities = game.getAllEntities();
-        for(var entity : allEntities) {
+        var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+        for(var entity : nearEntities) {
             if (!(entity instanceof Hero)) {
                 continue;
             }
