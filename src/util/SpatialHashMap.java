@@ -236,12 +236,9 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         ArrayList<SpatialHashMapEntry> entriesForHash;
         entriesForHash = this.buckets.get(hash);
 
-        // TODO: remove
-        if (entriesForHash.size() != 0) { // search linearly for key
-            for (var entry : entriesForHash) {
-                if (areFlooredPointsEqual(entry.getKey(), key)) {
-                    return entry;
-                }
+        for (var entry : entriesForHash) {
+            if (areFlooredPointsEqual(entry.getKey(), key)) {
+                return entry;
             }
         }
 
@@ -252,20 +249,14 @@ public class SpatialHashMap implements IDrawableEntityObserver {
     // insert a new entry with key at position specified by hash, will throw IllegalArgumentException, if the
     // hash is negative
     private SpatialHashMapEntry insertEntry(int hash, Point key) throws IllegalArgumentException {
-        if (hash < 0) {
-            throw new IllegalArgumentException("hash cannot be negative!");
+        var entry = findEntry(hash, key);
+        if (entry != null) { // entry is already in map
+            return entry;
         }
 
-        ArrayList<SpatialHashMapEntry> entriesForHash;
-        entriesForHash = this.buckets.get(hash);
-
-        for (var entry : entriesForHash) {
-            if (areFlooredPointsEqual(entry.getKey(), key)) {
-                // entry is already in map
-                return entry;
-            }
-        }
+        // add new entry
         var newEntry = new SpatialHashMapEntry(getFlooredPoint(key), null);
+        var entriesForHash = this.buckets.get(hash);
         entriesForHash.add(newEntry);
         return newEntry;
     }
