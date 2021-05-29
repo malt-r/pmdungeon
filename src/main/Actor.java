@@ -455,7 +455,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @param animationState animation state which the actor is currently in
    */
   private void setCurrentAnimation(AnimationState animationState) {
-    // TODO: play hit animation on knockback
     switch (animationState) {
       case RUN:
         this.currentAnimation = lookLeft ? this.runAnimationLeft : this.runAnimationRight;

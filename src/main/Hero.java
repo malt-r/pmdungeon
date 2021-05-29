@@ -504,7 +504,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(Weapon weapon){
-        //TODO - Error if Inventory is full!
         updateWeaponModifiers(rightHandSlot, weapon);
         if (rightHandSlot != null) { inventory.addItem(rightHandSlot); }
         rightHandSlot = weapon;
@@ -542,7 +541,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(PoisonPotion potion){
-        //TODO: heal with a negative
         this.heal(-potion.getDamageValue());
         mainLogger.info("visit potion2");
         notifyObservers();
@@ -554,8 +552,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(AttackScroll scroll) {
-        //TODO: AttackScroll should not heal
-        //this.heal(scroll.getAttackBonus());
+        //TODO: Add functionality?
         mainLogger.info("visit Attackscroll");
     }
 
@@ -565,6 +562,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(SpeedScroll scroll){
+        //TODO: Add functionality?
         mainLogger.info("visit speedscroll");
     }
     /**
