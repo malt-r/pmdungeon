@@ -79,25 +79,29 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
         if (fromHero){
             updateHeroInv(inv);
         }else{
-            if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
-                for (int i = 0; i < chest.length; i++){
-                    chestBackground[i].setDefaultBackgroundTexture();
-                }
-                ((OtherInventoryOpenState)inv.getCurrentState()).register(this);
-                chestBackground[((OtherInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
+            updateChestInv(inv);
+        }
+    }
 
-                for (int i = 0; i < chest.length; i++){
-                    if (i < inv.getCount()){
-                        chest[i].setTexture(inv.getItemAt(i).getTexture());
-                    } else {
-                        chest[i].setDefaultTexture();
-                    }
-                }
-            }else {
-                for (int i = 0; i < chest.length; i++) {
+    private void updateChestInv(Inventory inv) {
+        if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
+            for (int i = 0; i < chest.length; i++){
+                chestBackground[i].setDefaultBackgroundTexture();
+            }
+            ((OtherInventoryOpenState) inv.getCurrentState()).register(this);
+            chestBackground[((OtherInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
+
+            for (int i = 0; i < chest.length; i++){
+                if (i < inv.getCount()){
+                    chest[i].setTexture(inv.getItemAt(i).getTexture());
+                } else {
                     chest[i].setDefaultTexture();
-                    chestBackground[i].setDefaultTexture();
                 }
+            }
+        }else {
+            for (int i = 0; i < chest.length; i++) {
+                chest[i].setDefaultTexture();
+                chestBackground[i].setDefaultTexture();
             }
         }
     }
