@@ -108,7 +108,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         try {
             var entry = findEntry(h, pos);
             if (entry != null) {
-                returnList = entry.getValues();
+                returnList = new ArrayList<>(entry.getValues());
             }
         } catch (IllegalArgumentException ex) {
             mainLogger.info("IllegalArgumentException, ignoring position " + pos);
