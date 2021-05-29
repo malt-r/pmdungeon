@@ -1,10 +1,7 @@
 package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.ICombatable;
-import util.math.Convenience;
-import util.math.Vec;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,12 +14,8 @@ import static util.math.Convenience.checkForIntersection;
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public class SpikesTrap extends Trap{
+public class SpikesTrap extends Trap {
   private float damageValue =10;
-
-  // TODO: put in base class
-  private float activationDistance = 0.7f;
-  private Point collisionCenterOffset = new Point(-0.2f, -0.3f);
 
   /**
    * The SpikeTrap does damage on every "pointy" state change.
@@ -49,6 +42,9 @@ public class SpikesTrap extends Trap{
   public SpikesTrap(){
     super();
     nextFrameTimer = new Timer();
+    super.collisionCenterOffset.x = -0.2f;
+    super.collisionCenterOffset.y = -0.3f;
+    super.activationDistance = 0.7f;
   }
 
   /**
@@ -138,10 +134,9 @@ public class SpikesTrap extends Trap{
 
   private void dealDamage(){
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
-    Point collisionCenter= new Vec(this.getPosition()).add(new Vec(collisionCenterOffset)).toPoint();
     for(var entitiy : nearEntities) {
       if (entitiy instanceof ICombatable) {
-        if(checkForIntersection(collisionCenter, entitiy.getPosition(), activationDistance)) {
+        if(checkForIntersection(super.collisionCenterPoint, entitiy.getPosition(), activationDistance)) {
           if (spikesTrapState == SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES) {
             ((ICombatable)entitiy).dealDamage(getDamageValue(), null);
           }

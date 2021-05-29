@@ -1,9 +1,7 @@
 package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.ICombatable;
-import util.math.Vec;
 
 import static util.math.Convenience.checkForIntersection;
 
@@ -13,10 +11,8 @@ import static util.math.Convenience.checkForIntersection;
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public class HoleTrap extends Trap{
+public class HoleTrap extends Trap {
 
-  private float activationDistance = 0.6f;
-  private Point collisionCenterOffset = new Point(-0.2f, -0.3f);
   /**
    * Constructor of the HoleTrap class.
    * <p>
@@ -25,6 +21,9 @@ public class HoleTrap extends Trap{
    */
   public HoleTrap(){
     super();
+    super.activationDistance = 0.6f;
+    super.collisionCenterOffset.x = -0.2f;
+    super.collisionCenterOffset.y = -0.3f;
   }
 
   /**
@@ -45,10 +44,9 @@ public class HoleTrap extends Trap{
   public void update() {
     this.draw(-1,-1);
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
-    Point collisionCenter= new Vec(this.getPosition()).add(new Vec(collisionCenterOffset)).toPoint();
     for(var entitiy : nearEntities){
       if (entitiy instanceof IDrawable && entitiy instanceof ICombatable) {
-        if(checkForIntersection(collisionCenter, entitiy.getPosition(), activationDistance)) {
+        if(super.checkForIntersectionWithDrawable(entitiy)) {
           ICombatable victim = (ICombatable) entitiy;
           victim.dealDamage(Float.MAX_VALUE,null);
         }

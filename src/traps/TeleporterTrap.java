@@ -1,9 +1,6 @@
 package traps;
 
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
-import util.math.Vec;
 
 import static util.math.Convenience.checkForIntersection;
 
@@ -13,9 +10,7 @@ import static util.math.Convenience.checkForIntersection;
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public class TeleporterTrap extends Trap{
-  private float activationDistance = 0.5f;
-  private Point collisionCenterOffset = new Point(-0.3f, -0.3f);
+public class TeleporterTrap extends Trap {
 
   /**
    * Constructor of the TeleporterTrap class.
@@ -25,6 +20,9 @@ public class TeleporterTrap extends Trap{
    */
   public TeleporterTrap(){
     super();
+    super.collisionCenterOffset.x = -0.3f;
+    super.collisionCenterOffset.y = -0.3f;
+    super.activationDistance = 0.5f;
   }
 
   /**
@@ -50,12 +48,10 @@ public class TeleporterTrap extends Trap{
     this.draw(-1,-1);
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
 
-    // TODO: calc on setPosition
-    Point collisionCenter= new Vec(this.getPosition()).add(new Vec(collisionCenterOffset)).toPoint();
     for (var entitiy : nearEntities) {
       if (!(entitiy instanceof Actor)) {continue;}
         var actor = (Actor) entitiy;
-      if(!checkForIntersection(collisionCenter, entitiy.getPosition(), activationDistance)){continue;}
+      if(!checkForIntersection(super.collisionCenterPoint, entitiy.getPosition(), activationDistance)){continue;}
           actor.findRandomPosition();
     }
   }
