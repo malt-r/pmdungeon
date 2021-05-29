@@ -1,5 +1,11 @@
 package monsters;
 
+import main.Game;
+import monsters.strategies.movement.FollowHeroStrategy;
+import monsters.strategies.movement.MovementStrategy;
+import monsters.strategies.movement.RandomMovementStrategy;
+import util.math.Convenience;
+
 /**
  * Lizard Monster.
  * <p>
@@ -7,6 +13,8 @@ package monsters;
  * </p>
  */
 public class LizardMonster  extends Monster {
+  private final MovementStrategy followHeroStrategy;
+  private final MovementStrategy randomMovementStrategy;
   /**
    * Constructor of the Lizardmonster class.
    * <p>
@@ -15,6 +23,8 @@ public class LizardMonster  extends Monster {
    */
   public LizardMonster() {
     super();
+    this.followHeroStrategy = new FollowHeroStrategy();
+    this.randomMovementStrategy = new RandomMovementStrategy();
   }
   /**
    * Generates the run and idle animation for the Lizard monster.
@@ -62,5 +72,19 @@ public class LizardMonster  extends Monster {
             "tileset/lizard/lizard_m_idle_anim_f0_hit.png"
     };
     hitAnimationRight = createAnimation(hitRightFrames, 1);
+  }
+
+  @Override
+  public void update() {
+    super.update();
+    var startTile = Convenience.convertPointToTile(getPosition(),level);
+    var endTile = Convenience.convertPointToTile(Game.getInstance().getHero().getPosition(),level);
+    var pathToHero = level.findPath(startTile, endTile);
+    if (pathToHero.getCount() < 5) {
+      currentMovementStrategy = followHeroStrategy;
+    }
+    else {
+      currentMovementStrategy = this.randomMovementStrategy;
+    }
   }
 }

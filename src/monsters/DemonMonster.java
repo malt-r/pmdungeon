@@ -1,5 +1,15 @@
 package monsters;
 
+
+import main.Game;
+import monsters.strategies.combat.CombatStrategy;
+import monsters.strategies.combat.MeleeStrategy;
+import monsters.strategies.combat.RangedcombatStrategy;
+import monsters.strategies.movement.FollowHeroStrategy;
+import monsters.strategies.movement.MovementStrategy;
+import monsters.strategies.movement.RandomMovementStrategy;
+import util.math.Convenience;
+
 /**
  * Demon Monster.
  * <p>
@@ -7,6 +17,10 @@ package monsters;
  * </p>
  */
 public class DemonMonster extends Monster{
+  private final MovementStrategy randomMovementStrategy;
+  private final MovementStrategy followHeroStrategy;
+  private final CombatStrategy meleeCombatStrategy;
+  private final CombatStrategy rangecombatStrategy;
   /**
    * Constructor of the Demonmonster class.
    * <p>
@@ -15,7 +29,14 @@ public class DemonMonster extends Monster{
    */
   public DemonMonster(){
   super();
+  randomMovementStrategy = new RandomMovementStrategy();
+  followHeroStrategy = new FollowHeroStrategy();
+  currentMovementStrategy = randomMovementStrategy;
+
+  meleeCombatStrategy = new MeleeStrategy();
+  rangecombatStrategy = new RangedcombatStrategy();
   }
+
   /**
    * Generates the run and idle animation for the Demon monster.
    */
@@ -71,4 +92,31 @@ public class DemonMonster extends Monster{
   public void draw(){
     drawWithScaling(2.0f,2.0f);
   }
+
+  @Override
+  public void update(){
+    var startTile = Convenience.convertPointToTile(getPosition(),level);
+    var endTile = Convenience.convertPointToTile(Game.getInstance().getHero().getPosition(),level);
+    var pathToHero = level.findPath(startTile, endTile);
+    if (pathToHero.getCount() > 2) {
+      currentCombatStrategy = this.rangecombatStrategy;
+
+    }else{
+      currentCombatStrategy = this.meleeCombatStrategy;
+    }
+    if(pathToHero.getCount()<6){
+      currentMovementStrategy = this.followHeroStrategy;
+    }else{
+      currentMovementStrategy = this.randomMovementStrategy;
+    }
+    super.update();
+  }
+
+  /**
+   * gets the damage value for combat
+   * @return damage value of the actor
+   */
+  @Override
+  public float getDamage() { return this.currentCombatStrategy.getAttackValue() * this.attackDamageModifierWeapon * this.attackDamageModifierScroll; }
+
 }
