@@ -219,6 +219,15 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
     }
 
+    private void ToggleGodMode() {
+        this.invincible = !this.invincible;
+        if (this.invincible) {
+            mainLogger.info("God mode on");
+        } else {
+            mainLogger.info("God mod off");
+        }
+    }
+
     /**
      * Constructor of the Hero class.
      * <p>
@@ -328,6 +337,10 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
             PrintNearEntities();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
+            ToggleGodMode();
         }
     }
 
