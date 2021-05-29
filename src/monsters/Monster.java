@@ -80,7 +80,7 @@ public abstract class Monster extends Actor {
    */
   @Override
   protected Point readMovementInput(){
-    if(hasTarget()){return new Point(this.getPosition());}
+    //if(hasTarget()){return new Point(this.getPosition());}
     return this.currentMovementStrategy.Move(getPosition(),level);
   }
 
