@@ -107,9 +107,7 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
     }
 
     private void updateHeroInv(Inventory inv) {
-        for(int i = 0; i < invBackground.length; i++){
-            invBackground[i].setDefaultBackgroundTexture();
-        }
+        invBackgroundSetAllDefault();
 
         if (inv.getCurrentState() instanceof OwnInventoryOpenState) {
             ((OwnInventoryOpenState) inv.getCurrentState()).register(this);
@@ -119,12 +117,22 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
             }
         }
 
+        fillInventorySlots(inv);
+    }
+
+    private void fillInventorySlots(Inventory inv) {
         for (int i = 0; i < inventory.length; i++){
             if (i < inv.getCount()){
                 inventory[i].setTexture(inv.getItemAt(i).getTexture());
             } else {
                 inventory[i].setDefaultTexture();
             }
+        }
+    }
+
+    private void invBackgroundSetAllDefault() {
+        for(int i = 0; i < invBackground.length; i++){
+            invBackground[i].setDefaultBackgroundTexture();
         }
     }
 
@@ -136,9 +144,7 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
     @Override
     public void update(InventoryOpenState invOp) {
         if (invOp instanceof OwnInventoryOpenState){
-            for(int i = 0; i < invBackground.length; i++){
-                invBackground[i].setDefaultBackgroundTexture();
-            }
+            invBackgroundSetAllDefault();
             invBackground[invOp.getselectorIdx()].setPointerTexture();
         }else if (invOp instanceof OtherInventoryOpenState){
             for(int i = 0; i < invBackground.length; i++){
