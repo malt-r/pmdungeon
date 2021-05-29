@@ -1,7 +1,11 @@
 package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
+import util.math.Vec;
+
+import static util.math.Convenience.checkForIntersection;
 
 /**
  * The base class for any TeleporterTrap.
@@ -10,6 +14,8 @@ import main.Actor;
  * </p>
  */
 public class TeleporterTrap extends Trap{
+  private float activationDistance = 0.5f;
+  private Point collisionCenterOffset = new Point(-0.3f, -0.3f);
 
   /**
    * Constructor of the TeleporterTrap class.
@@ -42,11 +48,14 @@ public class TeleporterTrap extends Trap{
   @Override
   public void update() {
     this.draw(-1,-1);
-    var allEntities = game.getAllEntities();
-    for(var entitiy : allEntities){
+    var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+
+    // TODO: calc on setPosition
+    Point collisionCenter= new Vec(this.getPosition()).add(new Vec(collisionCenterOffset)).toPoint();
+    for (var entitiy : nearEntities) {
       if (!(entitiy instanceof Actor)) {continue;}
         var actor = (Actor) entitiy;
-        if(!game.checkForIntersection(this, (IDrawable) entitiy,level)){continue;}
+      if(!checkForIntersection(collisionCenter, entitiy.getPosition(), activationDistance)){continue;}
           actor.findRandomPosition();
     }
   }
