@@ -1,9 +1,6 @@
 package traps;
 
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import main.ICombatable;
-
-import static util.math.Convenience.checkForIntersection;
 
 /**
  * The base class for any HoleTrap.

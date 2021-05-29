@@ -1,20 +1,9 @@
 package traps;
 
-import com.badlogic.gdx.graphics.Texture;
-import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
-import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.DrawableEntity;
-import main.Game;
 import util.math.Vec;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.logging.Logger;
 
 import static util.math.Convenience.checkForIntersection;
 

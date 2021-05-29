@@ -2,8 +2,6 @@ package traps;
 
 import main.Actor;
 
-import static util.math.Convenience.checkForIntersection;
-
 /**
  * The base class for any TeleporterTrap.
  * <p>

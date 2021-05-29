@@ -1,7 +1,6 @@
 package traps;
 
 import items.Item;
-import main.Hero;
 import monsters.MonsterType;
 
 import java.util.Random;

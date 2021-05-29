@@ -6,8 +6,6 @@ import main.ICombatable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static util.math.Convenience.checkForIntersection;
-
 /**
  * The base class for any SpikesTrap.
  * <p>
