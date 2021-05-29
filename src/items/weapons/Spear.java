@@ -50,7 +50,7 @@ public class Spear extends Weapon{
     draw(-0.60f,-1f,0.25f,1.0f);
   }
   /**
-   * Accept method for a item visitor to extend the functionality of the scroll class.
+   * Accept method for a item visitor to extend the functionality of the spear class.
    * @param visitor Visitor that visits the class
    */
   @Override

@@ -2,14 +2,14 @@ package items.weapons;
 
 import items.IItemVisitor;
 /**
- * Regular sword class.
+ * Staff class.
  * <p>
- *   Contains everything that describes a regular sword.
+ *   Contains everything that describes a staff.
  * </p>
  */
 public class Staff extends Weapon {
     /**
-     * Constructor of the RegularWord class.
+     * Constructor of the Staff class.
      * <p>
      * This constructor will instantiate the animations and read all required texture data.
      * </p>
@@ -28,30 +28,30 @@ public class Staff extends Weapon {
     }
     public float getRange(){ return this.range; }
     /**
-     * Returns the name of the sword for display purposes
-     * @return Name of the swords
+     * Returns the name of the staff for display purposes
+     * @return Name of the staff
      */
     @Override
     public String getName() {
         return "Magic Staff";
     }
     /**
-     * description of the sword for display purposes
-     * @return description of the regular sword
+     * description of the staff for display purposes
+     * @return description of the staff
      */
     @Override
     protected String getDescription() {
         return "Staff used for ranged combat";
     }
     /**
-     * Called each frame and draws the regular sword with the right scaling.
+     * Called each frame and draws the staff with the right scaling.
      */
     @Override
     public void update(){
         draw(-0.75f,-0.75f,0.5f,1.0f);
     }
     /**
-     * Accept method for a item visitor to extend the functionality of the scroll class.
+     * Accept method for a item visitor to extend the functionality of the staff.
      * @param visitor Visitor that visits the class
      */
     @Override
