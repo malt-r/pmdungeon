@@ -19,7 +19,7 @@ public class Staff extends Weapon {
         this.attackDamageModifier=1.2f;
         this.hitChanceModifier=1.2f;
         this.range=3.0f;
-        this.condition=100;
+        this.condition=2000;
         String[] idleLeftFrames = new String[]{
                 "tileset/items/weapon_red_magic_staff.png"
         };

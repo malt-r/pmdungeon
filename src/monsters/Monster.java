@@ -110,7 +110,7 @@ public abstract class Monster extends Actor {
       }
     }
 
-    if (directionState ==0) {
+    /*if (directionState ==0) {
       newPosition.y += movementSpeed;
     }
     if (directionState ==1) {
@@ -121,7 +121,7 @@ public abstract class Monster extends Actor {
     }
     if (directionState ==3) {
       newPosition.x -= movementSpeed;
-    }
+    }*/
   return newPosition;
   }
   /**

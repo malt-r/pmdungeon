@@ -40,8 +40,6 @@ public class DebugControl {
       }
     }
 
-
-
     for (Monster monster : monsterArray) {
       monster.setLevel(levelController.getDungeon());
     }

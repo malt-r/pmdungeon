@@ -5,6 +5,7 @@ import GUI.HeroObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
+import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.tiles.Tile;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
@@ -29,6 +30,7 @@ import progress.ability.SprintAbility;
 import quests.QuestReward;
 import util.math.Vec;
 
+import javax.xml.stream.events.StartDocument;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -85,7 +87,24 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     @Override
     protected boolean inRangeFunc(Point p){
-        return new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < getRangeOfWeapon();
+
+        if (new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() >= getRangeOfWeapon()) return false;
+
+        Vec direction = new Vec(p).subtract(new Vec(this.getPosition()));
+        Vec location = new Vec(this.getPosition());
+        float length = direction.magnitude();
+        float stepSize = 0.2f;
+        int steps = (int) (length / stepSize);
+
+        for (float i = 1.0f; i <= steps; i=i+1.0f){
+            Vec stepVector = location.add(direction.multiply(i/(float)steps));
+
+            int x = (int)Math.floor(stepVector.x());
+            int y = (int)Math.floor(stepVector.y());
+
+            if (game.getCurrentLevel().getTileTypeAt(x,y) == Tile.Type.WALL){ return false; }
+        }
+        return true;
     }
 
     @Override
