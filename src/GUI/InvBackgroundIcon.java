@@ -15,7 +15,7 @@ public class InvBackgroundIcon implements IHUDElement {
     private Point position;
     private Texture texture;
     private Texture defaultTexture = new Texture("tileset/default/default_anim_seethrough.png");
-    private Texture pointer = new Texture("tileset/default/inv_pointer.png");
+    private Texture pointer = new Texture("tileset/default/floor_1_test.png");
     private Texture defaultBackground = new Texture("textures/dungeon/floor/floor_1.png");
 
     /**
