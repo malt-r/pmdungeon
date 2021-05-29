@@ -98,8 +98,8 @@ public class Game extends MainController {
     }
 
     /**
-     *
-     * @return
+     * Gets the current Questhandler
+     * @return current Questhandler
      */
     public QuestHandler getQuestHandler(){ return this.questHandler; }
 
@@ -108,10 +108,11 @@ public class Game extends MainController {
     }
 
     /**
-     *
-     * @return
+     * Gets the hero
+     * @return current hero
      */
     public Hero getHero(){ return this.hero; }
+
     /**
      * Setup of the game world.
      * <p>
