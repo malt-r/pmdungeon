@@ -1,10 +1,12 @@
 package traps;
 
 import items.Item;
-import main.Hero;
 import monsters.MonsterType;
 
 import java.util.Random;
+
+import static util.math.Convenience.checkForIntersection;
+
 /**
  * The base class for a Activator trap.
  * <p>
@@ -56,17 +58,20 @@ public class ActivatorTrap extends Trap{
 
   //Check if item lays on it
   //to spawn a monster
-  private boolean checkIfActivated(){
-    var allEntities = game.getAllEntities();
-    for(var entitiy : allEntities){
-      if (!(entitiy instanceof Item)) { continue; }
-      var item = (Item) entitiy;
-      if (!game.checkForIntersection(this, item, level)){ continue;  }
-      if (isActivated){ return false; }
-      isActivated = true;
-      mainLogger.info("Trap activated");
-      spawnMonsters();
-      return true;
+  private boolean checkIfActivated() {
+    var nearEntities = game.getEntitiesAtPoint(this.getPosition());
+    for(var entitiy : nearEntities) {
+      if ((entitiy instanceof Item)) {
+        var item = (Item) entitiy;
+        if (checkForIntersection(this, item)) {
+          if (!isActivated) {
+            isActivated = true;
+            mainLogger.info("Trap activated");
+            spawnMonsters();
+            return true;
+          }
+        }
+      }
     }
     return false;
   }

@@ -16,6 +16,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import static util.math.Convenience.checkForIntersection;
+
 /**
  * Implementation of a QuestFiver that gives an qust.
  */
@@ -107,13 +109,13 @@ public class QuestGiver extends DrawableEntity {
     }
 
     private boolean isHeroOnTile(){
-        var allEntities = game.getAllEntities();
-        for(var entity : allEntities) {
+        var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+        for(var entity : nearEntities) {
             if (!(entity instanceof Hero)) {
                 continue;
             }
             var hero = (Hero) entity;
-            if (!game.checkForIntersection(this, hero, level)) {
+            if (!checkForIntersection(this, hero)) {
                 continue;
             }
             return true;

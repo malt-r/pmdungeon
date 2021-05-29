@@ -2,15 +2,17 @@ package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import main.ICombatable;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
 /**
  * The base class for any SpikesTrap.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public class SpikesTrap extends Trap{
+public class SpikesTrap extends Trap {
   private float damageValue =10;
 
   /**
@@ -38,6 +40,9 @@ public class SpikesTrap extends Trap{
   public SpikesTrap(){
     super();
     nextFrameTimer = new Timer();
+    super.collisionCenterOffset.x = -0.2f;
+    super.collisionCenterOffset.y = -0.3f;
+    super.activationDistance = 0.7f;
   }
 
   /**
@@ -85,7 +90,7 @@ public class SpikesTrap extends Trap{
         nextFrame = true;
       }
     };
-    nextFrameTimer.schedule(timerTask,1000);
+    nextFrameTimer.schedule(timerTask,100);
 
     switch (spikesTrapState) {
       case NO_SPIKES:
@@ -126,11 +131,14 @@ public class SpikesTrap extends Trap{
   }
 
   private void dealDamage(){
-    if(game.checkForTrigger(this.getPosition())){
-        // TODO: why is only the hero affected by this trap?!
-      ICombatable hero = game.getHero();
-      if(spikesTrapState==SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES){
-        hero.dealDamage(getDamageValue(),null);
+    var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+    for(var entitiy : nearEntities) {
+      if (entitiy instanceof ICombatable) {
+        if(super.checkForIntersectionWithDrawable(entitiy)) {
+          if (spikesTrapState == SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES) {
+            ((ICombatable)entitiy).dealDamage(getDamageValue(), null);
+          }
+        }
       }
     }
   }

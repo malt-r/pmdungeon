@@ -1,6 +1,5 @@
 package util;
 
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.DrawableEntity;
 import main.IDrawableEntityObserver;
@@ -8,36 +7,68 @@ import main.IDrawableEntityObserver;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-// TODO: document
+import static util.math.Convenience.getFlooredPoint;
+import static util.math.Convenience.areFlooredPointsEqual;
+
+/**
+ * Hashmap implementation, which stores DrawableEntities with their positions as keys.
+ * Uses chaining for collision resolution.
+ *
+ * The Hashmap does not store the DrawableEntities directly but stores SpatialHashMapEntries, which in turn store
+ * multiple DrawableEntities for on position (so that multiple DrawableEntities can be stored for the same position)
+ */
 public class SpatialHashMap implements IDrawableEntityObserver {
+    /**
+     * Logger.
+     */
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     final float UPPER_LOADFACTOR_THRESHOLD = 0.8f;
-    final float LOWER_LOADFACTOR_THRESHOLD = 0.25f;
 
+    // buckets of the hashmap
     private ArrayList<ArrayList<SpatialHashMapEntry>> buckets;
-    private boolean log;
 
+    // log or don't log. for debugging
+    private boolean log = false;
+
+    // keep track of the amount of filled buckets
     int filledBuckets;
+
+    /**
+     * return the number of filled buckets
+     */
     public int getFilledBuckets() {
         return filledBuckets;
     }
 
+
+    /**
+     * Constructor
+     * @param targetSize The number of buckets, which should at least be contained in this hashmap. Will be set to
+     *                   next bigger prime.
+     */
     public SpatialHashMap(int targetSize) {
         int capacity = findNearestPrime(targetSize);
 
         buckets = new ArrayList<>(capacity);
         for (int i = 0; i < capacity; i++ ) {
-            buckets.add(new ArrayList<SpatialHashMapEntry>());
+            buckets.add(new ArrayList<>());
         }
         this.filledBuckets = 0;
     }
 
+    /**
+     * The position of an observed entity was updated, therefore the position of the entity in the map may need to be updated.
+     * @param entity The entity, whichs position was updated.
+     */
     @Override
     public void update(DrawableEntity entity) {
         updateEntityPosition(entity);
     }
 
+    /**
+     * Print info about this hashmap (number of filled buckets, total bucket, loadfactor, length of longest collision length"
+     */
     public void printStats() {
         mainLogger.info("Printing Spatial hashmap stats:");
         mainLogger.info("Filled buckets: " + this.filledBuckets);
@@ -46,6 +77,10 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         mainLogger.info("Max length of collision list: " + getLengthOfLongestCollisionList());
     }
 
+    /**
+     * Insert a new entity in the hashmap.
+     * @param entity The entity to insert.
+     */
     public void insert(DrawableEntity entity) {
         var key = entity.getPosition();
         int h = hash(key);
@@ -69,10 +104,15 @@ public class SpatialHashMap implements IDrawableEntityObserver {
             entry.addToValues(entity);
             entity.register(this);
         } catch (IllegalArgumentException ex) {
-            mainLogger.info("Illegal argument exception, ignoring entity " + entity);
+            if (log) {
+                mainLogger.info("Illegal argument exception, ignoring entity " + entity);
+            }
         }
     }
 
+    /**
+     * Clear the whole map, remove all entries.
+     */
     public void clear() {
         for (var entry : this.buckets) {
             entry.clear();
@@ -80,9 +120,12 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         this.filledBuckets = 0;
     }
 
-    // this is problematic, because the position of the entity may have changed, so it would be found
-    // in bucket for entity.getPostition
-    // no other way but to search linearly through all entries..
+    /**
+     * Remove an entry from this hashmap.
+     *
+     * @param entity The entity to remove.
+     * @return True, if the entity was removed successfully. False otherwise.
+     */
     public boolean remove(DrawableEntity entity) {
         SpatialHashMapEntry entry;
         var key = entity.getPosition();
@@ -97,7 +140,11 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return removedEntry;
     }
 
-
+    /**
+     * Get all entities which are stored in the bucket for a specified Point. The components of the Point will be floored.
+     * @param pos The Point to get the stored entities for.
+     * @return An ArrayList with all entities in the bucket specified by pos.
+     */
     public ArrayList<DrawableEntity> getAt(Point pos) {
         int h = hash(pos);
         ArrayList<DrawableEntity> returnList = new ArrayList<>();
@@ -105,14 +152,25 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         try {
             var entry = findEntry(h, pos);
             if (entry != null) {
-                returnList = entry.getValues();
+                // copy entries to new ArrayList to not risk concurrent modification exception, if client code updates
+                // positions of some of the entities.
+                returnList = new ArrayList<>(entry.getValues());
             }
         } catch (IllegalArgumentException ex) {
-            mainLogger.info("IllegalArgumentException, ignoring position " + pos);
+            if (log) {
+                mainLogger.info("IllegalArgumentException, ignoring position " + pos);
+            }
         }
         return returnList;
     }
 
+    /**
+     * Get all entities which are stored in the buckets for a specified range. The range is specified by the lowerBound
+     * and upperBound (lower and upper bound for x and y coordinates).
+     * @param lowerBound The lower bound of the range (lower bound for x and y coordinates).
+     * @param upperBound The upper bound of the range (upper bound for x and y coordinates).
+     * @return
+     */
     public ArrayList<DrawableEntity> getInRange(Point lowerBound, Point upperBound) {
         ArrayList<DrawableEntity> returnList = new ArrayList<>();
 
@@ -134,16 +192,20 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return new ArrayList<>();
     }
 
+
+    // calculate hash for Point (shift floored x coordinate 8 to left and add floored y coordinate)
     private int hash(Point pos) {
         long flooredX = (long)Math.floor(pos.x);
         long flooredY = (long)Math.floor(pos.y);
         return (int)((flooredX << 8 + flooredY) % this.buckets.size());
     }
 
+    // calculate the load factor (currently filled buckets / total bucket count)
     private float calcLoadFactor() {
         return (float)this.filledBuckets / (float)this.buckets.size();
     }
 
+    // remove an entry from a bucket.
     private boolean removeEntry(int hash, SpatialHashMapEntry entry) {
         var bucket = this.buckets.get(hash);
         if (bucket.size() > 0) {
@@ -155,6 +217,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return false;
     }
 
+    // remove a DrawableEntity from an SpatialHashMapEntry
     private boolean removeEntityFromEntry(DrawableEntity entity, SpatialHashMapEntry entry) {
         if (null != entry && entry.getValues().contains(entity)) {
             entry.removeFromValues(entity);
@@ -163,28 +226,9 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return false;
     }
 
+    // find entry with key at position specified by hash, will throw IllegalArgumentException, if the
+    // hash is negative
     private SpatialHashMapEntry findEntry(int hash, Point key) throws IllegalArgumentException {
-        if (hash < 0) {
-            throw new IllegalArgumentException("hash cannot be negative!");
-        }
-
-        ArrayList<SpatialHashMapEntry> entriesForHash;
-        entriesForHash = this.buckets.get(hash);
-
-        // TODO: remove
-        if (entriesForHash.size() != 0) { // search linearly for key
-            for (var entry : entriesForHash) {
-                if (areFlooredPointsEqual(entry.getKey(), key)) {
-                    return entry;
-                }
-            }
-        }
-
-        // key is not in map
-        return null;
-    }
-
-    private SpatialHashMapEntry insertEntry(int hash, Point key) throws IllegalArgumentException {
         if (hash < 0) {
             throw new IllegalArgumentException("hash cannot be negative!");
         }
@@ -194,28 +238,33 @@ public class SpatialHashMap implements IDrawableEntityObserver {
 
         for (var entry : entriesForHash) {
             if (areFlooredPointsEqual(entry.getKey(), key)) {
-                // entry is already in map
                 return entry;
             }
         }
+
+        // key is not in map
+        return null;
+    }
+
+    // insert a new entry with key at position specified by hash, will throw IllegalArgumentException, if the
+    // hash is negative
+    private SpatialHashMapEntry insertEntry(int hash, Point key) throws IllegalArgumentException {
+        var entry = findEntry(hash, key);
+        if (entry != null) { // entry is already in map
+            return entry;
+        }
+
+        // add new entry
         var newEntry = new SpatialHashMapEntry(getFlooredPoint(key), null);
+        var entriesForHash = this.buckets.get(hash);
         entriesForHash.add(newEntry);
         return newEntry;
     }
 
-    private boolean areFlooredPointsEqual(Point p1, Point p2) {
-        if (Math.floor(p1.x) == Math.floor(p2.x) &&
-            Math.floor(p1.y) == Math.floor(p2.y)) {
-            return true;
-        }
-        return false;
-    }
-
-    private Point getFlooredPoint(Point toFloor) {
-        return new Point((float)Math.floor(toFloor.x), (float)Math.floor(toFloor.y));
-    }
-
+    // update the position of a DrawableEntity in the hashmap
     private void updateEntityPosition(DrawableEntity entity) {
+        // determine, if the position needs to be updated (only if the floored components of current position and last
+        // position dont match
         boolean noUpdateRequired =
                 entity.getLastPosition().equals(DrawableEntity.LAST_POSITION_NOT_SET) ||
                 areFlooredPointsEqual(entity.getPosition(), entity.getLastPosition());
@@ -240,6 +289,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         }
     }
 
+    // find next biggest prime after target
     private int findNearestPrime(int target) {
         boolean foundPrime = false;
         int prime = target;
@@ -259,6 +309,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
         return prime;
     }
 
+    // iterate over all buckets and store maximum length of chaining list
     private int getLengthOfLongestCollisionList() {
         int maxLength = 0;
         for (var entry : this.buckets) {
