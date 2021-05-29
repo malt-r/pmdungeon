@@ -18,6 +18,7 @@ public class RegularSword extends Weapon {
     super();
     this.attackDamageModifier=1.2f;
     this.hitChanceModifier=1.2f;
+    this.range=1.0f;
     this.condition=100;
     String[] idleLeftFrames = new String[]{
             "tileset/items/weapon_regular_sword.png"
@@ -49,7 +50,7 @@ public class RegularSword extends Weapon {
     draw(-0.75f,-0.75f,0.5f,1.0f);
   }
   /**
-   * Accept method for a item visitor to extend the functionality of the scroll class.
+   * Accept method for a item visitor to extend the functionality of the regular sword class.
    * @param visitor Visitor that visits the class
    */
   @Override
