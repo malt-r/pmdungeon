@@ -77,26 +77,7 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
     @Override
     public void update(Inventory inv, boolean fromHero) {
         if (fromHero){
-
-            for(int i = 0; i < invBackground.length; i++){
-                invBackground[i].setDefaultBackgroundTexture();
-            }
-
-            if (inv.getCurrentState() instanceof OwnInventoryOpenState) {
-                ((OwnInventoryOpenState) inv.getCurrentState()).register(this);
-                int index = ((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx();
-                if (index >= 0) {
-                    invBackground[index].setPointerTexture();
-                }
-            }
-
-            for (int i = 0; i < inventory.length; i++){
-                if (i < inv.getCount()){
-                    inventory[i].setTexture(inv.getItemAt(i).getTexture());
-                } else {
-                    inventory[i].setDefaultTexture();
-                }
-            }
+            updateHeroInv(inv);
         }else{
             if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
                 for (int i = 0; i < chest.length; i++){
@@ -117,6 +98,28 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
                     chest[i].setDefaultTexture();
                     chestBackground[i].setDefaultTexture();
                 }
+            }
+        }
+    }
+
+    private void updateHeroInv(Inventory inv) {
+        for(int i = 0; i < invBackground.length; i++){
+            invBackground[i].setDefaultBackgroundTexture();
+        }
+
+        if (inv.getCurrentState() instanceof OwnInventoryOpenState) {
+            ((OwnInventoryOpenState) inv.getCurrentState()).register(this);
+            int index = ((OwnInventoryOpenState) inv.getCurrentState()).getselectorIdx();
+            if (index >= 0) {
+                invBackground[index].setPointerTexture();
+            }
+        }
+
+        for (int i = 0; i < inventory.length; i++){
+            if (i < inv.getCount()){
+                inventory[i].setTexture(inv.getItemAt(i).getTexture());
+            } else {
+                inventory[i].setDefaultTexture();
             }
         }
     }

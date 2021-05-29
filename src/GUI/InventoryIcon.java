@@ -47,7 +47,7 @@ public class InventoryIcon implements IHUDElement {
     }
 
     /**
-     * Sets the texture of the icon for display pruposes
+     * Sets the texture of the icon for display purposes
      * @param texture which should be used for the icon
      */
     public void setTexture(Texture texture){
