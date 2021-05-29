@@ -26,6 +26,8 @@ hs_err_pid*
 # intelliJ config directory
 .idea/workspace.xml
 .idea/uiDesigner.xml
+.idea/dictionaries/
+.idea/inspectionProfiles/
 /shelf/
 out/
 
