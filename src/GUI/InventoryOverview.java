@@ -86,20 +86,25 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
     private void updateChestInv(Inventory inv) {
         if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
             chestBackgroundSetVisible();
+
             ((OtherInventoryOpenState) inv.getCurrentState()).register(this);
             chestBackground[((OtherInventoryOpenState) inv.getCurrentState()).getselectorIdx()].setPointerTexture();
 
-            for (int i = 0; i < chest.length; i++){
-                if (i < inv.getCount()){
-                    chest[i].setTexture(inv.getItemAt(i).getTexture());
-                } else {
-                    chest[i].setDefaultTexture();
-                }
-            }
+            fillChestSlots(inv);
         }else {
             for (int i = 0; i < chest.length; i++) {
                 chest[i].setDefaultTexture();
                 chestBackground[i].setDefaultTexture();
+            }
+        }
+    }
+
+    private void fillChestSlots(Inventory inv) {
+        for (int i = 0; i < chest.length; i++){
+            if (i < inv.getCount()){
+                chest[i].setTexture(inv.getItemAt(i).getTexture());
+            } else {
+                chest[i].setDefaultTexture();
             }
         }
     }
