@@ -9,6 +9,8 @@ import items.shields.EagleShield;
 import items.shields.WoodShield;
 import items.weapons.GoldenSword;
 import items.weapons.RegularSword;
+import items.weapons.Staff;
+
 import java.util.ArrayList;
 
 /**
@@ -31,10 +33,11 @@ public class ItemFactory {
     if(itemType == ItemType.POTION_HEAL)        return new HealthPotion();
     if(itemType == ItemType.POTION_POISON)      return new PoisonPotion();
     if(itemType == ItemType.SCROLL_ATTACK)      return new AttackScroll();
-    if(itemType == ItemType.SCROL_SUPERVISION)  return new SupervisionScroll();
+    if(itemType == ItemType.SCROLL_SUPERVISION)  return new SupervisionScroll();
     if(itemType == ItemType.SCROLL_SPEED)       return new SpeedScroll();
     if(itemType == ItemType.SHIELD_WOOD)        return new WoodShield();
     if(itemType == ItemType.SHIELD_EAGLE)       return new EagleShield();
+    if(itemType == ItemType.STAFF)              return new Staff();
     throw new Exception("ItemType no supported");
   }
 

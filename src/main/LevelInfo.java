@@ -25,7 +25,7 @@ public class LevelInfo {
     content = new ArrayList<>();
     var level1 = new LevelContent(
             new MonsterType[]{MonsterType.LIZARD},
-            new ItemType[]{ItemType.SWORD_REGULAR,ItemType.SCROL_SUPERVISION},
+            new ItemType[]{ItemType.SWORD_REGULAR,ItemType.SCROLL_SUPERVISION, ItemType.STAFF},
             new ChestType[]{ChestType.NORMAL},
             new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR,TrapType.TELEPORT},
             new QuestGiverType[]{QuestGiverType.DEFAULT});

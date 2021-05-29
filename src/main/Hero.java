@@ -27,6 +27,7 @@ import progress.Level;
 import progress.ability.KnockbackAbility;
 import progress.ability.SprintAbility;
 import quests.QuestReward;
+import util.math.Vec;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -45,11 +46,11 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     public Inventory getInventory() { return inventory; }
 
     private boolean inventoryLock = false;
-    private Item leftHandSlot = null; //Defence hand
+    private Shield leftHandSlot = null; //Defence hand
 
-    public Item getLeftHandSlot() { return leftHandSlot; }
+    public  Shield getLeftHandSlot() { return leftHandSlot; }
     private Weapon rightHandSlot = null; //Offence hand
-    public Item getRightHandSlot() { return rightHandSlot; }
+    public Weapon getRightHandSlot() { return rightHandSlot; }
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
     // TODO: this should be packaged in an unified handler of stats and modifiers
@@ -76,6 +77,25 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
             mainLogger.info("Hero got healed, health is now " + this.health);
             notifyObservers();
         }
+    }
+
+    private float getRangeOfWeapon(){
+        return ((rightHandSlot != null) ? rightHandSlot.getRange() : 1.0f);
+    }
+
+    @Override
+    protected boolean inRangeFunc(Point p){
+        return new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < getRangeOfWeapon();
+    }
+
+    @Override
+    public Point lowerAttackRangeBound(Point ownPosition) {
+        return new Point((float)Math.floor(ownPosition.x) - getRangeOfWeapon(), (float)Math.floor(ownPosition.y) - getRangeOfWeapon());
+    }
+
+    @Override
+    public Point upperAttackRangeBound(Point ownPosition) {
+        return new Point((float)Math.ceil(ownPosition.x) + 1 + getRangeOfWeapon(), (float)Math.ceil(ownPosition.y) + 1 + getRangeOfWeapon());
     }
 
     public boolean[] movementLog = new boolean[4];
