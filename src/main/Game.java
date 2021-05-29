@@ -184,25 +184,7 @@ public class Game extends MainController {
 
         // TODO: refactor
         if (hero.isDead()) {
-            mainLogger.info("GAME OVER");
-            hero.onGameOver();
-            this.questOverview.hide();
-            this.questDialog.hide();
-            try {
-                levelController.loadDungeon(firstLevel);
-                currentLevelIndex =0;
-                drawTraps=false;
-            } catch (InvocationTargetException ex) {
-                mainLogger.severe(ex.getMessage());
-            } catch (IllegalAccessException ex) {
-                mainLogger.severe(ex.getMessage());
-            }
-            var allEntities = entityController.getList();
-            for(var entity: allEntities){
-                if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
-                    entitiesToRemove.add(entity);
-                }
-            }
+            onGameOver();
         }
 
         if (entitiesToRemove.size() > 0){
@@ -217,6 +199,28 @@ public class Game extends MainController {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
             printHashMapStats();
+        }
+    }
+
+    private void onGameOver() {
+        mainLogger.info("GAME OVER");
+        hero.onGameOver();
+        this.questOverview.hide();
+        this.questDialog.hide();
+        try {
+            levelController.loadDungeon(firstLevel);
+            currentLevelIndex =0;
+            drawTraps=false;
+        } catch (InvocationTargetException ex) {
+            mainLogger.severe(ex.getMessage());
+        } catch (IllegalAccessException ex) {
+            mainLogger.severe(ex.getMessage());
+        }
+        var allEntities = entityController.getList();
+        for(var entity: allEntities){
+            if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
+                entitiesToRemove.add(entity);
+            }
         }
     }
 
