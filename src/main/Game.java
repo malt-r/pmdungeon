@@ -66,6 +66,12 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         return this.spatialMap.getInRange(lowerBound, upperBound);
     }
 
+    public ArrayList<DrawableEntity> getEntitiesInNeighborFields(Point centerPoint) {
+        var lowerBound = new Point((float)Math.floor(centerPoint.x) - 1, (float)Math.floor(centerPoint.y) - 1);
+        var upperBound = new Point((float)Math.ceil(centerPoint.x) + 1, (float)Math.ceil(centerPoint.y) + 1);
+        return this.spatialMap.getInRange(lowerBound, upperBound);
+    }
+
     /**
      * Gets the current level where the hero is
      * @return current level of the game
@@ -188,6 +194,7 @@ public class Game extends MainController implements InventoryObserver, HeroObser
         hero.getInventory().register(this);
         hero.register(this);
         hero.getLevel().register(this);
+
 
     }
 
@@ -335,46 +342,6 @@ public class Game extends MainController implements InventoryObserver, HeroObser
     public ArrayList<IEntity> getAllEntities() {
         return this.entityController.getList();
     }
-
-    // TODO: find better place / name/ for this, don't hardcode hero as the IDrawable to check against
-    /**
-     *
-     * @param p Point which should be checked if it collids with the hero
-     * @return if point is on the same tile as the hero
-     */
-    public boolean checkForTrigger(Point p) {
-        //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
-        var level = levelController.getDungeon();
-        int ownX = Math.round(hero.getPosition().x);
-        int ownY = Math.round(hero.getPosition().y);
-        var ownTile = level.getTileAt(ownX, ownY);
-
-        int otherX = Math.round(p.x);
-        int otherY = Math.round(p.y);
-        var otherTile = level.getTileAt(otherX, otherY);
-
-        return ownTile == otherTile;
-    }
-
-    /**
-     * A generic trigger function which checks if two IDrawable instances are on the same time
-     * @param drawable1 first drawable
-     * @param drawable2 second drawable
-     * @param level     dungeon level
-     * @return          if the two drawables are on the same tile in the same level
-     */
-    public boolean checkForIntersection (IDrawable drawable1, IDrawable drawable2, DungeonWorld level) {
-        int ownX = Math.round(drawable1.getPosition().x);
-        int ownY = Math.round(drawable1.getPosition().y);
-        var ownTile = level.getTileAt(ownX, ownY);
-        Point otherPosition = drawable2.getPosition();
-
-        int otherX = Math.round(otherPosition.x);
-        int otherY = Math.round(otherPosition.y);
-        var otherTile = level.getTileAt(otherX, otherY);
-        return ownTile == otherTile;
-    }
-
 
     /**
      * Adds an entitty to the game. To prevent a ConcurrentException adding and deleting may
