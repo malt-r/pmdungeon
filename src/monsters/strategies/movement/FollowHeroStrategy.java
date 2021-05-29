@@ -4,12 +4,14 @@ import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Game;
 
-import static main.DrawableEntity.game;
-
+/**
+ * This Strategy follows a hero to a specific range.
+ */
 public class FollowHeroStrategy implements MovementStrategy{
-  public FollowHeroStrategy(){
-  }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Point Move(Point currentPosition, DungeonWorld level) {
 

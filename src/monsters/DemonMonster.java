@@ -1,6 +1,5 @@
 package monsters;
 
-
 import main.Game;
 import monsters.strategies.combat.CombatStrategy;
 import monsters.strategies.combat.MeleeStrategy;
@@ -93,6 +92,9 @@ public class DemonMonster extends Monster{
     drawWithScaling(2.0f,2.0f);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void update(){
     var startTile = Convenience.convertPointToTile(getPosition(),level);
