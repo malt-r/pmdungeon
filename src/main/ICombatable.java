@@ -8,6 +8,8 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 import java.util.ArrayList;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * This interface implements the basic combat system.
@@ -112,18 +114,18 @@ public interface ICombatable {
      * as provided by ownPosition and attack this target, if canAttack returns true.
      *
      * @param ownPosition The current position of the ICombatable. This is used to check, if other targets are in range for an attack.
-     * @param level The current DungeonWorld in which the ICombatable exitst. This is used to get the tile, on which the ICombatable is located.
-     * @param entities All other entities in the current DungeonWorld for which should be checked, if they are in range for an attack.
+     * @param inRangeFunc Function which determines if a given point is in range of this ICombatable. The passed Point will be the position of a potential target.
+     * @param entityFinder
      */
-    default void attackTargetIfReachable(Point ownPosition, DungeonWorld level, ArrayList<IEntity> entities) {
-        if (!isTargetInRange(ownPosition, getTarget(), level)) {
+    default void attackTargetIfReachable(Point ownPosition, Function<Point, Boolean> inRangeFunc, BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder) {
+        if (!isTargetInRange(getTarget(), inRangeFunc)) {
             setTarget(null);
         }
         if (!isPassive() && canAttack()) {
             if (hasTarget() && attackOnInput()) {
                 attack(getTarget());
             } else {
-                setTarget(findTarget(ownPosition, entities, level));
+                setTarget(findTarget(ownPosition, entityFinder, inRangeFunc));
                 if (hasTarget() && attackOnInput()) {
                     attack(getTarget());
                 }
@@ -131,47 +133,93 @@ public interface ICombatable {
         }
     }
 
+    // TODO: remove? This is the legacy way of doing this..
+    default void attackTargetIfReachable(Point ownPosition, DungeonWorld level, ArrayList<IEntity> entities) {
+        Function<Point, Boolean> inRangeFunc = (p) -> {
+            var ownTile = level.getTileAt((int)ownPosition.x, (int)ownPosition.y);
+            var tileOfP = level.getTileAt((int)p.x, (int)p.y);
+            return ownTile == tileOfP;
+        };
+
+        BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder = (p1, p2) -> {
+            ArrayList<DrawableEntity> drawableEntities = new ArrayList<>();
+            for (var entity : entities) {
+                if (entity instanceof DrawableEntity) {
+                    drawableEntities.add((DrawableEntity) entity);
+                }
+            }
+            return drawableEntities;
+        };
+
+        attackTargetIfReachable(ownPosition, inRangeFunc, entityFinder);
+    }
+
     /**
-     * Checks, whether a given target is in range for an attack.
-     *
-     * It will compare the tiles on which the ownPosition and the position of target are located.
-     * This requires the passed target to implement IDrawable!
-     *
-     * @param ownPosition The position of the ICombatable.
-     * @param target The ICombatable for which should be checked, if it is in range for an attack.
-     * @param level The current DungeonWorld in which the ICombatable exists. Used to get the tiles on which the target
-     *              and the ownPosition are located.
-     * @return
+     * Checks, if a given ICombatable target is in range for an attack.
+     * @param target the target to check for potential attack.
+     * @param isInRangeFunc The function, which will be used to determine, if the target is in range.
+     *                      The position of the potential target will be passed as a parameter to this function.
+     * @return True, if the target is in range, false otherwise.
      */
-    default boolean isTargetInRange(Point ownPosition, ICombatable target, DungeonWorld level) {
-        int ownX = Math.round(ownPosition.x);
-        int ownY = Math.round(ownPosition.y);
-        var ownTile = level.getTileAt(ownX, ownY);
+    default boolean isTargetInRange(ICombatable target, Function<Point, Boolean> isInRangeFunc) {
         if (target instanceof IDrawable) {
             Point otherPosition = ((IDrawable)target).getPosition();
 
             int otherX = Math.round(otherPosition.x);
             int otherY = Math.round(otherPosition.y);
-            var otherTile = level.getTileAt(otherX, otherY);
-            return ownTile == otherTile;
+            Point roundedOtherPos = new Point(otherX, otherY);
+            return isInRangeFunc.apply(roundedOtherPos);
         }
         return false;
     }
 
     /**
+     * Together with lowerAttackRangeBound, this function creates a rectangle in which entities will be checked as potential targets.
+     * This function returns the lower bound of this rectangle (lower bound of x and y coordinates).
+     * @param ownPosition The position from which the rectangle will be created.
+     * @return The lower bound of the calculated rectangle.
+     */
+    default Point lowerAttackRangeBound(Point ownPosition) {
+        return new Point((float)Math.floor(ownPosition.x), (float)Math.floor(ownPosition.y));
+    }
+
+    /**
+     * Together with lowerAttackRangeBound, this function creates a rectangle in which entities will be checked as potential targets.
+     * This function returns the upper bound of this rectangle (upper bound of x and y coordinates).
+     * @param ownPosition The position from which the rectangle will be created.
+     * @return The upper bound of the calculated rectangle.
+     */
+    default Point upperAttackRangeBound(Point ownPosition) {
+        return new Point((float)Math.ceil(ownPosition.x) + 1, (float)Math.ceil(ownPosition.y) + 1);
+    }
+
+    /**
      * Iterates over a passed list of IEntities and checks, if one of them is an ICombatable and in range for an attack.
      * @param ownPosition The position of the ICombatable.
-     * @param entities An ArrayList of IEntity objects for which should be checked, if the are a suitable target.
-     * @param level The level in which the ICombatable and the entities exist.
+     //* @param entities An ArrayList of IEntity objects for which should be checked, if the are a suitable target.
+     * @param inRangeFunc The function, which will determine, if the position of a potential target is in range. The passed Point will be the position of a potential target.
+     * @param entityFinder The function, which will return the DrawableEntities, for which will be checked, if they are a potential target.
      * @return The found target. If no suitable target is found, null.
      */
-    default ICombatable findTarget(Point ownPosition, ArrayList<IEntity> entities, DungeonWorld level) {
-        for (IEntity entity : entities) {
+    default ICombatable findTarget(Point ownPosition, BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder, Function<Point, Boolean> inRangeFunc) {
+        var lowerBound = lowerAttackRangeBound(ownPosition);
+        var upperBound = upperAttackRangeBound(ownPosition);
+
+        ArrayList<DrawableEntity> entities = entityFinder.apply(lowerBound, upperBound);
+        entities.remove(this);
+        if (this instanceof Hero && entities.size() > 0) {
+            if (entities.contains(this)) {
+                ArrayList<DrawableEntity> testEntities = entityFinder.apply(lowerBound, upperBound);
+            }
+        }
+
+        //Todo - find nearest target
+        for (DrawableEntity entity : entities) {
             if (!entity.equals(this) && entity instanceof ICombatable) {
                 var combatable = (ICombatable) entity;
                 if (!isOtherFriendly(combatable)) {
                     // is in range/on the same tile?
-                    if (isTargetInRange(ownPosition, combatable, level)) {
+                    if (isTargetInRange(combatable, inRangeFunc)) {
                         return combatable;
                     }
                 }

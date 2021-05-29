@@ -8,6 +8,9 @@ import items.EquipableItem;
  * </p>
  */
 public abstract class Weapon extends EquipableItem {
+  protected float range;
+  public float getRange(){ return range; }
+
   protected float attackDamageModifier;
   /**
    *  Returns the attackDamageModifier value of the shield which can be used for display purposes

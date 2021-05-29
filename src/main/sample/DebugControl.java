@@ -2,7 +2,6 @@ package main.sample;
 
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.EntityController;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.LevelController;
-import items.chests.Chest;
 import items.ItemFactory;
 import items.ItemType;
 import items.chests.ChestFactory;
@@ -41,8 +40,6 @@ public class DebugControl {
       }
     }
 
-
-
     for (Monster monster : monsterArray) {
       monster.setLevel(levelController.getDungeon());
     }
@@ -65,7 +62,7 @@ public class DebugControl {
       entityController.addEntity(scrollAttack);
       scrollAttack.setLevel(levelController.getDungeon());
 
-      var scrollSupervision = ItemFactory.CreateItem(ItemType.SCROL_SUPERVISION);
+      var scrollSupervision = ItemFactory.CreateItem(ItemType.SCROLL_SUPERVISION);
       entityController.addEntity(scrollSupervision);
       scrollSupervision.setLevel(levelController.getDungeon());
 

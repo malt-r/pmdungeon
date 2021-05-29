@@ -3,8 +3,11 @@ package progress.ability;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
+import main.Game;
 import progress.effect.KnockBackEffect;
+import util.math.Convenience;
 import util.math.Vec;
 import progress.ability.Ability;
 
@@ -32,11 +35,24 @@ public class KnockbackAbility extends Ability {
         return activationCheck;
     }
 
+
+    protected Point calcLowerAreaBound(Point center) {
+        return new Vec(Convenience.getFlooredPoint(center)).subtract(new Vec(areaRadius / 2, areaRadius / 2)).toPoint();
+    }
+
+    protected Point calcUpperAreaBound(Point center) {
+        return new Vec(center).add(new Vec(areaRadius / 2, areaRadius / 2)).toPoint();
+    }
+
     @Override
     public void activate(Actor origin) {
         //check for area around self and initiate knockback
-        var originPostion = origin.getPosition();
-        var entities = main.Game.getInstance().getAllEntities();
+        var originPosition = origin.getPosition();
+
+        var lowerBound = calcLowerAreaBound(originPosition);
+        var upperBound = calcUpperAreaBound(originPosition);
+        var entities = Game.getInstance().getEntitiesInCoordRange(lowerBound, upperBound);
+
         ArrayList<Actor> actorsToKnockBack = new ArrayList<>();
         for (IEntity entity : entities) {
             if (entity.equals(origin)) {
@@ -45,14 +61,14 @@ public class KnockbackAbility extends Ability {
             if (entity instanceof Actor) {
                 var actor = (Actor)entity;
                 var positon = actor.getPosition();
-                var diff = new util.math.Vec(positon).subtract(new Vec(originPostion)).magnitude();
+                var diff = new util.math.Vec(positon).subtract(new Vec(originPosition)).magnitude();
                 if (diff <= areaRadius) {
                     actorsToKnockBack.add(actor);
                 }
             }
         }
 
-        var effect = new KnockBackEffect(originPostion);
+        var effect = new KnockBackEffect(originPosition);
         for (Actor actor : actorsToKnockBack) {
             actor.applyOneShotEffect(effect);
         }

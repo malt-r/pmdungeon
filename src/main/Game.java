@@ -4,9 +4,7 @@ import GUI.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
@@ -21,10 +19,11 @@ import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
 import progress.Level;
-import quests.KillMonstersQuest;
 import quests.QuestGiver;
 import quests.QuestHandler;
 import traps.*;
+import util.SpatialHashMap;
+
 import java.util.logging.Logger;
 
 /**
@@ -52,6 +51,20 @@ public class Game extends MainController {
     private final ArrayList <IEntity> entitiesToAdd = new ArrayList<>();
     private int currentLevelIndex =0;
     private boolean drawTraps=false;
+
+    public ArrayList<DrawableEntity> getEntitiesAtPoint(Point p) {
+        return this.spatialMap.getAt(p);
+    }
+
+    public ArrayList<DrawableEntity> getEntitiesInCoordRange(Point lowerBound, Point upperBound) {
+        return this.spatialMap.getInRange(lowerBound, upperBound);
+    }
+
+    public ArrayList<DrawableEntity> getEntitiesInNeighborFields(Point centerPoint) {
+        var lowerBound = new Point((float)Math.floor(centerPoint.x) - 1, (float)Math.floor(centerPoint.y) - 1);
+        var upperBound = new Point((float)Math.ceil(centerPoint.x) + 1, (float)Math.ceil(centerPoint.y) + 1);
+        return this.spatialMap.getInRange(lowerBound, upperBound);
+    }
 
     /**
      * Gets the current level where the hero is
@@ -146,6 +159,9 @@ public class Game extends MainController {
         if (entitiesToAdd.size() > 0) {
             for (IEntity entity : entitiesToAdd) {
                 this.entityController.addEntity(entity);
+                if (entity instanceof DrawableEntity) {
+                    this.spatialMap.insert((DrawableEntity)entity);
+                }
 //                if(entity instanceof Actor) {
 //                    ((Actor)entity).setLevel(levelController.getDungeon());
 //                }
@@ -187,6 +203,7 @@ public class Game extends MainController {
      */
     @Override
     protected void endFrame() {
+
         // check, if current position of hero is on the trigger to load a new level
         if (levelController.checkForTrigger(hero.getPosition()) ) {
             currentLevelIndex++;
@@ -196,6 +213,7 @@ public class Game extends MainController {
             entityController.removeAllFrom(Chest.class);
             entityController.removeAllFrom(QuestGiver.class);
             levelController.triggerNextStage();
+            spatialMap.clear();
             mainLogger.info("Next stage loaded");
 
         }
@@ -215,7 +233,7 @@ public class Game extends MainController {
             } catch (IllegalAccessException ex) {
                 mainLogger.severe(ex.getMessage());
             }
-            var allEntities = getAllEntities();
+            var allEntities = entityController.getList();
             for(var entity: allEntities){
                 if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
                     entitiesToRemove.add(entity);
@@ -226,8 +244,15 @@ public class Game extends MainController {
         if (entitiesToRemove.size() > 0){
             for(IEntity entity : entitiesToRemove){
                 this.entityController.removeEntity(entity);
+                if (entity instanceof DrawableEntity) {
+                    this.spatialMap.remove((DrawableEntity)entity);
+                }
             }
             entitiesToRemove.clear();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+            printHashMapStats();
         }
     }
 
@@ -237,6 +262,7 @@ public class Game extends MainController {
      */
     @Override
     public void  onLevelLoad() {
+
         // cache the first level to be able to spawn hero back in after game over
         if (null == firstLevel) {
             firstLevel = levelController.getDungeon();
@@ -244,9 +270,11 @@ public class Game extends MainController {
         // set the level of the hero
         hero.setLevel(levelController.getDungeon());
 
+        this.spatialMap.remove(this.hero);
+        this.spatialMap.insert(this.hero);
+
         //test_SpawnAllItemsAndMonster();
         spawnEntitiesOfLevel();
-
     }
 
     private void spawnEntitiesOfLevel(){
@@ -259,54 +287,6 @@ public class Game extends MainController {
             e.printStackTrace();
         }
     }
-    /**
-     * Returns all entities from the entityController.
-     * This method is used by the combat system to enable ICombatable-instances to scan for attackable targets.
-     * @return List of all entities in the game.
-     */
-    public ArrayList<IEntity> getAllEntities() {
-        return this.entityController.getList();
-    }
-
-    // TODO: find better place / name/ for this, don't hardcode hero as the IDrawable to check against
-    /**
-     *
-     * @param p Point which should be checked if it collids with the hero
-     * @return if point is on the same tile as the hero
-     */
-    public boolean checkForTrigger(Point p) {
-        //return (int)p.x == (int) this.hero.position.x && (int)p.y == (int)this.hero.position.y;
-        var level = levelController.getDungeon();
-        int ownX = Math.round(hero.position.x);
-        int ownY = Math.round(hero.position.y);
-        var ownTile = level.getTileAt(ownX, ownY);
-
-        int otherX = Math.round(p.x);
-        int otherY = Math.round(p.y);
-        var otherTile = level.getTileAt(otherX, otherY);
-
-        return ownTile == otherTile;
-    }
-
-    /**
-     * A generic trigger function which checks if two IDrawable instances are on the same time
-     * @param drawable1 first drawable
-     * @param drawable2 second drawable
-     * @param level     dungeon level
-     * @return          if the two drawables are on the same tile in the same level
-     */
-    public boolean checkForIntersection (IDrawable drawable1, IDrawable drawable2, DungeonWorld level) {
-        int ownX = Math.round(drawable1.getPosition().x);
-        int ownY = Math.round(drawable1.getPosition().y);
-        var ownTile = level.getTileAt(ownX, ownY);
-        Point otherPosition = drawable2.getPosition();
-
-        int otherX = Math.round(otherPosition.x);
-        int otherY = Math.round(otherPosition.y);
-        var otherTile = level.getTileAt(otherX, otherY);
-        return ownTile == otherTile;
-    }
-
 
     /**
      * Adds an entitty to the game. To prevent a ConcurrentException adding and deleting may
@@ -345,6 +325,6 @@ public class Game extends MainController {
         var monster = Spawner.spawnMonster(monsterType);
         addEntity(monster);
         monster.setLevel(levelController.getDungeon());
-        monster.position = position;
+        monster.setPosition(position);
     }
 }

@@ -1,14 +1,14 @@
 package traps;
 
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import main.ICombatable;
+
 /**
  * The base class for any HoleTrap.
  * <p>
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public class HoleTrap extends Trap{
+public class HoleTrap extends Trap {
 
   /**
    * Constructor of the HoleTrap class.
@@ -18,6 +18,9 @@ public class HoleTrap extends Trap{
    */
   public HoleTrap(){
     super();
+    super.activationDistance = 0.6f;
+    super.collisionCenterOffset.x = -0.2f;
+    super.collisionCenterOffset.y = -0.3f;
   }
 
   /**
@@ -37,15 +40,14 @@ public class HoleTrap extends Trap{
   @Override
   public void update() {
     this.draw(-1,-1);
-    var allEntities = game.getAllEntities();
-    for(var entitiy : allEntities){
-      if (entitiy instanceof IDrawable && entitiy instanceof ICombatable) {
-      if(game.checkForIntersection(this,(IDrawable) entitiy,level)){
-        ICombatable victim = (ICombatable) entitiy;
-        victim.dealDamage(Float.MAX_VALUE,null);
-      }
+    var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+    for(var entitiy : nearEntities) {
+      if (entitiy instanceof ICombatable) {
+        if(super.checkForIntersectionWithDrawable(entitiy)) {
+          ICombatable victim = (ICombatable) entitiy;
+          victim.dealDamage(Float.MAX_VALUE,null);
+        }
       }
     }
-
   }
 }

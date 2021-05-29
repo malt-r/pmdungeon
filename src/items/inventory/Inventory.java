@@ -48,7 +48,7 @@ public class Inventory<T extends Item> implements ObservableInventory{
     /**
      * The distance which the opener can move away from this inventory before the inventory is closed.
      */
-    protected float leavingDistanceThreshold = 0.7f;
+    protected float leavingDistanceThreshold = 1.f;
 
     /**
      * Returns the leavingDistanceThreshold

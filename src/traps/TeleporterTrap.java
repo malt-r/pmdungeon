@@ -1,6 +1,5 @@
 package traps;
 
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import main.Actor;
 
 /**
@@ -9,7 +8,7 @@ import main.Actor;
  *     Contains all animations, the current position in the DungeonWorld.
  * </p>
  */
-public class TeleporterTrap extends Trap{
+public class TeleporterTrap extends Trap {
 
   /**
    * Constructor of the TeleporterTrap class.
@@ -19,6 +18,9 @@ public class TeleporterTrap extends Trap{
    */
   public TeleporterTrap(){
     super();
+    super.collisionCenterOffset.x = -0.3f;
+    super.collisionCenterOffset.y = -0.3f;
+    super.activationDistance = 0.5f;
   }
 
   /**
@@ -42,12 +44,14 @@ public class TeleporterTrap extends Trap{
   @Override
   public void update() {
     this.draw(-1,-1);
-    var allEntities = game.getAllEntities();
-    for(var entitiy : allEntities){
-      if (!(entitiy instanceof Actor)) {continue;}
+    var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+    for (var entitiy : nearEntities) {
+      if (entitiy instanceof Actor) {
         var actor = (Actor) entitiy;
-        if(!game.checkForIntersection(this, (IDrawable) entitiy,level)){continue;}
+        if(super.checkForIntersectionWithDrawable(entitiy)) {
           actor.findRandomPosition();
+        }
+      }
     }
   }
 }

@@ -77,9 +77,9 @@ public abstract class Monster extends Actor {
    */
   @Override
   protected Point readMovementInput(){
-    if(hasTarget()){return new Point(this.position.x,this.position.y);}
+    if(hasTarget()){return new Point(this.getPosition());}
 
-    var newPosition = new Point(this.position.x,this.position.y);
+    var newPosition = new Point(this.getPosition());
     if(updateDirectionState){
       updateDirectionState=false;
       TimerTask timerTask = new TimerTask() {
