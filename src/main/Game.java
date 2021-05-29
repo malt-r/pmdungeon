@@ -207,6 +207,16 @@ public class Game extends MainController {
         hero.onGameOver();
         this.questOverview.hide();
         this.questDialog.hide();
+        reloadFirstLevel();
+        var allEntities = entityController.getList();
+        for(var entity: allEntities){
+            if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
+                entitiesToRemove.add(entity);
+            }
+        }
+    }
+
+    private void reloadFirstLevel() {
         try {
             levelController.loadDungeon(firstLevel);
             currentLevelIndex =0;
@@ -215,12 +225,6 @@ public class Game extends MainController {
             mainLogger.severe(ex.getMessage());
         } catch (IllegalAccessException ex) {
             mainLogger.severe(ex.getMessage());
-        }
-        var allEntities = entityController.getList();
-        for(var entity: allEntities){
-            if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
-                entitiesToRemove.add(entity);
-            }
         }
     }
 
