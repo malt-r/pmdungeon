@@ -29,6 +29,7 @@ import progress.ability.KnockbackAbility;
 import progress.ability.SprintAbility;
 import quests.QuestReward;
 import util.math.Vec;
+import util.math.Convenience;
 
 import javax.xml.stream.events.StartDocument;
 import java.util.ArrayList;
@@ -428,7 +429,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         for (IEntity entity : allEntities) {
             if (entity instanceof Item) {
                 var item = (Item) entity;
-                if(game.checkForTrigger(item.getPosition())){
+                if(Convenience.checkForIntersection(this.getPosition(), item.getPosition())) {
                     if (inventory.addItem(item)){
                         game.deleteEntity(entity);
                     }
@@ -436,7 +437,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
                 }
             } else if (entity instanceof Chest) {
                 var chest = (Chest) entity;
-                if(game.checkForTrigger(chest.getPosition())) {
+                if(Convenience.checkForIntersection(this.getPosition(), chest.getPosition())) {
                     System.out.println("Opening chest");
                     chest.open(this);
                     break;
