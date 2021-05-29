@@ -3,7 +3,10 @@ package monsters;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
 import main.ICombatable;
-
+import monsters.strategies.combat.CombatStrategy;
+import monsters.strategies.combat.MeleeStrategy;
+import monsters.strategies.movement.MovementStrategy;
+import monsters.strategies.movement.RandomMovementStrategy;
 import java.util.*;
 
 /**
@@ -15,11 +18,8 @@ import java.util.*;
 public abstract class Monster extends Actor {
   private final Timer respawnTimer;
   private final long respawnDelay;
-  //Saves the direction of the last movement
-  private Integer directionState=0;
-  //Wether the direction of the moving monster should be updated
-  private boolean updateDirectionState;
-  private final Timer updateDirectionStateTimer;
+  protected MovementStrategy currentMovementStrategy;
+  protected CombatStrategy currentCombatStrategy;
 
   /**
    * Constructor of the Monster class.
@@ -28,9 +28,8 @@ public abstract class Monster extends Actor {
    * </p>
    */
   public Monster() {
-    updateDirectionStateTimer = new Timer();
-    updateDirectionState=true;
-
+    this.currentMovementStrategy = new RandomMovementStrategy();
+    this.currentCombatStrategy = new MeleeStrategy();
     this.respawnTimer = new Timer();
     this.respawnDelay = 500;
 
@@ -50,6 +49,7 @@ public abstract class Monster extends Actor {
     evasionChanceModifierWeapon = 1.f;
     evasionChanceModifierScroll = 1.f;
   }
+
   /**
    * Called each frame, handles movement and the switching to and back from the running animation state.
    */
@@ -57,6 +57,12 @@ public abstract class Monster extends Actor {
   public void update() {
     super.update();
   }
+
+  @Override
+  protected boolean inRangeFunc(Point p){
+    return this.currentCombatStrategy.RangeFunction(this.getPosition(),p);
+  }
+
 
   /**
    * Monster shouldn't attack other monsters.
@@ -66,10 +72,7 @@ public abstract class Monster extends Actor {
    */
   @Override
   public boolean isOtherFriendly(ICombatable other) {
-    if (other instanceof Monster) {
-      return true;
-    }
-    return false;
+    return other instanceof Monster;
   }
 
   /**
@@ -78,52 +81,9 @@ public abstract class Monster extends Actor {
   @Override
   protected Point readMovementInput(){
     if(hasTarget()){return new Point(this.getPosition());}
-
-    var newPosition = new Point(this.getPosition());
-    if(updateDirectionState){
-      updateDirectionState=false;
-      TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-          updateDirectionState = true;
-        }
-      };
-      //TODO:describe matrix values in interval and in rows
-      updateDirectionStateTimer.schedule(timerTask,200);
-      var directionMatrix = new int[][]{
-              { 40, 10, 10, 10, 15},
-              { 10, 40, 10, 10, 15},
-              { 10, 10, 40, 10, 15},
-              { 10, 10, 10, 40, 15},
-              { 30, 30, 30, 30, 40}
-      };
-      var max=100;
-      var min = 1;
-      int number = (int)  ((Math.random() * (max - min)) + min);
-      int current=0;
-      for (int i=0;i<directionMatrix[i].length;i++){
-        current+= directionMatrix[i][directionState];
-        if(number<current){
-          directionState=i;
-          break;
-        }
-      }
-    }
-
-    if (directionState ==0) {
-      newPosition.y += movementSpeed;
-    }
-    if (directionState ==1) {
-      newPosition.y -= movementSpeed;
-    }
-    if (directionState ==2) {
-      newPosition.x += movementSpeed;
-    }
-    if (directionState ==3) {
-      newPosition.x -= movementSpeed;
-    }
-  return newPosition;
+    return this.currentMovementStrategy.Move(getPosition(),level);
   }
+
   /**
    * Manages damage given by other actors. Also starts a timer for respawning, when the monster has been slain.
    *
