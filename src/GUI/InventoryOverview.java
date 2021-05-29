@@ -92,10 +92,14 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
 
             fillChestSlots(inv);
         }else {
-            for (int i = 0; i < chest.length; i++) {
-                chest[i].setDefaultTexture();
-                chestBackground[i].setDefaultTexture();
-            }
+            chestSetInvisible();
+        }
+    }
+
+    private void chestSetInvisible() {
+        for (int i = 0; i < chest.length; i++) {
+            chest[i].setDefaultTexture();
+            chestBackground[i].setDefaultTexture();
         }
     }
 
