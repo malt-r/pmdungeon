@@ -44,8 +44,8 @@ public class HoleTrap extends Trap {
   public void update() {
     this.draw(-1,-1);
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
-    for(var entitiy : nearEntities){
-      if (entitiy instanceof IDrawable && entitiy instanceof ICombatable) {
+    for(var entitiy : nearEntities) {
+      if (entitiy instanceof ICombatable) {
         if(super.checkForIntersectionWithDrawable(entitiy)) {
           ICombatable victim = (ICombatable) entitiy;
           victim.dealDamage(Float.MAX_VALUE,null);

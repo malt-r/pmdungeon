@@ -47,12 +47,13 @@ public class TeleporterTrap extends Trap {
   public void update() {
     this.draw(-1,-1);
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
-
     for (var entitiy : nearEntities) {
-      if (!(entitiy instanceof Actor)) {continue;}
+      if (entitiy instanceof Actor) {
         var actor = (Actor) entitiy;
-      if(!checkForIntersection(super.collisionCenterPoint, entitiy.getPosition(), activationDistance)){continue;}
+        if(super.checkForIntersectionWithDrawable(entitiy)) {
           actor.findRandomPosition();
+        }
+      }
     }
   }
 }

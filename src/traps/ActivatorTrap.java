@@ -59,17 +59,20 @@ public class ActivatorTrap extends Trap{
 
   //Check if item lays on it
   //to spawn a monster
-  private boolean checkIfActivated(){
+  private boolean checkIfActivated() {
     var nearEntities = game.getEntitiesAtPoint(this.getPosition());
-    for(var entitiy : nearEntities){
-      if (!(entitiy instanceof Item)) { continue; }
-      var item = (Item) entitiy;
-      if (!checkForIntersection(this, item)){ continue;  }
-      if (isActivated){ return false; }
-      isActivated = true;
-      mainLogger.info("Trap activated");
-      spawnMonsters();
-      return true;
+    for(var entitiy : nearEntities) {
+      if ((entitiy instanceof Item)) {
+        var item = (Item) entitiy;
+        if (checkForIntersection(this, item)) {
+          if (!isActivated) {
+            isActivated = true;
+            mainLogger.info("Trap activated");
+            spawnMonsters();
+            return true;
+          }
+        }
+      }
     }
     return false;
   }

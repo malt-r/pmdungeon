@@ -136,7 +136,7 @@ public class SpikesTrap extends Trap {
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
     for(var entitiy : nearEntities) {
       if (entitiy instanceof ICombatable) {
-        if(checkForIntersection(super.collisionCenterPoint, entitiy.getPosition(), activationDistance)) {
+        if(super.checkForIntersectionWithDrawable(entitiy)) {
           if (spikesTrapState == SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES) {
             ((ICombatable)entitiy).dealDamage(getDamageValue(), null);
           }
