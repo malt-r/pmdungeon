@@ -1,9 +1,16 @@
 package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
+import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.ICombatable;
+import util.math.Convenience;
+import util.math.Vec;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static util.math.Convenience.checkForIntersection;
+
 /**
  * The base class for any SpikesTrap.
  * <p>
@@ -12,6 +19,10 @@ import java.util.TimerTask;
  */
 public class SpikesTrap extends Trap{
   private float damageValue =10;
+
+  // TODO: put in base class
+  private float activationDistance = 0.7f;
+  private Point collisionCenterOffset = new Point(-0.2f, -0.3f);
 
   /**
    * The SpikeTrap does damage on every "pointy" state change.
@@ -85,7 +96,7 @@ public class SpikesTrap extends Trap{
         nextFrame = true;
       }
     };
-    nextFrameTimer.schedule(timerTask,1000);
+    nextFrameTimer.schedule(timerTask,100);
 
     switch (spikesTrapState) {
       case NO_SPIKES:
@@ -126,11 +137,15 @@ public class SpikesTrap extends Trap{
   }
 
   private void dealDamage(){
-    if(game.checkForTrigger(this.getPosition())){
-        // TODO: why is only the hero affected by this trap?!
-      ICombatable hero = game.getHero();
-      if(spikesTrapState==SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES){
-        hero.dealDamage(getDamageValue(),null);
+    var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
+    Point collisionCenter= new Vec(this.getPosition()).add(new Vec(collisionCenterOffset)).toPoint();
+    for(var entitiy : nearEntities) {
+      if (entitiy instanceof ICombatable) {
+        if(checkForIntersection(collisionCenter, entitiy.getPosition(), activationDistance)) {
+          if (spikesTrapState == SpikesTrapState.MIDDLE_SPIKES || spikesTrapState == SpikesTrapState.BIG_SPIKES) {
+            ((ICombatable)entitiy).dealDamage(getDamageValue(), null);
+          }
+        }
       }
     }
   }
