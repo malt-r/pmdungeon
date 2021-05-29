@@ -24,14 +24,14 @@ public class LevelInfo {
   public LevelInfo(){
     content = new ArrayList<>();
     var level1 = new LevelContent(
-            new MonsterType[]{MonsterType.LIZARD},
+            new MonsterType[]{MonsterType.LIZARD,MonsterType.CHEST, MonsterType.DEMON },
             new ItemType[]{ItemType.SWORD_REGULAR,ItemType.SCROLL_SUPERVISION, ItemType.STAFF},
             new ChestType[]{ChestType.NORMAL},
             new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR,TrapType.TELEPORT},
             new QuestGiverType[]{QuestGiverType.DEFAULT});
     content.add(level1);
     var level2 = new LevelContent(
-            new MonsterType[]{MonsterType.LIZARD},
+            new MonsterType[]{MonsterType.LIZARD,MonsterType.CHEST, MonsterType.DEMON },
             new ItemType[]{ItemType.SWORD_GOLD},
             new ChestType[]{ChestType.NORMAL,ChestType.NORMAL},
             new TrapType[]{TrapType.HOLE,TrapType.SPIKES,TrapType.ACTIVATOR},
