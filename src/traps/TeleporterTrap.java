@@ -34,7 +34,7 @@ public class TeleporterTrap extends Trap {
             "tileset/traps/teleporter/teleporter_3.png",
             "tileset/traps/teleporter/teleporter_4.png",
     };
-    currentAnimation = createAnimation(idleLeftFrames, Integer.MAX_VALUE);
+    currentAnimation = createAnimation(idleLeftFrames, 6);
   }
 
   /**
