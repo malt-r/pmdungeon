@@ -221,7 +221,10 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     private void ToggleGodMode() {
         this.invincible = !this.invincible;
+
         if (this.invincible) {
+            this.level.addAbility(new SprintAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)));
+            this.level.addAbility(new KnockbackAbility(() -> Gdx.input.isKeyJustPressed(Input.Keys.K)));
             mainLogger.info("God mode on");
         } else {
             mainLogger.info("God mod off");
