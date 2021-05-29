@@ -3,22 +3,17 @@ package main;
 import GUI.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
 import items.chests.Chest;
-import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
-import progress.Level;
 import quests.QuestGiver;
 import quests.QuestHandler;
 import traps.*;
@@ -93,7 +88,7 @@ public class Game extends MainController {
 
     /**
      * the game is a singleton instance which can be used everywhere in the game
-     * @return singelton instance of the game
+     * @return singleton instance of the game
      */
     public static Game getInstance(){
         if(Game.instance==null){
@@ -112,11 +107,6 @@ public class Game extends MainController {
         return this.questDialog;
     }
 
-    public QuestOverview getQuestOverview() {
-        return this.questOverview;
-    }
-
-    //TODO - Maybe only temporary (who knows)
     /**
      *
      * @return
@@ -134,8 +124,6 @@ public class Game extends MainController {
         hero = new Hero();
         this.questHandler = new QuestHandler(hero);
         this.entityController.addEntity(this.questHandler);
-        // TODO: temporary solution, how to pass hero to quest?
-        //this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
 
         firstLevel = null;
         // the entityController will call hero.update each frame
@@ -144,7 +132,10 @@ public class Game extends MainController {
         // attach camera to hero
         camera.follow(hero);
 
+        setupGUI();
+    }
 
+    private void setupGUI() {
         questDialog = new QuestDialog(hud, textHUD);
         questOverview = new QuestOverview(hud, textHUD);
         inventoryOverview = new InventoryOverview(hud);
@@ -163,38 +154,11 @@ public class Game extends MainController {
                 if (entity instanceof DrawableEntity) {
                     this.spatialMap.insert((DrawableEntity)entity);
                 }
-//                if(entity instanceof Actor) {
-//                    ((Actor)entity).setLevel(levelController.getDungeon());
-//                }
-//                if(entity instanceof Item) {
-//                    ((Item)entity).setLevel(levelController.getDungeon());
-//                }
-//                if(entity instanceof Chest) {
-//                    ((Chest)entity).setLevel(levelController.getDungeon());
-//                }
-//                if(entity instanceof Trap) {
-//                    ((Trap)entity).setLevel(levelController.getDungeon());
-//                }
             }
             entitiesToAdd.clear();
         }
-
-        // TODO: this still needed?
-        //Y in German keyboard
-       // if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-       //     questDialog.show();
-       // }
-       // if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-       //     questDialog.hide();
-       // }
-
-       // if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-       //     questOverview.show();
-       // }
-       // if (Gdx.input.isKeyPressed(Input.Keys.V)) {
-       //     questOverview.hide();
-       // }
     }
+
     /**
      * Implements logic executed at the end of a frame.
      * <p>
@@ -216,7 +180,6 @@ public class Game extends MainController {
             levelController.triggerNextStage();
             spatialMap.clear();
             mainLogger.info("Next stage loaded");
-
         }
 
         // TODO: refactor
