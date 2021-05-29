@@ -1,6 +1,8 @@
 package util.math;
 
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
+import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
+import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.tiles.Tile;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 /**
@@ -108,5 +110,11 @@ public class Convenience {
     static public boolean checkForIntersection (IDrawable drawable1, IDrawable drawable2, float maxDiff) {
         var diff = new Vec(drawable1.getPosition()).subtract(new Vec(drawable2.getPosition())).magnitude();
         return diff < maxDiff;
+    }
+    static public Tile convertPointToTile(Point p,DungeonWorld level){
+        int x = (int) p.x;
+        int y = (int) p.y;
+        return level.getTileAt(x, y);
+
     }
 }
