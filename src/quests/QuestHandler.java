@@ -1,10 +1,9 @@
 package quests;
 
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
-import main.Hero;
-
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import main.Hero;
 
 /** Managerclass for the currently activated quest. */
 public class QuestHandler implements IQuestObserver, IEntity {
@@ -13,18 +12,19 @@ public class QuestHandler implements IQuestObserver, IEntity {
 
   private final Hero hero;
   private final ArrayList<IQuestObserver> questObservers;
-  /** Current state of the statemachine */
+  /** Current state of the statemachine. */
   protected IQuestHandlerState currentState;
-  /** Idle state of the statemachine */
+  /** Idle state of the statemachine. */
   protected QuestHandlerIdleState idleState;
 
   private Quest currentQuest = null;
   private boolean removeCurrentQuest = false;
   /**
-   * constructor
+   * constructor.
    *
    * @param hero the hero to manage quests for and apply rewards to.
    */
+
   public QuestHandler(Hero hero) {
     this.hero = hero;
     this.idleState = new QuestHandlerIdleState();
@@ -33,9 +33,9 @@ public class QuestHandler implements IQuestObserver, IEntity {
   }
 
   /**
-   * Gets the idle state of the state machine
+   * Gets the idle state of the state machine.
    *
-   * @return
+   * @return idlestate
    */
   public IQuestHandlerState getIdleState() {
     return idleState;
@@ -92,7 +92,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
   /**
    * Setup new quest. Cleans up old quest.
    *
-   * @param quest
+   * @param quest quest
    */
   public void setupQuest(Quest quest) {
     mainLogger.info("Setting new current quest: " + quest.getQuestName());
@@ -110,7 +110,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
   }
 
   /**
-   * Has this handler a quest?
+   * Has this handler a quest.
    *
    * @return True, if this handler has a quest.
    */
@@ -181,7 +181,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return if it was sucessfull
    */
   @Override
   public boolean deleteable() {

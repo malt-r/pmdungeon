@@ -4,9 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import items.IInventoryOpener;
 import items.Item;
-
 import java.util.logging.Logger;
 
+
+
+
+/**
+ * Other Inventory OpenState.
+ */
 public class OtherInventoryOpenState extends InventoryOpenState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 

@@ -1,6 +1,6 @@
 package quests;
 
-/** Idle state of the state machine of a quest handler */
+/** Idle state of the state machine of a quest handler. */
 public class QuestHandlerIdleState implements IQuestHandlerState {
 
   /**

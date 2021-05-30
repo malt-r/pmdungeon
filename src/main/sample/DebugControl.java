@@ -36,7 +36,7 @@ public class DebugControl {
         monsterType = MonsterType.DEMON;
       }
       try {
-        var mon = MonsterFactory.CreateMonster(monsterType);
+        var mon = MonsterFactory.createMonster(monsterType);
         monsterArray[i] = mon;
         entityController.addEntity(mon);
         mainLogger.info("Monster(" + (mon.getClass().getName()) + ") created");

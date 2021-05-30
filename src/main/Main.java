@@ -1,7 +1,6 @@
 package main;
 
 import de.fhbielefeld.pmdungeon.desktop.DesktopLauncher;
-
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;

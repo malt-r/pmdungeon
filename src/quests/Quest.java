@@ -10,16 +10,16 @@ public abstract class Quest implements IObservableQuest {
 
   private final ArrayList<IQuestObserver> observers;
 
-  /** The reward to apply to a hero, if the quest goal is fulfilled */
+  /** The reward to apply to a hero, if the quest goal is fulfilled. */
   protected QuestReward reward;
 
   /**
    * Flag to check, if the reward can be retrieved from this quest -> will be set to false in
-   * cleanup
+   * cleanup.
    */
   protected boolean rewardIsAvailable = true;
 
-  /** constructor */
+  /** constructor. */
   public Quest() {
     observers = new ArrayList<>();
   }
@@ -56,19 +56,20 @@ public abstract class Quest implements IObservableQuest {
 
   /**
    * Initial setup of the quest (this is the place to register the quest as an observer where
-   * necessary)
+   * necessary).
    */
   public abstract void setup();
 
-  /** Cleanup function (this is the place to unregister the quest as an observer where necessary) */
+  /** Cleanup function (this is the place to
+   * unregister the quest as an observer where necessary). */
   public void cleanup() {
     this.rewardIsAvailable = false;
   }
 
   /**
-   * Is the quest-goal fulfilled?
+   * Is the quest-goal fulfilled.
    *
-   * @return
+   * @return if finished
    */
   public abstract boolean isFinished();
 

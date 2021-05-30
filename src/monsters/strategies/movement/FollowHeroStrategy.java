@@ -10,7 +10,7 @@ public class FollowHeroStrategy implements MovementStrategy {
 
   /** {@inheritDoc} */
   @Override
-  public Point Move(Point currentPosition, DungeonWorld level) {
+  public Point move(Point currentPosition, DungeonWorld level) {
 
     int startX = (int) currentPosition.x;
     int startY = (int) currentPosition.y;

@@ -5,7 +5,6 @@ import items.Item;
 import items.ItemFactory;
 import main.Hero;
 import progress.Level;
-
 import java.util.ArrayList;
 
 /** Quest to level up random amount of levels. */
@@ -16,9 +15,9 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   private boolean isFinished;
 
   /**
-   * constructor
+   * constructor.
    *
-   * @param hero the hero to observer for level ups
+   * @param hero the hero to observer for level ups.
    */
   public LevelUpQuest(Hero hero) {
     this.hero = hero;
@@ -30,6 +29,12 @@ public class LevelUpQuest extends Quest implements LevelObserver {
     this.reward = new QuestReward(items, xp);
   }
 
+  /**
+   * LevelUpQuest
+   * @param hero hero
+   * @param rewardItems rewardItems
+   * @param levelsToLevel levelsToLevel
+   */
   public LevelUpQuest(Hero hero, ArrayList<Item> rewardItems, int levelsToLevel) {
     this.hero = hero;
     int xp = 120;
@@ -41,7 +46,6 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public String getQuestName() {
@@ -51,7 +55,6 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public String getProgressString() {
@@ -65,7 +68,7 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return description
    */
   @Override
   public String getDescription() {
@@ -74,8 +77,6 @@ public class LevelUpQuest extends Quest implements LevelObserver {
 
   /**
    * {@inheritDoc}
-   *
-   * @return
    */
   @Override
   public void setup() {
@@ -87,7 +88,6 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void cleanup() {
@@ -98,7 +98,7 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return if finishes
    */
   @Override
   public boolean isFinished() {
@@ -108,7 +108,6 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void update(Level level) {

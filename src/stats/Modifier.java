@@ -14,6 +14,7 @@ public class Modifier {
    * @param type The type of the modification.
    * @param typeOfEffectedAttribute The effected attribute type.
    */
+
   public Modifier(float value, ModifierType type, Attribute.AttributeType typeOfEffectedAttribute) {
     this.value = value;
     this.type = type;

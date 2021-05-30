@@ -3,14 +3,15 @@ package monsters;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
 import main.ICombatable;
+import java.util.Timer;
+import java.util.TimerTask;
 import monsters.strategies.combat.CombatStrategy;
 import monsters.strategies.combat.MeleeStrategy;
 import monsters.strategies.movement.MovementStrategy;
 import monsters.strategies.movement.RandomMovementStrategy;
 import stats.Attribute;
 
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 /**
  * The base class for any monster.
@@ -67,10 +68,10 @@ public abstract class Monster extends Actor {
     return other instanceof Monster;
   }
 
-  /** Generates random Movement Inputs for natural moving of the monster */
+  /** Generates random Movement Inputs for natural moving of the monster. */
   @Override
   protected Point readMovementInput() {
-    return this.currentMovementStrategy.Move(getPosition(), level);
+    return this.currentMovementStrategy.move(getPosition(), level);
   }
 
   /**

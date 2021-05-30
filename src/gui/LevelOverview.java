@@ -7,13 +7,17 @@ import main.Game;
 import progress.Level;
 
 public class LevelOverview implements LevelObserver {
-  private final TextStage textHUD;
+  private final TextStage texthud;
   private final Game game;
 
   private Label levelLabel;
 
-  public LevelOverview(TextStage textHUD) {
-    this.textHUD = textHUD;
+  /**
+   * Leveloverview
+   * @param texthud texthud
+   */
+  public LevelOverview(TextStage texthud) {
+    this.texthud = texthud;
     this.game = Game.getInstance();
 
     levelLabelInit();
@@ -23,7 +27,7 @@ public class LevelOverview implements LevelObserver {
 
   private void levelLabelInit() {
     levelLabel =
-        textHUD.drawText(
+        texthud.drawText(
             game.getHero().getLevel().getCurrentLevel()
                 + "    "
                 + game.getHero().getLevel().getCurrentXP()

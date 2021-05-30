@@ -22,7 +22,7 @@ public class PoisonPotion extends Potion {
   }
 
   /**
-   * Returns the damage value of the potion which can be used for display purposes
+   * Returns the damage value of the potion which can be used for display purposes.
    *
    * @return damageBalue of the potion
    */
@@ -31,9 +31,9 @@ public class PoisonPotion extends Potion {
   }
 
   /**
-   * Returns the name of the potion which can be used for display purposes
+   * Returns the name of the potion which can be used for display purposes.
    *
-   * @return Name of the potion
+   * @return Name of the potion.
    */
   @Override
   public String getName() {
@@ -41,9 +41,9 @@ public class PoisonPotion extends Potion {
   }
 
   /**
-   * Returns the deescription of the potion which can be used for display purposes
+   * Returns the deescription of the potion which can be used for display purposes.
    *
-   * @return description of the potion
+   * @return description of the potion.
    */
   @Override
   protected String getDescription() {

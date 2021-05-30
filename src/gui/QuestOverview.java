@@ -70,7 +70,7 @@ public class QuestOverview implements IQuestObserver {
     lbProgress.setText("Abgeschlossen!");
   }
 
-  /** Hides the questoverview */
+  /** Hides the questoverview. */
   public void hide() {
     lbName.setText("");
     lbProgress.setText("");

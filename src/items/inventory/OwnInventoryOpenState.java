@@ -3,6 +3,9 @@ package items.inventory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+/**
+ * Open state.
+ */
 public class OwnInventoryOpenState extends InventoryOpenState {
 
   public OwnInventoryOpenState() {

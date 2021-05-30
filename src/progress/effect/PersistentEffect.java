@@ -1,11 +1,12 @@
 package progress.effect;
 
+import java.util.concurrent.Callable;
 import main.Actor;
 
-import java.util.concurrent.Callable;
+
 
 /**
- * A persistent effect, which should be applied for duration to an Actor
+ * A persistent effect, which should be applied for duration to an Actor.
  *
  * @author malte
  */

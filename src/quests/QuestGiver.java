@@ -1,12 +1,14 @@
 package quests;
 
+import static util.math.Convenience.checkForIntersection;
+
+import java.util.Random;
 import main.DrawableEntity;
 import main.Game;
 import main.Hero;
 
-import java.util.Random;
 
-import static util.math.Convenience.checkForIntersection;
+
 
 /** Implementation of a QuestFiver that gives an qust. */
 public class QuestGiver extends DrawableEntity {
@@ -85,7 +87,7 @@ public class QuestGiver extends DrawableEntity {
   /**
    * Disables the waiting procedure if the quest has been accepted.
    *
-   * @param status
+   * @param status status
    */
   public void questWasAccepted(boolean status) {
     if (!questWasAccepted) {

@@ -37,7 +37,7 @@ public class Spawner {
   public static void spawnEntities(LevelContent levelContent, ArrayList<IEntity> listToAdd)
       throws Exception {
     for (MonsterType monsterType : levelContent.monsters) {
-      var monster = MonsterFactory.CreateMonster(monsterType);
+      var monster = MonsterFactory.createMonster(monsterType);
       monster.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info("Monster " + monsterType.toString() + " spawned");
       listToAdd.add(monster);
@@ -81,7 +81,7 @@ public class Spawner {
    */
   public static Monster spawnMonster(MonsterType monsterType) throws Exception {
     mainLogger.info("Monster " + monsterType.toString() + " spawned");
-    return MonsterFactory.CreateMonster(monsterType);
+    return MonsterFactory.createMonster(monsterType);
   }
 
   /**

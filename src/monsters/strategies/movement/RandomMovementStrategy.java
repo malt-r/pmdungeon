@@ -24,7 +24,7 @@ public class RandomMovementStrategy implements MovementStrategy {
 
   /** {@inheritDoc} */
   @Override
-  public Point Move(Point currentPosition, DungeonWorld level) {
+  public Point move(Point currentPosition, DungeonWorld level) {
     var newPosition = new Point(currentPosition);
     if (updateDirectionState) {
       updateDirectionState = false;

@@ -35,7 +35,7 @@ public class QuestDialog {
   }
 
   /**
-   * display a questdialog
+   * display a questdialog.
    *
    * @param newQuest quest which should be drawn
    * @param currentQuest which is drawn currently
@@ -58,7 +58,7 @@ public class QuestDialog {
     }
   }
 
-  /** hides the questdialog */
+  /** hides the questdialog. */
   public void hide() {
     this.isVisible = false;
     lbText.setText("");
@@ -67,7 +67,7 @@ public class QuestDialog {
   }
 
   /**
-   * gets the visibility state of the questdialog
+   * gets the visibility state of the questdialog.
    *
    * @return if the questdialog is visible
    */

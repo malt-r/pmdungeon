@@ -14,7 +14,7 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState {
   private boolean receivedInput;
 
   /**
-   * constructor
+   * constructor.
    *
    * @param pendingQuest the requested new quest.
    * @param giver the giver, which started the request for the new quest.
@@ -41,7 +41,7 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState {
    * {@inheritDoc}
    *
    * @param handler the QuestHandler of the state machine
-   * @return
+   * @return the state of the quest
    */
   @Override
   public IQuestHandlerState update(QuestHandler handler) {
