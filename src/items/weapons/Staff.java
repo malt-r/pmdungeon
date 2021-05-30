@@ -21,10 +21,7 @@ public class Staff extends Weapon {
         super();
         this.modifiers.add(new Modifier(1.2f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.PHYSICAL_ATTACK_DAMAGE));
         this.modifiers.add(new Modifier(1.2f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.HIT_CHANCE));
-        //this.attackDamageModifier=1.2f;
-        //this.hitChanceModifier=1.2f;
         this.range=3.0f;
-        // TODO: use health for that
         this.condition=2000;
         String[] idleLeftFrames = new String[]{
                 "tileset/items/weapon_red_magic_staff.png"

@@ -19,14 +19,6 @@ public abstract class Shield extends EquipableItem {
   public Shield() {
     super();
   }
-
-  /**
-   *  Returns the defense value of the shield which can be used for display purposes
-   *  @return defensevalue of the shield
-   */
-  //public float getDefenseValue(){
-  //  return defenseValue;
-  //}
   /**
    * Called each frame and draws the shield.
    */

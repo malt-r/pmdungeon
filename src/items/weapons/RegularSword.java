@@ -21,10 +21,7 @@ public class RegularSword extends Weapon {
     super();
     this.modifiers.add(new Modifier(1.3f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.PHYSICAL_ATTACK_DAMAGE));
     this.modifiers.add(new Modifier(1.4f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.HIT_CHANCE));
-    //this.attackDamageModifier=1.2f;
-    //this.hitChanceModifier=1.2f;
     this.range=1.0f;
-    // TODO: use health for that..
     this.condition=100;
     String[] idleLeftFrames = new String[]{
             "tileset/items/weapon_regular_sword.png"

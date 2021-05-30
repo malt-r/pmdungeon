@@ -20,7 +20,6 @@ public class WoodShield extends Shield{
   public WoodShield() {
     super();
     this.modifiers.add(new Modifier(1.1f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.EVASION_CHANCE));
-    //this.defenseValue= 1.1f;
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_wood.png"
     };

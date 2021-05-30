@@ -20,7 +20,6 @@ public class EagleShield extends Shield{
   public EagleShield() {
     super();
     this.modifiers.add(new Modifier(1.3f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.EVASION_CHANCE));
-    //this.defenseValue= 1.3f;
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_red_yellow_eagle.png"
     };
