@@ -1,6 +1,9 @@
 package items.shields;
 
 import items.IItemVisitor;
+import stats.Attribute;
+import stats.Modifier;
+
 /**
  * Wood Shield.
  * <p>
@@ -16,7 +19,7 @@ public class WoodShield extends Shield{
    */
   public WoodShield() {
     super();
-    this.defenseValue= 1.1f;
+    this.modifiers.add(new Modifier(1.1f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.EVASION_CHANCE));
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_wood.png"
     };

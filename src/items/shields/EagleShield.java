@@ -1,6 +1,9 @@
 package items.shields;
 
 import items.IItemVisitor;
+import stats.Attribute;
+import stats.Modifier;
+
 /**
  * Eagle Shield.
  * <p>
@@ -16,7 +19,7 @@ public class EagleShield extends Shield{
    */
   public EagleShield() {
     super();
-    this.defenseValue= 1.3f;
+    this.modifiers.add(new Modifier(1.3f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.EVASION_CHANCE));
     String[] idleLeftFrames = new String[]{
             "tileset/items/shield_red_yellow_eagle.png"
     };

@@ -1,6 +1,9 @@
 package items.weapons;
 
 import items.IItemVisitor;
+import stats.Attribute;
+import stats.Modifier;
+
 /**
  * Regular sword class.
  * <p>
@@ -16,8 +19,8 @@ public class GoldenSword extends Weapon {
    */
   public GoldenSword(){
     super();
-    this.attackDamageModifier=2f;
-    this.hitChanceModifier=0.7f;
+    this.modifiers.add(new Modifier(2.f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.PHYSICAL_ATTACK_DAMAGE));
+    this.modifiers.add(new Modifier(0.7f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.HIT_CHANCE));
     this.range=1.0f;
     this.condition=100;
     String[] idleLeftFrames = new String[]{

@@ -1,6 +1,9 @@
 package items.weapons;
 
 import items.IItemVisitor;
+import stats.Attribute;
+import stats.Modifier;
+
 /**
  * Staff class.
  * <p>
@@ -16,8 +19,8 @@ public class Staff extends Weapon {
      */
     public Staff(){
         super();
-        this.attackDamageModifier=1.2f;
-        this.hitChanceModifier=1.2f;
+        this.modifiers.add(new Modifier(1.2f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.PHYSICAL_ATTACK_DAMAGE));
+        this.modifiers.add(new Modifier(1.2f, Modifier.ModifierType.MULTIPLIER, Attribute.AttributeType.HIT_CHANCE));
         this.range=3.0f;
         this.condition=2000;
         String[] idleLeftFrames = new String[]{

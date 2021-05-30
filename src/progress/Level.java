@@ -25,11 +25,13 @@ public class Level implements ObserveableLevel{
     private Runnable levelUpCallback;
 
     public boolean addAbility(Ability ability) {
-        if (!abilities.contains(ability)) {
-            abilities.add(ability);
-            return true;
+        for (var ab : abilities) {
+            if (ab.getClass() == ability.getClass()) {
+                return false;
+            }
         }
-        return false;
+        abilities.add(ability);
+        return true;
     }
 
     public void checkForAbilityActivation(Actor origin) {
@@ -88,8 +90,6 @@ public class Level implements ObserveableLevel{
      * @return Currently a constant value. Dependent on the implementation of the handling of modifiers of stats, this will change.
      */
     public float getHealthIncrementForCurrentLevel() {
-        // first test
-        //return (int)Math.pow(((double)this.level * (double)this.healthScaleConstant), 2);
         return this.healthScaleConstant;
     }
 
@@ -98,8 +98,6 @@ public class Level implements ObserveableLevel{
      * @return Currently a constant value. Dependent on the implementation of the handling of modifiers of stats, this will change.
      */
     public float getDamageIncrementForCurrentLevel() {
-        // first test
-        //return (int)Math.pow(((double)this.level * (double)this.damageScaleConstant), 2);
         return this.damageScaleConstant;
     }
 
@@ -117,9 +115,6 @@ public class Level implements ObserveableLevel{
      * @return
      */
     public int getXPForNextLevelTotal() {
-        // level = sqrt(XP) / constant
-        // XP = (level*constant) ^2
-        // first test
         return (int)Math.pow(((double)this.level * (double)this.xpConstant), 2);
     }
 

@@ -23,17 +23,18 @@ import items.scrolls.SpeedScroll;
 import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
-import progress.ability.Ability;
 import progress.Level;
 import progress.ability.KnockbackAbility;
 import progress.ability.SprintAbility;
 import quests.QuestReward;
+import stats.Modifier;
 import util.math.Vec;
 import util.math.Convenience;
 
-import javax.xml.stream.events.StartDocument;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+
+import static stats.Modifier.*;
+import static stats.Attribute.*;
 
 /**
  * The controllable player character.
@@ -56,7 +57,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     public Weapon getRightHandSlot() { return rightHandSlot; }
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
-    // TODO: this should be packaged in an unified handler of stats and modifiers
     private float bonusHealth = 0.0f;
     private float bonusDamage = 0.0f;
     protected int killCount = 0;
@@ -77,7 +77,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         float rand = (float)Math.random();
         if (rand < healOnKillChance) {
             this.heal(healOnKillAmount);
-            mainLogger.info("Hero got healed, health is now " + this.health);
+            mainLogger.info("Hero got healed, health is now " + this.getHealth());
             notifyObservers();
         }
     }
@@ -138,10 +138,22 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
     private void applyLevelUp() {
         mainLogger.info("You leveled up to level " + this.level.getCurrentLevel() + "!");
-        this.baseAttackDamage += this.level.getDamageIncrementForCurrentLevel();
-        mainLogger.info("Your base attack damage is now " + this.baseAttackDamage);
-        this.maxHealth += this.level.getHealthIncrementForCurrentLevel();
-        mainLogger.info("Your max health is now " + this.maxHealth);
+
+        var dmgIncr = this.level.getDamageIncrementForCurrentLevel();
+        this.stats.applyModToAttribute
+        (
+            new Modifier(dmgIncr, ModifierType.ADDITION, AttributeType.PHYSICAL_ATTACK_DAMAGE)
+        );
+
+        mainLogger.info("Your base attack damage is now " + this.stats.getValue(AttributeType.PHYSICAL_ATTACK_DAMAGE));
+
+        var healthIncr = this.level.getHealthIncrementForCurrentLevel();
+        this.stats.applyModToAttribute
+        (
+            new Modifier(healthIncr, ModifierType.ADDITION, AttributeType.MAX_HEALTH)
+        );
+
+        mainLogger.info("Your max health is now " + this.stats.getValue(AttributeType.MAX_HEALTH));
         grantAbility();
     }
 
@@ -156,11 +168,11 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         if (damage > 0.0f) {
             mainLogger.info(damage + " damage dealt to " + other.toString());
             if (rightHandSlot != null) {
+
+                // TODO: use effect for that?
                 if (!rightHandSlot.reduceCondition(25)) {
                     mainLogger.info("Das Schwert ist hinüber");
                     rightHandSlot = null;
-                    attackDamageModifierWeapon = 1.0f;
-                    hitChanceModifierWeapon = 1.0f;
                 }
             }
         } else {
@@ -174,9 +186,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
             mainLogger.info("Current XP: " + level.getCurrentXP());
             mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
-            if (levelIncrease) {
-                applyLevelUp();
-            }
 
             RandomHealOnKill();
 
@@ -197,7 +206,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         if (!this.invincible) {
             super.dealDamage(damage, attacker);
         }
-        mainLogger.info(this.toString() + ": " + health + " health left");
+        mainLogger.info(this.toString() + ": " + this.getHealth() + " health left");
 
         notifyObservers();
 
@@ -219,7 +228,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
     }
 
-    private void ToggleGodMode() {
+    private void toggleGodMode() {
         this.invincible = !this.invincible;
 
         if (this.invincible) {
@@ -239,22 +248,12 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     public Hero() {
         super();
-        movementSpeed=0.13f;
-        // combat-characteristics:
-        health = 200.f;
-        maxHealth = 200.f;
-
-        baseHitChance = 0.6f;
-        hitChanceModifierWeapon = 1.f;
-        hitChanceModifierScroll = 1.f;
-
-        baseAttackDamage = 50;
-        attackDamageModifierWeapon = 1.f;
-        attackDamageModifierScroll = 1.f;
-
-        baseEvasionChance = 0.15f;
-        evasionChanceModifierWeapon = 1.f;
-        evasionChanceModifierScroll = 1.f;
+        this.stats.addInPlace(AttributeType.MOVEMENT_SPEED, 0.13f);
+        this.stats.addInPlace(AttributeType.HEALTH, 200.f);
+        this.stats.addInPlace(AttributeType.MAX_HEALTH, 200.f);
+        this.stats.addInPlace(AttributeType.HIT_CHANCE, 0.7f);
+        this.stats.addInPlace(AttributeType.PHYSICAL_ATTACK_DAMAGE, 50.f);
+        this.stats.addInPlace(AttributeType.EVASION_CHANCE, 0.15f);
 
         knockBackAble = true;
 
@@ -343,7 +342,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
-            ToggleGodMode();
+            toggleGodMode();
         }
     }
 
@@ -357,14 +356,14 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      * Resets the combat stats of the hero-
      */
     @Override
-    protected void resetCombatStats() {
-        super.resetCombatStats();
-        mainLogger.info("Combat stats reset");
+    protected void resetStats() {
+        super.resetStats();
+        mainLogger.info("Stats reset");
         notifyObservers();
     }
 
     public void onGameOver() {
-        resetCombatStats();
+        resetStats();
         this.killCount = 0;
         this.rightHandSlot = null;
         this.leftHandSlot = null;
@@ -379,6 +378,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     @Override
     protected Point readMovementInput(){
         var newPosition = new Point(this.getPosition());
+        var movementSpeed = this.stats.getValue(AttributeType.MOVEMENT_SPEED);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             newPosition.y += movementSpeed;
         }else{
@@ -470,13 +470,32 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         return false;
     }
 
-    private void updateStats(Weapon weapon){
-        attackDamageModifierWeapon = weapon.getAttackDamageModifier(); //When absolut
-        hitChanceModifierWeapon = weapon.getHitChanceModifier();
+    private void updateWeaponModifiers(Weapon oldWeapon, Weapon newWeapon){
+        if (null != oldWeapon) {
+            for (var mod : oldWeapon.getModifiers()) {
+                this.stats.removeModifierFromAttribut(mod);
+            }
+        }
+
+        if (null != newWeapon) {
+            for (var mod : newWeapon.getModifiers()) {
+                this.stats.applyModToAttribute(mod);
+            }
+        }
     }
 
-    private void updateStats(Shield shield){
-        evasionChanceModifierWeapon = shield.getDefenseValue();
+    private void updateShieldStats(Shield oldShield, Shield newShield){
+        if (null != oldShield) {
+            for (var mod : oldShield.getModifiers()) {
+                this.stats.removeModifierFromAttribut(mod);
+            }
+        }
+
+        if (null != newShield) {
+            for (var mod : newShield.getModifiers()) {
+                this.stats.applyModToAttribute(mod);
+            }
+        }
     }
 
     /**
@@ -486,9 +505,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     @Override
     public void visit(Weapon weapon){
         //TODO - Error if Inventory is full!
+        updateWeaponModifiers(rightHandSlot, weapon);
         if (rightHandSlot != null) { inventory.addItem(rightHandSlot); }
         rightHandSlot = weapon;
-        updateStats(weapon);
         mainLogger.info("visit weapon");
         notifyObservers();
     }
@@ -499,9 +518,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
      */
     @Override
     public void visit(Shield shield){
+        updateShieldStats(leftHandSlot, shield);
         if (leftHandSlot != null) { inventory.addItem(leftHandSlot); }
         leftHandSlot = shield;
-        updateStats(shield);
         mainLogger.info("visit shield");
         notifyObservers();
     }

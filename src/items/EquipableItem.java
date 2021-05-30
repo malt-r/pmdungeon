@@ -1,4 +1,9 @@
 package items;
+
+import stats.Modifier;
+
+import java.util.ArrayList;
+
 /**
  * Abstract Base class for equioable items.
  * <p>
@@ -6,6 +11,12 @@ package items;
  * </p>
  */
 public abstract class EquipableItem extends Item{
+
+  protected ArrayList<Modifier> modifiers = new ArrayList<>();
+
+  public ArrayList<Modifier> getModifiers() {
+    return modifiers;
+  }
 
   /**
    * Constructor of the EquipableItem class.
