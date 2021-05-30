@@ -1,22 +1,22 @@
 package main;
 
+import static stats.Attribute.AttributeType;
+import static util.math.Convenience.scaleDelta;
+
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import progress.effect.OneShotEffect;
-import progress.effect.PersistentEffect;
-import stats.Stats;
-import util.math.Vec;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import progress.effect.OneShotEffect;
+import progress.effect.PersistentEffect;
+import stats.Stats;
+import util.math.Vec;
 
-import static stats.Attribute.AttributeType;
-import static util.math.Convenience.scaleDelta;
 
 /**
  * The controllable player character.
@@ -26,7 +26,7 @@ import static util.math.Convenience.scaleDelta;
 public abstract class Actor extends DrawableEntity implements ICombatable {
   private final Timer attackTimer;
   private final Timer hitTimer;
-  /** Animation types */
+  /** Animation types. */
   protected Animation idleAnimationRight;
 
   protected Animation idleAnimationLeft;
@@ -77,6 +77,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    *
    * <p>This constructor will instantiate the animations and read all required texture data.
    */
+
   public Actor() {
     lookLeft = false;
     canAttack = true;
@@ -109,7 +110,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Gets the health of the actor
+   * Gets the health of the actor.
    *
    * @return health of the actor
    */
@@ -119,7 +120,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * sets the health of the actor
+   * sets the health of the actor.
    *
    * @param health The new value for the health backing field.
    */
@@ -129,7 +130,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * If the actor is passive
+   * If the actor is passive.
    *
    * @return if the actor is passive
    */
@@ -139,7 +140,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * if the actor has a target for combat
+   * if the actor has a target for combat.
    *
    * @return if the actor has a target
    */
@@ -149,7 +150,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Returns of the actor has a target
+   * Returns of the actor has a target.
    *
    * @return if the acor ahs a target
    */
@@ -159,7 +160,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Sets the target of the actor
+   * Sets the target of the actor.
    *
    * @param target The ICombatable to cache as a target.
    */
@@ -169,7 +170,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Returns of the other is friendly for combat
+   * Returns of the other is friendly for combat.
    *
    * @param other The other ICombatable.
    * @return if the other is friendly
@@ -180,7 +181,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Gets the Hitchance for combat
+   * Gets the Hitchance for combat.
    *
    * @return value of the hitchance
    */
@@ -190,7 +191,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Gets the evasion rate of the actor
+   * Gets the evasion rate of the actor.
    *
    * @return evasion rate of the actor
    */
@@ -200,7 +201,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * gets the damage value for combat
+   * gets the damage value for combat.
    *
    * @return damage value of the actor
    */
@@ -214,7 +215,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Attack implementation for combat
+   * Attack implementation for combat.
    *
    * @param other The ICombatable to attack.
    * @return if the attack was sucessfull
@@ -236,7 +237,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Resolves if another attack is possible
+   * Resolves if another attack is possible.
    *
    * @return an attack is possible
    */
@@ -246,7 +247,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Deals damage to this actor
+   * Deals damage to this actor.
    *
    * @param damage The amount to decrease the health by.
    * @param attacker The ICombatable which deals the damage.
@@ -261,7 +262,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Heals the actor
+   * Heals the actor.
    *
    * @param amount The amount to increase the health value by.
    */
@@ -407,7 +408,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     }
   }
 
-  /** Generates the animations of the actor */
+  /** Generates the animations of the actor. */
   @Override
   protected void generateAnimations() {
     String[] idleLeftFrames =
@@ -442,7 +443,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Sets the current animation
+   * Sets the current animation.
    *
    * @param animationState animation state which the actor is currently in
    */
@@ -521,6 +522,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         break;
       case SUSPENDED:
         break;
+      default:
+        break;
     }
     setCurrentAnimation(animationState);
     this.draw();
@@ -550,14 +553,14 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * abstract method which has to be overwritten in the sub classes this makes it possible to
-   * control an actor autoamticly or via key presisng
+   * control an actor autoamticly or via key presisng.
    *
    * @return returns the new point where the actor should be moved
    */
   protected abstract Point readMovementInput();
 
   /**
-   * Has to be overwritten for the hero, monsters do this automaticly
+   * Has to be overwritten for the hero, monsters do this automaticly.
    *
    * @return if pickup input has been read
    */
@@ -565,7 +568,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     return false;
   }
 
-  /** Handles Item picking of the actor */
+  /** Handles Item picking of the actor. */
   protected void handleItemPicking() {}
 
   /**

@@ -50,7 +50,7 @@ public class Spawner {
     }
 
     for (var chestType : levelContent.chests) {
-      var chest = ChestFactory.CreateChest(chestType);
+      var chest = ChestFactory.createChest(chestType);
       chest.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info("Chest " + chestType.toString() + " spawned");
       listToAdd.add(chest);
@@ -116,6 +116,6 @@ public class Spawner {
    */
   public static Chest spawnChest(ChestType chestType) throws Exception {
     mainLogger.info("Chest " + chestType.toString() + " spawned");
-    return ChestFactory.CreateChest(chestType);
+    return ChestFactory.createChest(chestType);
   }
 }

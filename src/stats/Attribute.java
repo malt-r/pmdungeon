@@ -19,6 +19,7 @@ public class Attribute {
   private final ArrayList<Modifier> multipliers = new ArrayList<>();
   private final ArrayList<Modifier> adders = new ArrayList<>();
   private float effectiveValue;
+
   /**
    * Constructor.
    *

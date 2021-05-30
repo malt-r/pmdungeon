@@ -1,9 +1,8 @@
 package progress.ability;
 
-import main.Actor;
-
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
+import main.Actor;
 
 /**
  * This encapsulates the logic needed to apply effects to a set of defined Actors (implementation
@@ -50,7 +49,7 @@ public abstract class Ability {
   }
 
   /**
-   * Activates this ability (apply effects to Actors)
+   * Activates this ability (apply effects to Actors).
    *
    * @param origin The Actor, which activates this ability.
    */

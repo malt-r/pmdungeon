@@ -78,7 +78,7 @@ public class DebugControl {
       entityController.addEntity(shieldEagle);
       shieldEagle.setLevel(levelController.getDungeon());
 
-      var chest1 = ChestFactory.CreateChest(ChestType.NORMAL);
+      var chest1 = ChestFactory.createChest(ChestType.NORMAL);
       entityController.addEntity(chest1);
       chest1.setLevel(levelController.getDungeon());
 

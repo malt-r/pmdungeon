@@ -7,12 +7,16 @@ package items.chests;
  */
 public class ChestFactory {
   /**
+   * Factory for chests.
+   *
    * @param chestType Type of the chest
    * @return A chest, of the specified type.
    * @throws Exception if chestType is not supported
    */
-  public static Chest CreateChest(ChestType chestType) throws Exception {
-    if (chestType == ChestType.NORMAL) return new Chest();
+  public static Chest createChest(ChestType chestType) throws Exception {
+    if (chestType == ChestType.NORMAL) {
+      return new Chest();
+    }
     throw new Exception("ItemType no supported");
   }
 }

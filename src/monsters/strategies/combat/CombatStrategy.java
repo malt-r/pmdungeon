@@ -2,7 +2,7 @@ package monsters.strategies.combat;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
-/** Interface for defining combat strategies that can be used by monsters */
+/** Interface for defining combat strategies that can be used by monsters. */
 public interface CombatStrategy {
   /**
    * Calculates if the Target position is in range.

@@ -23,7 +23,7 @@ public class AttackScroll extends Scroll {
   }
 
   /**
-   * Returns the heal value of the potion which can be used for display purposes
+   * Returns the heal value of the potion which can be used for display purposes.
    *
    * @return attackbonus of the scroll
    */
@@ -32,7 +32,7 @@ public class AttackScroll extends Scroll {
   }
 
   /**
-   * Returns the name of the scroll which can be used for display purposes
+   * Returns the name of the scroll which can be used for display purposes.
    *
    * @return Name of the scroll
    */
@@ -42,7 +42,7 @@ public class AttackScroll extends Scroll {
   }
 
   /**
-   * Returns the deescription of the potion which can be used for display purposes
+   * Returns the deescription of the potion which can be used for display purposes.
    *
    * @return description of the potion
    */

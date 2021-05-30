@@ -33,7 +33,7 @@ public class Chest extends DrawableEntity {
   }
 
   /**
-   * Returns the inventory of the chest
+   * Returns the inventory of the chest.
    *
    * @return inventory of the chest
    */
@@ -53,7 +53,7 @@ public class Chest extends DrawableEntity {
   }
 
   /**
-   * Opens the inventory of the chest
+   * Opens the inventory of the chest.
    *
    * @param opener opener of the chest
    */

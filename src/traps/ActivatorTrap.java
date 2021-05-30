@@ -1,11 +1,11 @@
 package traps;
 
+import static util.math.Convenience.checkForIntersection;
+
 import items.Item;
+import java.util.Random;
 import monsters.MonsterType;
 
-import java.util.Random;
-
-import static util.math.Convenience.checkForIntersection;
 
 /**
  * The base class for a Activator trap.
@@ -80,8 +80,8 @@ public class ActivatorTrap extends Trap {
       int upperbound = 100;
 
       for (int i = 0; i < 3; i++) {
-        int int_random = rand.nextInt(upperbound);
-        if (int_random % 2 == 0) {
+        int intRandom = rand.nextInt(upperbound);
+        if (intRandom % 2 == 0) {
           game.spawnMonster(MonsterType.LIZARD, this.getPosition());
         } else {
           game.spawnMonster(MonsterType.DEMON, this.getPosition());

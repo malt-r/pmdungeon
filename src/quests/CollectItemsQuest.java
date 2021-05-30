@@ -4,11 +4,10 @@ import GUI.InventoryObserver;
 import items.Item;
 import items.ItemFactory;
 import items.inventory.Inventory;
+import java.util.ArrayList;
 import main.Hero;
 
-import java.util.ArrayList;
-
-/** Quest to collect random number of items */
+/** Quest to collect random number of items. */
 public class CollectItemsQuest extends Quest implements InventoryObserver {
   private final int toCollect;
   private final Hero hero;
@@ -16,7 +15,7 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   private int collected;
 
   /**
-   * constructor
+   * constructor.
    *
    * @param hero hero to observe the inventory of.
    */
@@ -29,6 +28,14 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
     this.reward = new QuestReward(items, xp);
   }
 
+
+  /**
+   * Constructor.
+   *
+   * @param hero The hero.
+   * @param rewardItems The rewards.
+   * @param toCollect Number of items to collect.
+   */
   public CollectItemsQuest(Hero hero, ArrayList<Item> rewardItems, int toCollect) {
     this.hero = hero;
     this.toCollect = toCollect;
@@ -44,7 +51,7 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return The Quest name.
    */
   @Override
   public String getQuestName() {
@@ -54,7 +61,7 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return The progress string.
    */
   @Override
   public String getProgressString() {
@@ -64,7 +71,7 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return the description.
    */
   @Override
   public String getDescription() {
@@ -74,7 +81,6 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void setup() {
@@ -85,7 +91,6 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void cleanup() {
@@ -96,7 +101,7 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
+   * @return true if finished.
    */
   @Override
   public boolean isFinished() {
@@ -106,7 +111,6 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void update(Inventory inv, boolean fromHero) {
