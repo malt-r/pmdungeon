@@ -1,12 +1,15 @@
 package main;
 
-import gui.HeroObserver;
+import static stats.Attribute.AttributeType;
+import static stats.Modifier.ModifierType;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.tiles.Tile;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import gui.HeroObserver;
 import items.Item;
 import items.chests.Chest;
 import items.inventory.Inventory;
@@ -17,6 +20,7 @@ import items.scrolls.SpeedScroll;
 import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
+import java.util.ArrayList;
 import progress.Level;
 import progress.ability.KnockbackAbility;
 import progress.ability.SprintAbility;
@@ -25,10 +29,6 @@ import stats.Modifier;
 import util.math.Convenience;
 import util.math.Vec;
 
-import java.util.ArrayList;
-
-import static stats.Attribute.AttributeType;
-import static stats.Modifier.ModifierType;
 
 /**
  * The controllable player character.
@@ -100,7 +100,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   // TODO: turn this into an ability
-  private void RandomHealOnKill() {
+  private void randomHealOnKill() {
     float rand = (float) Math.random();
     if (rand < healOnKillChance) {
       this.heal(healOnKillAmount);
@@ -116,8 +116,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   @Override
   protected boolean inRangeFunc(Point p) {
 
-    if (new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() >= getRangeOfWeapon())
+    if (new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() >= getRangeOfWeapon()) {
       return false;
+    }
 
     Vec direction = new Vec(p).subtract(new Vec(this.getPosition()));
     Vec location = new Vec(this.getPosition());
@@ -219,7 +220,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
       mainLogger.info("Current XP: " + level.getCurrentXP());
       mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
 
-      RandomHealOnKill();
+      randomHealOnKill();
 
       this.killCount++;
       notifyObservers();
