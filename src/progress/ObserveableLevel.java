@@ -3,7 +3,7 @@ package progress;
 import gui.LevelObserver;
 
 /**
- * Observablelevel
+ * Observablelevel.
  */
 public interface ObserveableLevel {
   void register(LevelObserver observer);

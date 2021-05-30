@@ -14,9 +14,15 @@ public class MonsterFactory {
    * @throws Exception if monsterType is not supported
    */
   public static Monster createMonster(MonsterType monsterType) throws Exception {
-    if (monsterType == MonsterType.DEMON) {return new DemonMonster();}
-    if (monsterType == MonsterType.LIZARD){ return new LizardMonster();}
-    if (monsterType == MonsterType.CHEST) {return new ChestMonster();}
+    if (monsterType == MonsterType.DEMON) {
+      return new DemonMonster();
+    }
+    if (monsterType == MonsterType.LIZARD) {
+      return new LizardMonster();
+    }
+    if (monsterType == MonsterType.CHEST) {
+      return new ChestMonster();
+    }
     throw new Exception("MonsterType no supported");
   }
 }

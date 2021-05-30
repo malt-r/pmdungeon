@@ -215,10 +215,10 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
       mainLogger.info("Other has been slain!");
 
       // TODO: specify xp amount based on monster kind
-      boolean levelIncrease = this.level.increaseXP(75);
+      boolean levelIncrease = this.level.increaseXp(75);
 
-      mainLogger.info("Current XP: " + level.getCurrentXP());
-      mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
+      mainLogger.info("Current XP: " + level.getCurrentXp());
+      mainLogger.info("XP to next Level: " + level.getXpForNextLevelLeft());
 
       randomHealOnKill();
 
@@ -665,7 +665,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   public void applyReward(QuestReward reward) {
     if (null != reward) {
       // apply xp
-      this.level.increaseXP(reward.getXp());
+      this.level.increaseXp(reward.getXp());
 
       // add items to inventory or drop them on the floor
       int freeSlots = this.inventory.getNumFreeSlots();

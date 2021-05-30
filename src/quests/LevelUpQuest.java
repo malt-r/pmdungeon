@@ -3,9 +3,11 @@ package quests;
 import gui.LevelObserver;
 import items.Item;
 import items.ItemFactory;
+import java.util.ArrayList;
 import main.Hero;
 import progress.Level;
-import java.util.ArrayList;
+
+
 
 /** Quest to level up random amount of levels. */
 public class LevelUpQuest extends Quest implements LevelObserver {
@@ -30,7 +32,8 @@ public class LevelUpQuest extends Quest implements LevelObserver {
   }
 
   /**
-   * LevelUpQuest
+   * LevelUpQuest.
+   *
    * @param hero hero
    * @param rewardItems rewardItems
    * @param levelsToLevel levelsToLevel
@@ -43,19 +46,13 @@ public class LevelUpQuest extends Quest implements LevelObserver {
     this.reward = new QuestReward(rewardItems, xp);
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   */
+  /** {@inheritDoc} */
   @Override
   public String getQuestName() {
     return "Level go brrr";
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   */
+  /** {@inheritDoc} */
   @Override
   public String getProgressString() {
     return "Level up "
@@ -75,9 +72,7 @@ public class LevelUpQuest extends Quest implements LevelObserver {
     return "Levels to level up: " + this.levels;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public void setup() {
     this.hero.getLevel().register(this);
@@ -85,10 +80,7 @@ public class LevelUpQuest extends Quest implements LevelObserver {
     this.isFinished = false;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   */
+  /** {@inheritDoc} */
   @Override
   public void cleanup() {
     super.cleanup();
@@ -105,10 +97,7 @@ public class LevelUpQuest extends Quest implements LevelObserver {
     return isFinished;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   */
+  /** {@inheritDoc} */
   @Override
   public void update(Level level) {
     mainLogger.info("startLevel: " + this.startLevel);

@@ -3,7 +3,7 @@ package items.inventory;
 import gui.OpenStateObserver;
 
 /**
- * ObservableOpenState
+ * ObservableOpenState.
  */
 public interface ObservableOpenState {
   void register(OpenStateObserver observer);

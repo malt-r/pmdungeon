@@ -2,14 +2,14 @@ package progress.ability;
 
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import main.Actor;
 import main.Game;
 import progress.effect.KnockBackEffect;
 import util.math.Convenience;
 import util.math.Vec;
 
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
 
 /**
  * Ability to knock back other Actors in an area of effect.

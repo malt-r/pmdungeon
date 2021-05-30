@@ -30,8 +30,8 @@ public class LevelUpQuestTest {
     quest.setup();
     quest.cleanup();
 
-    hero.getLevel().increaseXP(100);
-    hero.getLevel().increaseXP(1000);
+    hero.getLevel().increaseXp(100);
+    hero.getLevel().increaseXp(1000);
 
     assertFalse(quest.isFinished());
   }
@@ -40,7 +40,7 @@ public class LevelUpQuestTest {
   public void testNotFinished() {
     quest.setup();
 
-    hero.getLevel().increaseXP(100);
+    hero.getLevel().increaseXp(100);
 
     assertEquals(quest.isFinished(), false);
   }
@@ -50,8 +50,8 @@ public class LevelUpQuestTest {
     quest.setup();
 
     // this should level at least two levels..
-    hero.getLevel().increaseXP(100);
-    hero.getLevel().increaseXP(1000);
+    hero.getLevel().increaseXp(100);
+    hero.getLevel().increaseXp(1000);
 
     assertEquals(quest.isFinished(), true);
   }
@@ -60,8 +60,8 @@ public class LevelUpQuestTest {
   public void testReward() {
     quest.setup();
 
-    hero.getLevel().increaseXP(100);
-    hero.getLevel().increaseXP(1000);
+    hero.getLevel().increaseXp(100);
+    hero.getLevel().increaseXp(1000);
 
     var reward = quest.getReward();
     assertNotNull(reward);
@@ -71,8 +71,8 @@ public class LevelUpQuestTest {
   public void testLockReward() {
     quest.setup();
 
-    hero.getLevel().increaseXP(100);
-    hero.getLevel().increaseXP(1000);
+    hero.getLevel().increaseXp(100);
+    hero.getLevel().increaseXp(1000);
     quest.cleanup();
 
     var reward = quest.getReward();

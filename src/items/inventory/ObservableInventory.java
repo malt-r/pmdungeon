@@ -3,7 +3,7 @@ package items.inventory;
 import gui.InventoryObserver;
 
 /**
- * ObservableInventory
+ * ObservableInventory.
  */
 public interface ObservableInventory {
   void register(InventoryObserver observer);

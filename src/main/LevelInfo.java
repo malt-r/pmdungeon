@@ -2,11 +2,12 @@ package main;
 
 import items.ItemType;
 import items.chests.ChestType;
+import java.util.ArrayList;
 import monsters.MonsterType;
 import quests.QuestGiverType;
 import traps.TrapType;
 
-import java.util.ArrayList;
+
 
 /**
  * Class for holding and acessing all LevelContents.

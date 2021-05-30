@@ -6,6 +6,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.TextStage;
 import main.Game;
 import progress.Level;
 
+/** LevelOverview. */
 public class LevelOverview implements LevelObserver {
   private final TextStage texthud;
   private final Game game;
@@ -13,7 +14,8 @@ public class LevelOverview implements LevelObserver {
   private Label levelLabel;
 
   /**
-   * Leveloverview
+   * Leveloverview.
+   *
    * @param texthud texthud
    */
   public LevelOverview(TextStage texthud) {
@@ -30,9 +32,9 @@ public class LevelOverview implements LevelObserver {
         texthud.drawText(
             game.getHero().getLevel().getCurrentLevel()
                 + "    "
-                + game.getHero().getLevel().getCurrentXP()
+                + game.getHero().getLevel().getCurrentXp()
                 + "/"
-                + game.getHero().getLevel().getXPForNextLevelTotal(),
+                + game.getHero().getLevel().getXpForNextLevelTotal(),
             "fonts/Pixeled.ttf",
             Color.YELLOW,
             20,
@@ -52,8 +54,8 @@ public class LevelOverview implements LevelObserver {
     levelLabel.setText(
         level.getCurrentLevel()
             + " "
-            + level.getCurrentXP()
+            + level.getCurrentXp()
             + "/"
-            + level.getXPForNextLevelTotal());
+            + level.getXpForNextLevelTotal());
   }
 }

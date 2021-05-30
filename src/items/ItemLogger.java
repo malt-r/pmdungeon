@@ -11,14 +11,14 @@ import stats.Modifier;
 
 import java.util.logging.Logger;
 
-/** Itemlogger class for logging information about items */
+/** Itemlogger class for logging information about items. */
 public class ItemLogger implements IItemVisitor {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   /**
-   * visits a generic weapon
+   * visits a generic weapon.
    *
-   * @param weapon weapon which should be visited
+   * @param weapon weapon which should be visited.
    */
   @Override
   public void visit(Weapon weapon) {
@@ -42,9 +42,9 @@ public class ItemLogger implements IItemVisitor {
   }
 
   /**
-   * Visits a generic shield
+   * Visits a generic shield.
    *
-   * @param shield weapon which should be visited
+   * @param shield weapon which should be visited.
    */
   @Override
   public void visit(Shield shield) {
@@ -53,9 +53,9 @@ public class ItemLogger implements IItemVisitor {
   }
 
   /**
-   * visits a Poisonpotion
+   * visits a Poisonpotion.
    *
-   * @param potion weapon which should be visited
+   * @param potion weapon which should be visited.
    */
   @Override
   public void visit(PoisonPotion potion) {
@@ -63,9 +63,9 @@ public class ItemLogger implements IItemVisitor {
   }
 
   /**
-   * visits a heath potion
+   * visits a heath potion.
    *
-   * @param potion weapon which should be visited
+   * @param potion weapon which should be visited.
    */
   @Override
   public void visit(HealthPotion potion) {
@@ -73,9 +73,9 @@ public class ItemLogger implements IItemVisitor {
   }
 
   /**
-   * visits an attack scroll
+   * visits an attack scroll.
    *
-   * @param scroll weapon which should be visited
+   * @param scroll weapon which should be visited.
    */
   @Override
   public void visit(AttackScroll scroll) {
@@ -83,9 +83,9 @@ public class ItemLogger implements IItemVisitor {
   }
 
   /**
-   * visits a speedscroll
+   * visits a speedscroll.
    *
-   * @param scroll scroll which should be visited
+   * @param scroll scroll which should be visited.
    */
   @Override
   public void visit(SpeedScroll scroll) {
@@ -93,9 +93,9 @@ public class ItemLogger implements IItemVisitor {
   }
 
   /**
-   * visits a supervision scroll
+   * visits a supervision scroll.
    *
-   * @param scroll
+   * @param scroll scroll
    */
   @Override
   public void visit(SupervisionScroll scroll) {

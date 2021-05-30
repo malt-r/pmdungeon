@@ -1,10 +1,11 @@
 package progress;
 
 import gui.LevelObserver;
+import java.util.ArrayList;
 import main.Actor;
 import progress.ability.Ability;
 
-import java.util.ArrayList;
+
 
 /**
  * Encapsulates basic calculations for progress. Calculates the amount of xp needed to reach the
@@ -28,6 +29,12 @@ public class Level implements ObserveableLevel {
     this.levelUpCallback = levelUpCallback;
   }
 
+  /**
+   * addAbility.
+   *
+   * @param ability ability
+   * @return if sucessfull
+   */
   public boolean addAbility(Ability ability) {
     for (var ab : abilities) {
       if (ab.getClass() == ability.getClass()) {
@@ -38,12 +45,20 @@ public class Level implements ObserveableLevel {
     return true;
   }
 
+  /**
+   * checkForAbilityActivation.
+   *
+   * @param origin origin
+   */
   public void checkForAbilityActivation(Actor origin) {
     for (Ability ability : abilities) {
       ability.checkForActivation(origin);
     }
   }
 
+  /**
+   * resets the level.
+   */
   public void reset() {
     this.abilities.clear();
     this.xp = 0;
@@ -54,9 +69,9 @@ public class Level implements ObserveableLevel {
   /**
    * Get current xp.
    *
-   * @return
+   * @return current xp.
    */
-  public int getCurrentXP() {
+  public int getCurrentXp() {
     return xp;
   }
 
@@ -66,10 +81,10 @@ public class Level implements ObserveableLevel {
    * @param amount The amount of xp to add
    * @return True, if a level up occured (temporary solution and this will likely change).
    */
-  public boolean increaseXP(int amount) {
+  public boolean increaseXp(int amount) {
     this.xp += amount;
     // level up
-    int xpForNextLevel = getXPForNextLevelTotal();
+    int xpForNextLevel = getXpForNextLevelTotal();
     if (this.xp >= xpForNextLevel) {
       this.xp -= xpForNextLevel;
       this.level += 1;
@@ -105,19 +120,19 @@ public class Level implements ObserveableLevel {
   /**
    * Calculates the amount of xp left to reach the new level.
    *
-   * @return
+   * @return nextlevel left
    */
-  public int getXPForNextLevelLeft() {
-    int total = getXPForNextLevelTotal();
+  public int getXpForNextLevelLeft() {
+    int total = getXpForNextLevelTotal();
     return total - this.xp;
   }
 
   /**
    * Calculates the total amount of xp to acquire to reach the new level.
    *
-   * @return
+   * @return nextleveltotal
    */
-  public int getXPForNextLevelTotal() {
+  public int getXpForNextLevelTotal() {
     return (int) Math.pow(((double) this.level * (double) this.xpConstant), 2);
   }
 
@@ -131,9 +146,9 @@ public class Level implements ObserveableLevel {
   }
 
   /**
-   * Registers an observer
+   * Registers an observer.
    *
-   * @param observer to be registered
+   * @param observer to be registered.
    */
   @Override
   public void register(LevelObserver observer) {
@@ -141,16 +156,16 @@ public class Level implements ObserveableLevel {
   }
 
   /**
-   * Unregisters an observer
+   * Unregisters an observer.
    *
-   * @param observer to be unregistered
+   * @param observer to be unregistered.
    */
   @Override
   public void unregister(LevelObserver observer) {
     this.observerList.remove(observer);
   }
 
-  /** notifies all observers */
+  /** notifies all observers. */
   @Override
   public void notifyObservers() {
     int numObservers = observerList.size();

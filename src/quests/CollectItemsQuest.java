@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import main.Hero;
 
 /** Quest to collect random number of items. */
-public class collectItemsQuest extends Quest implements InventoryObserver {
+public class CollectItemsQuest extends Quest implements InventoryObserver {
   private final int toCollect;
   private final Hero hero;
   private int invCountLastUpdate;
@@ -19,7 +19,7 @@ public class collectItemsQuest extends Quest implements InventoryObserver {
    *
    * @param hero hero to observe the inventory of.
    */
-  public collectItemsQuest(Hero hero) {
+  public CollectItemsQuest(Hero hero) {
     this.hero = hero;
     this.toCollect = util.math.Convenience.getRandBetween(3, 8);
     int xp = this.toCollect * 10;
@@ -36,7 +36,7 @@ public class collectItemsQuest extends Quest implements InventoryObserver {
    * @param rewardItems The rewards.
    * @param toCollect Number of items to collect.
    */
-  public collectItemsQuest(Hero hero, ArrayList<Item> rewardItems, int toCollect) {
+  public CollectItemsQuest(Hero hero, ArrayList<Item> rewardItems, int toCollect) {
     this.hero = hero;
     this.toCollect = toCollect;
     int xp = this.toCollect * 10;

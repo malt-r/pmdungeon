@@ -3,7 +3,7 @@ package main;
 import gui.HeroObserver;
 
 /**
- * ObservableHero
+ * ObservableHero.
  */
 public interface ObservableHero {
   void register(HeroObserver observer);

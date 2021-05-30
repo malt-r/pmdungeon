@@ -3,11 +3,11 @@ package quests;
 import gui.HeroObserver;
 import items.Item;
 import items.ItemFactory;
+import java.util.ArrayList;
 import main.Hero;
 
-import java.util.ArrayList;
 
-/** Quest to kill random amount of monsters */
+/** Quest to kill random amount of monsters. */
 public class KillMonstersQuest extends Quest implements HeroObserver {
   private final int toKill;
   private final Hero hero;
@@ -28,6 +28,14 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
     this.reward = new QuestReward(items, xp);
   }
 
+  /**
+   * KillMonstersQuest.
+   *
+   *
+   * @param hero hero
+   *
+   * @param rewardItems rewardItems
+   */
   public KillMonstersQuest(Hero hero, ArrayList<Item> rewardItems) {
     this.hero = hero;
     this.toKill = util.math.Convenience.getRandBetween(3, 8);
@@ -44,7 +52,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public String getQuestName() {
@@ -54,7 +61,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public String getProgressString() {
@@ -64,7 +70,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public String getDescription() {
@@ -74,7 +79,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void setup() {
@@ -85,7 +89,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void cleanup() {
@@ -96,7 +99,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public boolean isFinished() {
@@ -106,7 +108,6 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
   /**
    * {@inheritDoc}
    *
-   * @return
    */
   @Override
   public void update(Hero hero) {
