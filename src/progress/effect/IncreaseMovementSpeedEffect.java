@@ -1,7 +1,5 @@
 package progress.effect;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import main.Actor;
 import stats.Attribute;
 import stats.Modifier;
@@ -14,8 +12,6 @@ import java.util.concurrent.Callable;
  */
 public class IncreaseMovementSpeedEffect extends PersistentEffect {
     Modifier modifier ;
-    //private float movementSpeedMultiplier = 1.5f;
-    //private EffectRemovalCheck removalCheck;
     private Callable<Boolean> removalCheck;
 
     @Override
@@ -32,7 +28,6 @@ public class IncreaseMovementSpeedEffect extends PersistentEffect {
     public void onApply(Actor target) {
         target.getStats().applyModToAttribute(modifier);
         mainLogger.info("On Apply");
-        //target.applyMovementSpeedMultiplier(movementSpeedMultiplier);
     }
 
     @Override
@@ -46,6 +41,5 @@ public class IncreaseMovementSpeedEffect extends PersistentEffect {
         if (target.getStats().getValue(Attribute.AttributeType.MOVEMENT_SPEED) > 0.14f) {
             boolean bBreak = true;
         }
-        //target.applyMovementSpeedMultiplier(1.f);
     }
 }
