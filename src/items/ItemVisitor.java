@@ -9,7 +9,7 @@ import items.shields.Shield;
 import items.weapons.Weapon;
 
 /** This interface implements an visitor for all items in the game */
-public interface IItemVisitor {
+public interface ItemVisitor {
   /**
    * Fallback if no concrete implementation exists.
    *

@@ -6,7 +6,7 @@ import items.Item;
 
 import java.util.logging.Logger;
 
-public class InventorySelectState implements IInventoryControlState {
+public class InventorySelectState implements InventoryControlState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
   int selectorIdx;
 
@@ -21,8 +21,8 @@ public class InventorySelectState implements IInventoryControlState {
   }
 
   @Override
-  public IInventoryControlState handleInput(Inventory inventory) {
-    IInventoryControlState nextState = null;
+  public InventoryControlState handleInput(Inventory inventory) {
+    InventoryControlState nextState = null;
     if (Gdx.input.isKeyJustPressed((Input.Keys.ESCAPE))) {
       nextState = new OwnInventoryOpenState(this.selectorIdx);
     } else if (Gdx.input.isKeyJustPressed((Input.Keys.Q))) {

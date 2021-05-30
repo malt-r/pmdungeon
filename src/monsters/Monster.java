@@ -2,7 +2,7 @@ package monsters;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Actor;
-import main.ICombatable;
+import main.Combatable;
 import java.util.Timer;
 import java.util.TimerTask;
 import monsters.strategies.combat.CombatStrategy;
@@ -64,7 +64,7 @@ public abstract class Monster extends Actor {
    * @return if the other combatable instance is friendly
    */
   @Override
-  public boolean isOtherFriendly(ICombatable other) {
+  public boolean isOtherFriendly(Combatable other) {
     return other instanceof Monster;
   }
 
@@ -81,7 +81,7 @@ public abstract class Monster extends Actor {
    * @param damage The damage value that should be deducted from health.
    */
   @Override
-  public void dealDamage(float damage, ICombatable attacker) {
+  public void dealDamage(float damage, Combatable attacker) {
     super.dealDamage(damage, attacker);
     var maxHealth = this.stats.getValue(Attribute.AttributeType.MAX_HEALTH);
     if (this.isDead()) {

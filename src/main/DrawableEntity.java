@@ -23,8 +23,8 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
   public static Game game;
   protected DungeonWorld level;
   protected Animation currentAnimation;
-  protected ArrayList<IDrawableEntityObserver> observers = new ArrayList<>();
-  protected ArrayList<IDrawableEntityObserver> observerToRemove = new ArrayList<>();
+  protected ArrayList<DrawableEntityObserver> observers = new ArrayList<>();
+  protected ArrayList<DrawableEntityObserver> observerToRemove = new ArrayList<>();
   private Point position;
   private Point lastPosition;
 
@@ -143,7 +143,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
    *
    * @param observer The observer to register.
    */
-  public void register(IDrawableEntityObserver observer) {
+  public void register(DrawableEntityObserver observer) {
     if (!this.observers.contains(observer)) {
       this.observers.add(observer);
     }
@@ -154,7 +154,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
    *
    * @param observer The observer to remove from notification list.
    */
-  public void unregister(IDrawableEntityObserver observer) {
+  public void unregister(DrawableEntityObserver observer) {
     if (this.observers.contains(observer) && !this.observerToRemove.contains(observer)) {
       this.observerToRemove.add(observer);
     }

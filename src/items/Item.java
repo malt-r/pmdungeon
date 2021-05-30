@@ -42,7 +42,7 @@ public abstract class Item extends DrawableEntity {
    *
    * @param visitor visitor which should be accepted
    */
-  public void accept(IItemVisitor visitor) {
+  public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 

@@ -1,6 +1,6 @@
 package items.chests;
 
-import items.IInventoryOpener;
+import items.InventoryOpener;
 import items.Item;
 import items.ItemFactory;
 import items.inventory.Inventory;
@@ -57,7 +57,7 @@ public class Chest extends DrawableEntity {
    *
    * @param opener opener of the chest
    */
-  public void open(IInventoryOpener opener) {
+  public void open(InventoryOpener opener) {
     this.inventory.open(opener);
   }
 

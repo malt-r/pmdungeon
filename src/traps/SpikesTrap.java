@@ -3,7 +3,7 @@ package traps;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import java.util.Timer;
 import java.util.TimerTask;
-import main.ICombatable;
+import main.Combatable;
 
 
 /**
@@ -131,11 +131,11 @@ public class SpikesTrap extends Trap {
   private void dealDamage() {
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
     for (var entitiy : nearEntities) {
-      if (entitiy instanceof ICombatable) {
+      if (entitiy instanceof Combatable) {
         if (super.checkForIntersectionWithDrawable(entitiy)) {
           if (spikesTrapState == SpikesTrapState.MIDDLE_SPIKES
               || spikesTrapState == SpikesTrapState.BIG_SPIKES) {
-            ((ICombatable) entitiy).dealDamage(getDamageValue(), null);
+            ((Combatable) entitiy).dealDamage(getDamageValue(), null);
           }
         }
       }

@@ -3,7 +3,7 @@ package items.inventory;
 import gui.InventoryObserver;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-import items.IInventoryOpener;
+import items.InventoryOpener;
 import items.Item;
 import items.ItemLogger;
 import main.Game;
@@ -32,13 +32,13 @@ public class Inventory<T extends Item> implements ObservableInventory {
   /** The parent of this inventory. Used to get the position on which items should be dropped. */
   protected IDrawable parent;
   /** The current opener of an inventory. Used to transfer items to another inventory. */
-  protected items.IInventoryOpener inventoryOpener;
+  protected InventoryOpener inventoryOpener;
   /**
    * The distance which the opener can move away from this inventory before the inventory is closed.
    */
   protected float leavingDistanceThreshold = 1.f;
   /** The current state of the state machine for navigating this inventory. */
-  protected IInventoryControlState currentState;
+  protected InventoryControlState currentState;
 
   /**
    * Constructor
@@ -59,7 +59,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
    *
    * @return The current opener.
    */
-  public items.IInventoryOpener getOpener() {
+  public InventoryOpener getOpener() {
     return inventoryOpener;
   }
 
@@ -167,7 +167,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
    *
    * @param nextState the state to transition to.
    */
-  protected void transitionToNextState(IInventoryControlState nextState) {
+  protected void transitionToNextState(InventoryControlState nextState) {
     this.currentState.exit(this);
     nextState.enter(this);
     this.currentState = nextState;
@@ -186,7 +186,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
   }
 
   // check, if the opener is the parent of this inventory
-  private boolean isOpenerParent(IInventoryOpener opener) {
+  private boolean isOpenerParent(InventoryOpener opener) {
     return opener.equals(this.parent);
   }
 
@@ -215,12 +215,12 @@ public class Inventory<T extends Item> implements ObservableInventory {
    *
    * @param opener The opener of the inventory.
    */
-  public void open(IInventoryOpener opener) {
+  public void open(InventoryOpener opener) {
     this.inventoryOpener = opener;
     mainLogger.info(
         "This: " + this.parent.toString() + " Opener: " + this.inventoryOpener.toString());
 
-    IInventoryControlState nextState;
+    InventoryControlState nextState;
     if (this.getCount() == 0) {
       nextState = new InventoryEmptyState();
     } else {
@@ -256,7 +256,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
   }
 
   /** gets the current state of the state machine */
-  public IInventoryControlState getCurrentState() {
+  public InventoryControlState getCurrentState() {
     return currentState;
   }
 

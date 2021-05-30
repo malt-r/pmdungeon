@@ -23,7 +23,7 @@ import util.math.Vec;
  *
  * <p>Contains all animations, the current position in the DungeonWorld and movement logic.
  */
-public abstract class Actor extends DrawableEntity implements ICombatable {
+public abstract class Actor extends DrawableEntity implements Combatable {
   private final Timer attackTimer;
   private final Timer hitTimer;
   /** Animation types. */
@@ -67,7 +67,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   protected ArrayList<PersistentEffect> effectsScheduledForRemoval;
 
-  private ICombatable target;
+  private Combatable target;
   // currently only two looking directions are supported (left and right),
   // therefore a boolean is sufficient to represent the
   // looking direction
@@ -155,7 +155,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @return if the acor ahs a target
    */
   @Override
-  public ICombatable getTarget() {
+  public Combatable getTarget() {
     return this.target;
   }
 
@@ -165,7 +165,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @param target The ICombatable to cache as a target.
    */
   @Override
-  public void setTarget(ICombatable target) {
+  public void setTarget(Combatable target) {
     this.target = target;
   }
 
@@ -176,7 +176,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @return if the other is friendly
    */
   @Override
-  public boolean isOtherFriendly(ICombatable other) {
+  public boolean isOtherFriendly(Combatable other) {
     return false;
   }
 
@@ -221,8 +221,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @return if the attack was sucessfull
    */
   @Override
-  public float attack(ICombatable other) {
-    float damage = ICombatable.super.attack(other);
+  public float attack(Combatable other) {
+    float damage = Combatable.super.attack(other);
     // delay next attack by attackDelay ms
     this.canAttack = false;
     TimerTask resetCanAttackTask =
@@ -243,7 +243,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public boolean canAttack() {
-    return ICombatable.super.canAttack() && canAttack;
+    return Combatable.super.canAttack() && canAttack;
   }
 
   /**
@@ -253,8 +253,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @param attacker The ICombatable which deals the damage.
    */
   @Override
-  public void dealDamage(float damage, ICombatable attacker) {
-    ICombatable.super.dealDamage(damage, attacker);
+  public void dealDamage(float damage, Combatable attacker) {
+    Combatable.super.dealDamage(damage, attacker);
     this.movementState = MovementState.HIT;
     if (isKnockBackAble() && attacker != null) {
       initiateKnockBack(attacker);
@@ -354,7 +354,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    *     which the knock back should be performed (the opposite of the difference vector of
    *     this.position and other.position). Should implement IDrawable.
    */
-  protected void initiateKnockBack(ICombatable other) {
+  protected void initiateKnockBack(Combatable other) {
     if (other instanceof IDrawable) {
       var attackerPosition = ((IDrawable) other).getPosition();
       initiateKnockBackFromPoint(attackerPosition, knockBackDistance);

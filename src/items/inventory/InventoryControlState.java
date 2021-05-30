@@ -3,14 +3,14 @@ package items.inventory;
 import util.math.Vec;
 
 /** Interface for a state of the statemachine used to navigate the inventory. */
-public interface IInventoryControlState {
+public interface InventoryControlState {
   /**
    * Handle input to navigate the inventory.
    *
    * @param inventory The inventory to navigate
    * @return The next state (if the state should be changed) or null
    */
-  IInventoryControlState handleInput(Inventory inventory);
+  InventoryControlState handleInput(Inventory inventory);
 
   /**
    * Any action which should be performed when entering the state.

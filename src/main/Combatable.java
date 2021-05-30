@@ -4,7 +4,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-
 import java.util.ArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -21,7 +20,7 @@ import java.util.function.Function;
  *
  * @author malte
  */
-public interface ICombatable {
+public interface Combatable {
   /**
    * Used to get the health of the ICombatable. A backing field needs to be provided.
    *
@@ -63,7 +62,7 @@ public interface ICombatable {
    * @param damage The amount to decrease the health by.
    * @param attacker The ICombatable which deals the damage.
    */
-  default void dealDamage(float damage, ICombatable attacker) {
+  default void dealDamage(float damage, Combatable attacker) {
     setHealth(getHealth() - damage);
     if (getHealth() <= 0) {
       setHealth(0);
@@ -82,7 +81,7 @@ public interface ICombatable {
    *
    * @return The cached target.
    */
-  ICombatable getTarget();
+  Combatable getTarget();
 
   /**
    * Used to cache an ICombatable as a target in the implementor. A backing field needs to be
@@ -90,15 +89,15 @@ public interface ICombatable {
    *
    * @param target The ICombatable to cache as a target.
    */
-  void setTarget(ICombatable target);
+  void setTarget(Combatable target);
 
   /**
-   * Check, if the other ICombatable should be attacked or is friendly
+   * Check, if the other ICombatable should be attacked or is friendly.
    *
    * @param other The other ICombatable.
    * @return True, if the other ICombatable should not be attacked.
    */
-  boolean isOtherFriendly(ICombatable other);
+  boolean isOtherFriendly(Combatable other);
 
   /**
    * Used to determine, if the ICombatable should be able to attack another ICombatable.
@@ -126,7 +125,7 @@ public interface ICombatable {
    *     targets are in range for an attack.
    * @param inRangeFunc Function which determines if a given point is in range of this ICombatable.
    *     The passed Point will be the position of a potential target.
-   * @param entityFinder
+   * @param entityFinder The finder of entities.
    */
   default void attackTargetIfReachable(
       Point ownPosition,
@@ -147,9 +146,27 @@ public interface ICombatable {
     }
   }
 
-  // TODO: remove? This is the legacy way of doing this..
+  /**
+   * The main method of ICombatable, which will scan for attackable targets, cache the target and
+   * attack the target.
+   *
+   * <p>This method should be called in the update-method of an IEntity. It calls the
+   * isPassive()-method in the beginning and will switch off the searching for other ICombatables
+   * and attacking of ICombatables.
+   *
+   * <p>If currently no ICombatable is cached as a target, it will search for an ICombatable which
+   * is located on the same tile as provided by ownPosition and attack this target, if canAttack
+   * returns true.
+   *
+   * @param ownPosition The current position of the ICombatable. This is used to check, if other
+   *     targets are in range for an attack.
+   * @param level The current level.
+   * @param entities All entities of the level>
+   */
   default void attackTargetIfReachable(
-      Point ownPosition, DungeonWorld level, ArrayList<IEntity> entities) {
+      Point ownPosition,
+      DungeonWorld level,
+      ArrayList<IEntity> entities) {
     Function<Point, Boolean> inRangeFunc =
         (p) -> {
           var ownTile = level.getTileAt((int) ownPosition.x, (int) ownPosition.y);
@@ -179,7 +196,7 @@ public interface ICombatable {
    *     The position of the potential target will be passed as a parameter to this function.
    * @return True, if the target is in range, false otherwise.
    */
-  default boolean isTargetInRange(ICombatable target, Function<Point, Boolean> isInRangeFunc) {
+  default boolean isTargetInRange(Combatable target, Function<Point, Boolean> isInRangeFunc) {
     if (target instanceof IDrawable) {
       Point otherPosition = ((IDrawable) target).getPosition();
 
@@ -227,7 +244,7 @@ public interface ICombatable {
    *     checked, if they are a potential target.
    * @return The found target. If no suitable target is found, null.
    */
-  default ICombatable findTarget(
+  default Combatable findTarget(
       Point ownPosition,
       BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder,
       Function<Point, Boolean> inRangeFunc) {
@@ -244,8 +261,8 @@ public interface ICombatable {
 
     // Todo - find nearest target
     for (DrawableEntity entity : entities) {
-      if (!entity.equals(this) && entity instanceof ICombatable) {
-        var combatable = (ICombatable) entity;
+      if (!entity.equals(this) && entity instanceof Combatable) {
+        var combatable = (Combatable) entity;
         if (!isOtherFriendly(combatable)) {
           // is in range/on the same tile?
           if (isTargetInRange(combatable, inRangeFunc)) {
@@ -300,7 +317,7 @@ public interface ICombatable {
    * @param other The ICombatable to attack.
    * @return If the attack was successful true, otherwise false.
    */
-  default float attack(ICombatable other) {
+  default float attack(Combatable other) {
     // calculate hitChance
     float hitChance = getHitChance() * (1.f - other.getEvasionChance());
 

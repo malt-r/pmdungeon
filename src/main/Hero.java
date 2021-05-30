@@ -10,6 +10,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.tiles.Tile;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import gui.HeroObserver;
+import items.InventoryOpener;
 import items.Item;
 import items.chests.Chest;
 import items.inventory.Inventory;
@@ -35,7 +36,7 @@ import util.math.Vec;
  *
  * <p>Contains all animations, the current position in the DungeonWorld and movement logic.
  */
-public class Hero extends Actor implements items.IInventoryOpener, ObservableHero {
+public class Hero extends Actor implements InventoryOpener, ObservableHero {
   private final float healOnKillChance = 0.6f;
   private final float healOnKillAmount = 100.f;
   private final Inventory inventory;
@@ -196,7 +197,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
    * @return true if the attack was sucessfull
    */
   @Override
-  public float attack(ICombatable other) {
+  public float attack(Combatable other) {
     float damage = super.attack(other);
     if (damage > 0.0f) {
       mainLogger.info(damage + " damage dealt to " + other.toString());
@@ -234,7 +235,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
    * @param damage The damage value that should be deducted from health.
    */
   @Override
-  public void dealDamage(float damage, ICombatable attacker) {
+  public void dealDamage(float damage, Combatable attacker) {
 
     // TODO - Reduce life of shield if equipped
     if (!this.invincible) {
@@ -245,12 +246,12 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     notifyObservers();
   }
 
-  private void CoordHelper() {
+  private void coordHelper() {
     mainLogger.info("Hero Coord: (" + this.getPosition().x + "|" + this.getPosition().y + ")");
   }
 
-  private void PrintNearEntities() {
-    CoordHelper();
+  private void printNearEntities() {
+    coordHelper();
 
     Point lowerBound = new Point(this.getPosition().x - 1, this.getPosition().y - 1);
     Point upperBound = new Point(this.getPosition().x + 1, this.getPosition().y + 1);
@@ -348,16 +349,18 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         break;
       case SUSPENDED:
         break;
+      default:
+        break;
     }
 
     this.inventory.update();
     removeObserversToRemove();
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
-      CoordHelper();
+      coordHelper();
     }
     if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
-      PrintNearEntities();
+      printNearEntities();
     }
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
@@ -365,7 +368,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     }
   }
 
-  /** Resets the combat stats of the hero- */
+  /** Resets the combat stats of the hero. */
   @Override
   protected void resetStats() {
     super.resetStats();
@@ -373,6 +376,9 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     notifyObservers();
   }
 
+  /**
+   * Will be called on game over.
+   */
   public void onGameOver() {
     resetStats();
     this.killCount = 0;
@@ -449,7 +455,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     return false;
   }
 
-  /** handles picking up an item, from ground into inventory and from chest into inventory */
+  /** handles picking up an item, from ground into inventory and from chest into inventory. */
   @Override
   protected void handleItemPicking() {
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
@@ -507,7 +513,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a weapon item
+   * Visits a weapon item.
    *
    * @param weapon weapon which should be visited
    */
@@ -523,7 +529,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a shield itme
+   * Visits a shield item.
    *
    * @param shield weapon which should be visited
    */
@@ -539,7 +545,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a Healpotion item
+   * Visits a Healpotion item.
    *
    * @param potion weapon which should be visited
    */
@@ -551,7 +557,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a PoisonPotion item
+   * Visits a PoisonPotion item.
    *
    * @param potion weapon which should be visited
    */
@@ -563,7 +569,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a AttackScroll item
+   * Visits a AttackScroll item.
    *
    * @param scroll weapon which should be visited
    */
@@ -574,7 +580,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a SpeedScroll item
+   * Visits a SpeedScroll item.
    *
    * @param scroll scroll which should be visited
    */
@@ -585,7 +591,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Visits a SupervisionScroll item
+   * Visits a SupervisionScroll item.
    *
    * @param scroll scroll which should be visited
    */
@@ -624,7 +630,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Registers an observer
+   * Registers an observer.
    *
    * @param observer to be registered
    */
@@ -634,7 +640,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
   }
 
   /**
-   * Unregisters an observer
+   * Unregisters an observer.
    *
    * @param observer to be unregistered
    */
@@ -652,7 +658,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     this.observersToRemove.clear();
   }
 
-  /** notifies all observers */
+  /** notifies all observers. */
   @Override
   public void notifyObservers() {
     for (HeroObserver obs : observerList) {
@@ -662,6 +668,11 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     }
   }
 
+  /**
+   * Applies a questreward to the hero.
+   *
+   * @param reward The reward.
+   */
   public void applyReward(QuestReward reward) {
     if (null != reward) {
       // apply xp

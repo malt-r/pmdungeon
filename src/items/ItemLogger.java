@@ -12,7 +12,7 @@ import stats.Modifier;
 import java.util.logging.Logger;
 
 /** Itemlogger class for logging information about items */
-public class ItemLogger implements IItemVisitor {
+public class ItemLogger implements ItemVisitor {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   /**

@@ -7,7 +7,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import main.DrawableEntity;
-import main.IDrawableEntityObserver;
+import main.DrawableEntityObserver;
 
 
 
@@ -19,7 +19,7 @@ import main.IDrawableEntityObserver;
  * which in turn store multiple DrawableEntities for on position (so that multiple DrawableEntities
  * can be stored for the same position)
  */
-public class SpatialHashMap implements IDrawableEntityObserver {
+public class SpatialHashMap implements DrawableEntityObserver {
   /** Logger. */
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
