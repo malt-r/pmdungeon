@@ -68,7 +68,6 @@ public class Level implements ObserveableLevel{
      * @param amount The amount of xp to add
      * @return True, if a level up occured (temporary solution and this will likely change).
      */
-    // TODO: provide observable pattern for level up
     public boolean increaseXP(int amount) {
         this.xp += amount;
         // level up

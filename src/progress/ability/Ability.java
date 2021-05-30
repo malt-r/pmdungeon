@@ -11,7 +11,6 @@ import java.util.logging.Logger;
  */
 public abstract class Ability {
     protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    // TODO: how to activate specific Ability on keypress?
 
     protected abstract Callable<Boolean> getActivationCheck();
 
