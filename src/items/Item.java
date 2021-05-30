@@ -18,16 +18,16 @@ public abstract class Item extends DrawableEntity {
   public Item() {}
 
   /**
-   * Returns the name of the item
+   * Returns the name of the item.
    *
-   * @return name of the item
+   * @return name of the item.
    */
   public abstract String getName();
 
   /**
-   * Returns the description of an item
+   * Returns the description of an item.
    *
-   * @return description of the item
+   * @return description of the item.
    */
   protected abstract String getDescription();
 
@@ -38,18 +38,18 @@ public abstract class Item extends DrawableEntity {
   }
 
   /**
-   * Accept method for accepting an ItemVisitpr
+   * Accept method for accepting an ItemVisitpr.
    *
-   * @param visitor visitor which should be accepted
+   * @param visitor visitor which should be accepted.
    */
   public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 
   /**
-   * Sets the position of the item when spawning or dropping
+   * Sets the position of the item when spawning or dropping.
    *
-   * @param newPosition the position where the itme should be moved to
+   * @param newPosition the position where the itme should be moved to.
    */
   public void setPosition(Point newPosition) {
     super.setPosition(newPosition);

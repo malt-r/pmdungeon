@@ -24,7 +24,7 @@ public class KillMonstersQuest extends Quest implements HeroObserver {
     this.toKill = util.math.Convenience.getRandBetween(3, 8);
     int xp = this.toKill * 30;
 
-    var items = ItemFactory.CreateRandomItems(2);
+    var items = ItemFactory.createRandomItems(2);
     this.reward = new QuestReward(items, xp);
   }
 

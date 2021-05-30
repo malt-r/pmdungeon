@@ -24,9 +24,9 @@ public interface QuestHandlerState {
   }
 
   /**
-   * Will be called when exiting the state
+   * Will be called when exiting the state.
    *
-   * @param handler the QuestHandler of the state machine
+   * @param handler the QuestHandler of the state machine.
    */
   default void exit(QuestHandler handler) {}
 }

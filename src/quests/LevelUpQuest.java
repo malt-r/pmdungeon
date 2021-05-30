@@ -27,7 +27,7 @@ public class LevelUpQuest extends Quest implements LevelObserver {
 
     this.levels = util.math.Convenience.getRandBetween(2, 4);
 
-    var items = ItemFactory.CreateRandomItems(1);
+    var items = ItemFactory.createRandomItems(1);
     this.reward = new QuestReward(items, xp);
   }
 

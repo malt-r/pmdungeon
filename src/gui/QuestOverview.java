@@ -5,8 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.HUD;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.TextStage;
 import main.Game;
-import quests.QuestObserver;
 import quests.Quest;
+import quests.QuestObserver;
+
 
 /**
  * QuestOvervoew class.

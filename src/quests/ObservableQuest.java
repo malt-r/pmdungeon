@@ -5,14 +5,14 @@ public interface ObservableQuest {
   /**
    * register new observer.
    *
-   * @param observer the observer to register
+   * @param observer the observer to register.
    */
   void register(QuestObserver observer);
 
   /**
-   * unregister registered observer
+   * unregister registered observer.
    *
-   * @param observer the observer to unregister
+   * @param observer the observer to unregister.
    */
   void unregister(QuestObserver observer);
 

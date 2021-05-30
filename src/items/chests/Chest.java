@@ -46,7 +46,7 @@ public class Chest extends DrawableEntity {
     int max = 5;
 
     int numItems = util.math.Convenience.getRandBetween(min, max);
-    var items = ItemFactory.CreateRandomItems(numItems);
+    var items = ItemFactory.createRandomItems(numItems);
     for (Item item : items) {
       this.inventory.addItem(item);
     }

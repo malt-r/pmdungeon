@@ -24,7 +24,7 @@ public class CollectItemsQuest extends Quest implements InventoryObserver {
     this.toCollect = util.math.Convenience.getRandBetween(3, 8);
     int xp = this.toCollect * 10;
 
-    var items = ItemFactory.CreateRandomItems(1);
+    var items = ItemFactory.createRandomItems(1);
     this.reward = new QuestReward(items, xp);
   }
 

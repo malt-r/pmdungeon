@@ -50,39 +50,39 @@ public class DebugControl {
     }
 
     try {
-      var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR);
+      var sword = ItemFactory.createItem(ItemType.SWORD_REGULAR);
       entityController.addEntity(sword);
       sword.setLevel(levelController.getDungeon());
 
-      var swordGold = ItemFactory.CreateItem(ItemType.SWORD_GOLD);
+      var swordGold = ItemFactory.createItem(ItemType.SWORD_GOLD);
       entityController.addEntity(swordGold);
       swordGold.setLevel(levelController.getDungeon());
 
-      var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED);
+      var scroll = ItemFactory.createItem(ItemType.SCROLL_SPEED);
       entityController.addEntity(scroll);
       scroll.setLevel(levelController.getDungeon());
 
-      var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK);
+      var scrollAttack = ItemFactory.createItem(ItemType.SCROLL_ATTACK);
       entityController.addEntity(scrollAttack);
       scrollAttack.setLevel(levelController.getDungeon());
 
-      var scrollSupervision = ItemFactory.CreateItem(ItemType.SCROLL_SUPERVISION);
+      var scrollSupervision = ItemFactory.createItem(ItemType.SCROLL_SUPERVISION);
       entityController.addEntity(scrollSupervision);
       scrollSupervision.setLevel(levelController.getDungeon());
 
-      var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL);
+      var potion = ItemFactory.createItem(ItemType.POTION_HEAL);
       entityController.addEntity(potion);
       potion.setLevel(levelController.getDungeon());
 
-      var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON);
+      var potionPoison = ItemFactory.createItem(ItemType.POTION_POISON);
       entityController.addEntity(potionPoison);
       potionPoison.setLevel(levelController.getDungeon());
 
-      var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD);
+      var shieldWood = ItemFactory.createItem(ItemType.SHIELD_WOOD);
       entityController.addEntity(shieldWood);
       shieldWood.setLevel(levelController.getDungeon());
 
-      var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE);
+      var shieldEagle = ItemFactory.createItem(ItemType.SHIELD_EAGLE);
       entityController.addEntity(shieldEagle);
       shieldEagle.setLevel(levelController.getDungeon());
 

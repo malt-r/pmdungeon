@@ -44,7 +44,7 @@ public class Spawner {
     }
 
     for (var itemType : levelContent.items) {
-      var item = ItemFactory.CreateItem(itemType);
+      var item = ItemFactory.createItem(itemType);
       item.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info("Item " + itemType.toString() + " spawned");
       listToAdd.add(item);
@@ -93,7 +93,7 @@ public class Spawner {
    */
   public static Item spawnItem(ItemType itemType) throws Exception {
     mainLogger.info("Item " + itemType.toString() + " spawned");
-    return ItemFactory.CreateItem(itemType);
+    return ItemFactory.createItem(itemType);
   }
 
   /**

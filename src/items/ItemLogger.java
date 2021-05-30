@@ -7,25 +7,15 @@ import items.scrolls.SpeedScroll;
 import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
+import java.util.logging.Logger;
 import stats.Modifier;
 
-import java.util.logging.Logger;
 
-
-/** Itemlogger class for logging information about items */
+/** Itemlogger class for logging information about items. */
 public class ItemLogger implements ItemVisitor {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  /**
-   * visits a generic weapon.
-   *
-   * @param weapon weapon which should be visited.
-   */
-  @Override
-  public void visit(Weapon weapon) {
-    mainLogger.info("A weapon");
-    printModifiers(weapon);
-  }
+
 
   private void printModifiers(EquipableItem item) {
     for (var mod : item.modifiers) {
@@ -40,6 +30,17 @@ public class ItemLogger implements ItemVisitor {
             + mod.getType().name()
             + " val: "
             + mod.getValue());
+  }
+
+  /**
+   * visits a generic weapon.
+   *
+   * @param weapon weapon which should be visited.
+   */
+  @Override
+  public void visit(Weapon weapon) {
+    mainLogger.info("A weapon");
+    printModifiers(weapon);
   }
 
   /**

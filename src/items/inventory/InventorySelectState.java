@@ -3,9 +3,11 @@ package items.inventory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import items.Item;
-
 import java.util.logging.Logger;
 
+/**
+ * InventorySelectState.
+ */
 public class InventorySelectState implements InventoryControlState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
   int selectorIdx;

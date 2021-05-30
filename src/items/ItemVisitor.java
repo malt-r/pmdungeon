@@ -8,7 +8,7 @@ import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
 
-/** This interface implements an visitor for all items in the game */
+/** This interface implements an visitor for all items in the game. */
 public interface ItemVisitor {
   /**
    * Fallback if no concrete implementation exists.
@@ -18,51 +18,51 @@ public interface ItemVisitor {
   default void visit(Item item) {}
 
   /**
-   * Visits the weapon
+   * Visits the weapon.
    *
-   * @param weapon weapon which should be visited
+   * @param weapon weapon which should be visited.
    */
   void visit(Weapon weapon);
 
   /**
-   * Visits the shield
+   * Visits the shield.
    *
-   * @param shield weapon which should be visited
+   * @param shield weapon which should be visited.
    */
   void visit(Shield shield);
 
   /**
-   * Visits the potion
+   * Visits the potion.
    *
-   * @param potion weapon which should be visited
+   * @param potion weapon which should be visited.
    */
   void visit(HealthPotion potion);
 
   /**
-   * Visits the potion
+   * Visits the potion.
    *
-   * @param potion weapon which should be visited
+   * @param potion weapon which should be visited.
    */
   void visit(PoisonPotion potion);
 
   /**
-   * Visits the scroll
+   * Visits the scroll.
    *
-   * @param scroll weapon which should be visited
+   * @param scroll weapon which should be visited.
    */
   void visit(AttackScroll scroll);
 
   /**
-   * Visits the scroll
+   * Visits the scroll.
    *
-   * @param scroll scroll which should be visited
+   * @param scroll scroll which should be visited.
    */
   void visit(SpeedScroll scroll);
 
   /**
-   * Visists the scroll
+   * Visists the scroll.
    *
-   * @param scroll scroll shich should be visited
+   * @param scroll scroll shich should be visited.
    */
   void visit(SupervisionScroll scroll);
 }

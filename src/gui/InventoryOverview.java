@@ -9,6 +9,9 @@ import items.inventory.OwnInventoryOpenState;
 import main.Game;
 import main.Hero;
 
+/**
+ * InventoryOverview.
+ */
 public class InventoryOverview implements InventoryObserver, OpenStateObserver, HeroObserver {
   private final HUD hud;
   private final InventoryIcon[] inventory = new InventoryIcon[10];
@@ -18,6 +21,12 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
   private final InvBackgroundIcon[] chestBackground = new InvBackgroundIcon[10];
   private final Game game;
 
+  /**
+   * Constructor.
+   *
+   * @param hud hud.
+   *
+   */
   public InventoryOverview(HUD hud) {
     this.hud = hud;
     this.game = Game.getInstance();
@@ -67,20 +76,7 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
     }
   }
 
-  /**
-   * Function to update inventory display Gets called by Inventory.notifyObservers()
-   *
-   * @param inv inv object from which inventory the function got called
-   * @param fromHero boolean if its inventory of hero
-   */
-  @Override
-  public void update(Inventory inv, boolean fromHero) {
-    if (fromHero) {
-      updateHeroInv(inv);
-    } else {
-      updateChestInv(inv);
-    }
-  }
+
 
   private void updateChestInv(Inventory inv) {
     if (inv.getCurrentState() instanceof OtherInventoryOpenState) {
@@ -188,6 +184,21 @@ public class InventoryOverview implements InventoryObserver, OpenStateObserver, 
       heroSlots[1].setTexture(rightHand.getTexture());
     } else {
       heroSlots[1].setDefaultTexture();
+    }
+  }
+
+  /**
+   * Function to update inventory display Gets called by Inventory.notifyObservers()
+   *
+   * @param inv inv object from which inventory the function got called
+   * @param fromHero boolean if its inventory of hero
+   */
+  @Override
+  public void update(Inventory inv, boolean fromHero) {
+    if (fromHero) {
+      updateHeroInv(inv);
+    } else {
+      updateChestInv(inv);
     }
   }
 }
