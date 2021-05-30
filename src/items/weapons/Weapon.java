@@ -1,6 +1,10 @@
 package items.weapons;
 
 import items.EquipableItem;
+import stats.Modifier;
+
+import java.util.ArrayList;
+
 /**
  * Weapon base class.
  * <p>
@@ -11,18 +15,20 @@ public abstract class Weapon extends EquipableItem {
   protected float range;
   public float getRange(){ return range; }
 
-  protected float attackDamageModifier;
+
+  //protected float attackDamageModifier;
   /**
    *  Returns the attackDamageModifier value of the shield which can be used for display purposes
    *  @return attackDamageModifier of the shield
    */
-  public float getAttackDamageModifier(){return attackDamageModifier;};
-  protected float hitChanceModifier;
+  //public float getAttackDamageModifier(){return attackDamageModifier;};
+  //protected float hitChanceModifier;
   /**
    *  Returns the hitChanceModifier value of the shield which can be used for display purposes
    *  @return hitChanceModifier of the shield
    */
-  public float getHitChanceModifier(){return hitChanceModifier;};
+  //public float getHitChanceModifier(){return hitChanceModifier;};
+  // TODO: solve this with health-stat
   protected int condition;
 
   /**
