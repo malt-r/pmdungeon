@@ -46,31 +46,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     this.stats.addInPlace(AttributeType.HIT_CHANCE, 0.7f);
     this.stats.addInPlace(AttributeType.PHYSICAL_ATTACK_DAMAGE, 50.f);
     this.stats.addInPlace(AttributeType.EVASION_CHANCE, 0.15f);
-
-    //protected float movementSpeed = 0.1f;
-    //protected float movementSpeedMultiplier = 1.f;
-    //// TODO: temporary solution
-    //public void applyMovementSpeedMultiplier(float multiplier) {
-    //  this.movementSpeedMultiplier = multiplier;
-    //}
-
-    //// combat-characteristics:
-    ////TODO:acter should only have basic hit chance, attack damge, evasion change
-    ////since it is used for the monster as well which doesnt can upgrade it's skills
-    //protected float health = 100.f;
-    //protected float maxHealth = 100.f;
-
-    //protected float baseHitChance = 0.6f;
-    //protected float hitChanceModifierScroll = 1.f;
-    //protected float hitChanceModifierWeapon = 1.f;
-
-    //protected float baseAttackDamage = 50;
-    //protected float attackDamageModifierScroll = 1.f;
-    //protected float attackDamageModifierWeapon= 1.f;
-
-    //protected float baseEvasionChance = 0.15f;
-    //protected float evasionChanceModifierScroll = 1.f;
-    //protected float evasionChanceModifierWeapon = 1.f;
   }
 
   /**
@@ -160,7 +135,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public float getHealth() {
-    //return this.health;
     return this.stats.getValue(AttributeType.HEALTH);
   }
 
@@ -170,7 +144,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public void setHealth(float health) {
-      // TODO: is this a good idea?
     this.stats.getAttribute(AttributeType.HEALTH).setEffectiveValue(health);
   }
 
@@ -226,7 +199,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public float getHitChance() {
-    //return baseHitChance * hitChanceModifierWeapon * hitChanceModifierScroll;
     return this.stats.getValue(AttributeType.HIT_CHANCE);
   }
 
@@ -236,7 +208,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public float getEvasionChance() {
-    //return this.baseEvasionChance * evasionChanceModifierWeapon * evasionChanceModifierScroll;
     return this.stats.getValue(AttributeType.EVASION_CHANCE);
   }
 
@@ -246,7 +217,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public float getDamage() {
-    //return this.baseAttackDamage * this.attackDamageModifierWeapon * this.attackDamageModifierScroll;
     return this.stats.getValue(AttributeType.PHYSICAL_ATTACK_DAMAGE);
   }
 
@@ -303,10 +273,10 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public void heal(float amount) {
-    //TODO: negative amount on poison?
     var healthAttr = this.stats.getAttribute(AttributeType.HEALTH);
     var maxHealthAttr = this.stats.getAttribute(AttributeType.MAX_HEALTH);
     var val = healthAttr.getEffectiveValue();
+
     if (val + amount > maxHealthAttr.getEffectiveValue()) {
       healthAttr.setEffectiveValue(maxHealthAttr.getEffectiveValue());
     } else {
@@ -568,7 +538,6 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   protected void resetStats() {
     this.stats.clearModifiers();
-    //this.setHealth(this.stats.getValue(AttributeType.MAX_HEALTH));
     this.movementState = MovementState.CAN_MOVE;
     this.canAttack = true;
   }
