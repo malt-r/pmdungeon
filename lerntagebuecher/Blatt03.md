@@ -1,6 +1,6 @@
 ---
-title:  'Lerntagebuch zur Bearbeitung von Blatt 03'
-author:
+title:  'Lerntagebuch zur Bearbeitung von Blatt 03' author:
+
 - MALTE REINSCH (malte.reinsch1@fh-bielefeld.de)
 - DENNIS ELLER (dennis.eller@fh-bielefeld.de)
 - TIM LUECKING (tim.luecking2@fh-bielefeld.de)
@@ -31,23 +31,16 @@ Beachten Sie auch die Hinweise im [Orga "Bewertung der Aufgaben"](pm_orga.html#p
 sowie [Praktikumsblatt "Lerntagebuch"](pm_praktikum.html#lerntagebuch).
 -->
 
-
 # Aufgabe
 
 <!--
 Bitte hier die zu lösende Aufgabe kurz in eigenen Worten beschreiben.
 -->
 Der erste Teil der Aufgabe ist das Implementieren von einsammelbaren Gegenständen, wie Tränke, Waffen oder
-Zaubersprüche. Die Items sollen im OOP-Gedanken erstellt werden.
-Der zweite Teil der Aufgabe ist die Implementierung eines Inventars
-in dem aufgesammelte Gegenstände mitgeführt werden sollen.
-Aus dem Inventar sollen Gegenstände ausrüstbar sein sowie Item wie Tränke
-aufgebraucht werden können.
-Im dritten Teil der Aufgabe sollen Schatztruhen mit zufälligem Loot erstellt
-werden sowie Taschen, die mehrere Items halten können.
-
-
-
+Zaubersprüche. Die Items sollen im OOP-Gedanken erstellt werden. Der zweite Teil der Aufgabe ist die Implementierung
+eines Inventars in dem aufgesammelte Gegenstände mitgeführt werden sollen. Aus dem Inventar sollen Gegenstände
+ausrüstbar sein sowie Item wie Tränke aufgebraucht werden können. Im dritten Teil der Aufgabe sollen Schatztruhen mit
+zufälligem Loot erstellt werden sowie Taschen, die mehrere Items halten können.
 
 # Ansatz und Modellierung
 
@@ -60,15 +53,19 @@ Bitte hier den Lösungsansatz kurz beschreiben:
 -->
 
 ## Items ##
+
 - ItemFactory zum Erstellen der Items
 - Item Basisklasse für das Inventar
 - Für jeden Itemtyp eine Basisklasse (Weapon, Shield, Scroll, Potion)
 
 ## Inventar ##
+
 - Wrapper ArrayList von Items
 - Menü zum durchgehen als Statemachine
-- 
+-
+
 ## Schätze und Taschen ##
+
 - Schatztruhen haben eigenes Inventar
 -
 -
@@ -84,16 +81,21 @@ Bitte hier die Umsetzung der Lösung kurz beschreiben:
 -->
 
 ## Items ##
+
 - Factory für die Items vereinfacht das Erstellen der Items
 - TriggerDetection zum Aufsammeln des Items im Level und löschen aus dem Entity Controller
 - Über Visitor-Pattern wird die Benutzung der items geloggt.
+
 ## Inventar ##
+
 - Ein Item kann über das Visitor-Pattern vom Hero genutzt werden.
 
 ## Schätze und Taschen ##
+
 - Schatztruhen kriegen Referenz zum Öffner
 
 # Postmortem
+
 <!--
 Bitte blicken Sie auf die Aufgabe, Ihren Lösungsansatz und die Umsetzung
 kritisch zurück:

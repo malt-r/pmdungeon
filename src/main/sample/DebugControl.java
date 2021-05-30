@@ -6,35 +6,41 @@ import items.ItemFactory;
 import items.ItemType;
 import items.chests.ChestFactory;
 import items.chests.ChestType;
+import java.util.logging.Logger;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
 import traps.TrapFactory;
 import traps.TrapType;
 
-import java.util.logging.Logger;
-
+/**
+ * The Debug control.
+ */
 public class DebugControl {
-  private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+  private static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  public static void SpawnAll(EntityController entityController, LevelController levelController){
+  /**
+   * Spawn all.
+   *
+   * @param entityController the entity controller.
+   * @param levelController The level controller.
+   */
+  public static void spawnAll(EntityController entityController, LevelController levelController) {
     Monster[] monsterArray = new Monster[5];
 
-    for(int i=0;i<monsterArray.length;i++){
+    for (int i = 0; i < monsterArray.length; i++) {
       MonsterType monsterType;
-      if(i%2==0){
+      if (i % 2 == 0) {
         monsterType = MonsterType.LIZARD;
-      }
-      else{
+      } else {
         monsterType = MonsterType.DEMON;
       }
-      try{
-        var mon = MonsterFactory.CreateMonster(monsterType);
-        monsterArray[i]= mon;
+      try {
+        var mon = MonsterFactory.createMonster(monsterType);
+        monsterArray[i] = mon;
         entityController.addEntity(mon);
         mainLogger.info("Monster(" + (mon.getClass().getName()) + ") created");
-      }
-      catch(Exception e){
+      } catch (Exception e) {
         mainLogger.severe(e.toString());
       }
     }
@@ -43,83 +49,61 @@ public class DebugControl {
       monster.setLevel(levelController.getDungeon());
     }
 
-
     try {
-      var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR);
+      var sword = ItemFactory.createItem(ItemType.SWORD_REGULAR);
       entityController.addEntity(sword);
       sword.setLevel(levelController.getDungeon());
 
-      var swordGold = ItemFactory.CreateItem(ItemType.SWORD_GOLD);
+      var swordGold = ItemFactory.createItem(ItemType.SWORD_GOLD);
       entityController.addEntity(swordGold);
       swordGold.setLevel(levelController.getDungeon());
 
-      var scroll = ItemFactory.CreateItem(ItemType.SCROLL_SPEED);
+      var scroll = ItemFactory.createItem(ItemType.SCROLL_SPEED);
       entityController.addEntity(scroll);
       scroll.setLevel(levelController.getDungeon());
 
-      var scrollAttack = ItemFactory.CreateItem(ItemType.SCROLL_ATTACK);
+      var scrollAttack = ItemFactory.createItem(ItemType.SCROLL_ATTACK);
       entityController.addEntity(scrollAttack);
       scrollAttack.setLevel(levelController.getDungeon());
 
-      var scrollSupervision = ItemFactory.CreateItem(ItemType.SCROLL_SUPERVISION);
+      var scrollSupervision = ItemFactory.createItem(ItemType.SCROLL_SUPERVISION);
       entityController.addEntity(scrollSupervision);
       scrollSupervision.setLevel(levelController.getDungeon());
 
-      var potion = ItemFactory.CreateItem(ItemType.POTION_HEAL);
+      var potion = ItemFactory.createItem(ItemType.POTION_HEAL);
       entityController.addEntity(potion);
       potion.setLevel(levelController.getDungeon());
 
-      var potionPoison = ItemFactory.CreateItem(ItemType.POTION_POISON);
+      var potionPoison = ItemFactory.createItem(ItemType.POTION_POISON);
       entityController.addEntity(potionPoison);
       potionPoison.setLevel(levelController.getDungeon());
 
-      var shieldWood = ItemFactory.CreateItem(ItemType.SHIELD_WOOD);
+      var shieldWood = ItemFactory.createItem(ItemType.SHIELD_WOOD);
       entityController.addEntity(shieldWood);
       shieldWood.setLevel(levelController.getDungeon());
 
-      var shieldEagle = ItemFactory.CreateItem(ItemType.SHIELD_EAGLE);
+      var shieldEagle = ItemFactory.createItem(ItemType.SHIELD_EAGLE);
       entityController.addEntity(shieldEagle);
       shieldEagle.setLevel(levelController.getDungeon());
 
-      var chest1 = ChestFactory.CreateChest(ChestType.NORMAL);
+      var chest1 = ChestFactory.createChest(ChestType.NORMAL);
       entityController.addEntity(chest1);
       chest1.setLevel(levelController.getDungeon());
 
-      var trapHole = TrapFactory.CreateTrap(TrapType.HOLE);
+      var trapHole = TrapFactory.createTrap(TrapType.HOLE);
       entityController.addEntity(trapHole);
       trapHole.setLevel(levelController.getDungeon());
 
-      var trapSpikes = TrapFactory.CreateTrap(TrapType.SPIKES);
+      var trapSpikes = TrapFactory.createTrap(TrapType.SPIKES);
       entityController.addEntity(trapSpikes);
       trapSpikes.setLevel(levelController.getDungeon());
 
-      var trapActivator = TrapFactory.CreateTrap(TrapType.ACTIVATOR);
+      var trapActivator = TrapFactory.createTrap(TrapType.ACTIVATOR);
       entityController.addEntity(trapActivator);
       trapActivator.setLevel(levelController.getDungeon());
 
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-  }
-
-  public void SpawnAllMonster(){
-
-  }
-
-  public void SpawnAllScrolls(){
-
-  }
-
-  public void SpawnAllPotions(){
-
-  }
-
-  public void SpawnAllWeapons(){
-
-  }
-
-  public void SpawnAllShields(){
-
   }
 }

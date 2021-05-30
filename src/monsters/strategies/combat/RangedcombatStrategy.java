@@ -3,22 +3,16 @@ package monsters.strategies.combat;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import util.math.Vec;
 
-/**
- * Combat strategy for distance attacks.
- */
-public class RangedcombatStrategy implements CombatStrategy{
+/** Combat strategy for distance attacks. */
+public class RangedcombatStrategy implements CombatStrategy {
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
-  public boolean RangeFunction(Point position, Point target) {
+  public boolean rangeFunction(Point position, Point target) {
     return new Vec(position).subtract(new Vec(target)).magnitude() < 5f;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public float getAttackValue() {
     return 10;

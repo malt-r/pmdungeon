@@ -1,9 +1,9 @@
 package traps;
+
 /**
  * Definition of SikeTrapState types.
- * <p>
- *     Contains all types of states that the spiketrap can have.
- * </p>
+ *
+ * <p>Contains all types of states that the spiketrap can have.
  */
 public enum SpikesTrapState {
   NO_SPIKES,

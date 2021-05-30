@@ -1,10 +1,14 @@
 package items.inventory;
 
+import gui.OpenStateObserver;
 
-import GUI.OpenStateObserver;
-
+/**
+ * ObservableOpenState.
+ */
 public interface ObservableOpenState {
-    void register(OpenStateObserver observer);
-    void unregister(OpenStateObserver observer);
-    void notifyObservers();
+  void register(OpenStateObserver observer);
+
+  void unregister(OpenStateObserver observer);
+
+  void notifyObservers();
 }

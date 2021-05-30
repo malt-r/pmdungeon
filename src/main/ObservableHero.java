@@ -1,10 +1,14 @@
 package main;
 
-import GUI.HeroObserver;
-import main.Hero;
+import gui.HeroObserver;
 
+/**
+ * ObservableHero.
+ */
 public interface ObservableHero {
-    void register(HeroObserver observer);
-    void unregister(HeroObserver observer);
-    void notifyObservers();
+  void register(HeroObserver observer);
+
+  void unregister(HeroObserver observer);
+
+  void notifyObservers();
 }

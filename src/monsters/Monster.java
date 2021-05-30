@@ -1,21 +1,22 @@
 package monsters;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import java.util.Timer;
+import java.util.TimerTask;
 import main.Actor;
-import main.ICombatable;
+import main.Combatable;
 import monsters.strategies.combat.CombatStrategy;
 import monsters.strategies.combat.MeleeStrategy;
 import monsters.strategies.movement.MovementStrategy;
 import monsters.strategies.movement.RandomMovementStrategy;
 import stats.Attribute;
 
-import java.util.*;
+
 
 /**
  * The base class for any monster.
- * <p>
- *     Contains all animations, the current position in the DungeonWorld and movement logic.
- * </p>
+ *
+ * <p>Contains all animations, the current position in the DungeonWorld and movement logic.
  */
 public abstract class Monster extends Actor {
   private final Timer respawnTimer;
@@ -25,9 +26,8 @@ public abstract class Monster extends Actor {
 
   /**
    * Constructor of the Monster class.
-   * <p>
-   *     This constructor will instantiate the animations and read all required texture data.
-   * </p>
+   *
+   * <p>This constructor will instantiate the animations and read all required texture data.
    */
   public Monster() {
     this.currentMovementStrategy = new RandomMovementStrategy();
@@ -43,19 +43,18 @@ public abstract class Monster extends Actor {
   }
 
   /**
-   * Called each frame, handles movement and the switching to and back from the running animation state.
+   * Called each frame, handles movement and the switching to and back from the running animation
+   * state.
    */
   @Override
   public void update() {
     super.update();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
-  protected boolean inRangeFunc(Point p){
-    return this.currentCombatStrategy.RangeFunction(this.getPosition(),p);
+  protected boolean inRangeFunc(Point p) {
+    return this.currentCombatStrategy.rangeFunction(this.getPosition(), p);
   }
 
   /**
@@ -65,35 +64,35 @@ public abstract class Monster extends Actor {
    * @return if the other combatable instance is friendly
    */
   @Override
-  public boolean isOtherFriendly(ICombatable other) {
+  public boolean isOtherFriendly(Combatable other) {
     return other instanceof Monster;
   }
 
-  /**
-   * Generates random Movement Inputs for natural moving of the monster
-   */
+  /** Generates random Movement Inputs for natural moving of the monster. */
   @Override
-  protected Point readMovementInput(){
-    return this.currentMovementStrategy.Move(getPosition(),level);
+  protected Point readMovementInput() {
+    return this.currentMovementStrategy.move(getPosition(), level);
   }
 
   /**
-   * Manages damage given by other actors. Also starts a timer for respawning, when the monster has been slain.
+   * Manages damage given by other actors. Also starts a timer for respawning, when the monster has
+   * been slain.
    *
-   * @param damage  The damage value that should be deducted from health.
+   * @param damage The damage value that should be deducted from health.
    */
   @Override
-  public void dealDamage(float damage, ICombatable attacker) {
+  public void dealDamage(float damage, Combatable attacker) {
     super.dealDamage(damage, attacker);
     var maxHealth = this.stats.getValue(Attribute.AttributeType.MAX_HEALTH);
     if (this.isDead()) {
-      TimerTask respawnTask = new TimerTask() {
-        @Override
-        public void run() {
-          findRandomPosition();
-          stats.clearModifiers();
-        }
-      };
+      TimerTask respawnTask =
+          new TimerTask() {
+            @Override
+            public void run() {
+              findRandomPosition();
+              stats.clearModifiers();
+            }
+          };
       respawnTimer.schedule(respawnTask, respawnDelay);
     }
   }

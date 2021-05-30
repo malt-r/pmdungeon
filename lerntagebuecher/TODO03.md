@@ -18,5 +18,7 @@ ProgMeth Blatt03 Zusammenfassung:
 Workitems:
 
 - DENNIS: Items (unterschiedliche Arten, Logging, Stats, ...)
-- MALTE: Inventar (Zugriff ueber Logging Menü (Spiel pausieren), Taschen, Kisten, Random spawn in Kiste, Random spawn in Level)
-- TIM: Hero-Seite (aktiver Angriff, Beeinflussung von Stats durch Items, Benutzung von Items, Ausrüstung von Items, Animation bei Angriff (einfach))
+- MALTE: Inventar (Zugriff ueber Logging Menü (Spiel pausieren), Taschen, Kisten, Random spawn in Kiste, Random spawn in
+  Level)
+- TIM: Hero-Seite (aktiver Angriff, Beeinflussung von Stats durch Items, Benutzung von Items, Ausrüstung von Items,
+  Animation bei Angriff (einfach))
