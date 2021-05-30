@@ -48,14 +48,30 @@ public class Game extends MainController {
     private int currentLevelIndex =0;
     private boolean drawTraps=false;
 
+    /**
+     * Gets every Entity at specific point
+     * @param p Point to check at
+     * @return List of all Entities at that point
+     */
     public ArrayList<DrawableEntity> getEntitiesAtPoint(Point p) {
         return this.spatialMap.getAt(p);
     }
 
+    /**
+     * Gets every Entity in specific coordinate range
+     * @param lowerBound Point of lower Bound
+     * @param upperBound Point of upper Bound
+     * @return List of all Entities in that coordinate range
+     */
     public ArrayList<DrawableEntity> getEntitiesInCoordRange(Point lowerBound, Point upperBound) {
         return this.spatialMap.getInRange(lowerBound, upperBound);
     }
 
+    /**
+     * Gets every Entity in neighbor fields
+     * @param centerPoint Point of center
+     * @return List of all Entities in neighbor fields
+     */
     public ArrayList<DrawableEntity> getEntitiesInNeighborFields(Point centerPoint) {
         var lowerBound = new Point((float)Math.floor(centerPoint.x) - 1, (float)Math.floor(centerPoint.y) - 1);
         var upperBound = new Point((float)Math.ceil(centerPoint.x) + 1, (float)Math.ceil(centerPoint.y) + 1);
