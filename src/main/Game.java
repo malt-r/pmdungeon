@@ -170,7 +170,7 @@ public class Game extends MainController {
     @Override
     protected void endFrame() {
 
-        // check, if current position of hero is on the trigger to load a new level
+
         if (levelController.checkForTrigger(hero.getPosition()) ) {
             currentLevelIndex++;
             entityController.removeAllFrom(Item.class);
@@ -183,11 +183,18 @@ public class Game extends MainController {
             mainLogger.info("Next stage loaded");
         }
 
-        // TODO: refactor
         if (hero.isDead()) {
             onGameOver();
         }
 
+        removeEntitiesFromList();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+            printHashMapStats();
+        }
+    }
+
+    private void removeEntitiesFromList() {
         if (entitiesToRemove.size() > 0){
             for(IEntity entity : entitiesToRemove){
                 this.entityController.removeEntity(entity);
@@ -196,10 +203,6 @@ public class Game extends MainController {
                 }
             }
             entitiesToRemove.clear();
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
-            printHashMapStats();
         }
     }
 
