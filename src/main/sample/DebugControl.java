@@ -32,8 +32,7 @@ public class DebugControl {
         var mon = MonsterFactory.CreateMonster(monsterType);
         monsterArray[i]= mon;
         entityController.addEntity(mon);
-        //TODO Add which kind of monster spawned
-        mainLogger.info("Monster(" + (i + 1) + ") created");
+        mainLogger.info("Monster(" + (mon.getClass().getName()) + ") created");
       }
       catch(Exception e){
         mainLogger.severe(e.toString());
