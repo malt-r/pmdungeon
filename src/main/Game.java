@@ -169,18 +169,8 @@ public class Game extends MainController {
      */
     @Override
     protected void endFrame() {
-
-
         if (levelController.checkForTrigger(hero.getPosition()) ) {
-            currentLevelIndex++;
-            entityController.removeAllFrom(Item.class);
-            entityController.removeAllFrom(Monster.class);
-            entityController.removeAllFrom(Trap.class);
-            entityController.removeAllFrom(Chest.class);
-            entityController.removeAllFrom(QuestGiver.class);
-            levelController.triggerNextStage();
-            spatialMap.clear();
-            mainLogger.info("Next stage loaded");
+            loadNextStage();
         }
 
         if (hero.isDead()) {
@@ -192,6 +182,18 @@ public class Game extends MainController {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
             printHashMapStats();
         }
+    }
+
+    private void loadNextStage() {
+        currentLevelIndex++;
+        entityController.removeAllFrom(Item.class);
+        entityController.removeAllFrom(Monster.class);
+        entityController.removeAllFrom(Trap.class);
+        entityController.removeAllFrom(Chest.class);
+        entityController.removeAllFrom(QuestGiver.class);
+        levelController.triggerNextStage();
+        spatialMap.clear();
+        mainLogger.info("Next stage loaded");
     }
 
     private void removeEntitiesFromList() {
