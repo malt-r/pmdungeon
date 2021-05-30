@@ -2,9 +2,11 @@ package items.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import java.util.logging.Logger;
 
+/**
+ * The empty state of the inventory.
+ */
 public class InventoryEmptyState implements InventoryControlState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 

@@ -6,14 +6,14 @@ import java.util.logging.Logger;
 import main.Hero;
 
 /** Managerclass for the currently activated quest. */
-public class QuestHandler implements IQuestObserver, IEntity {
+public class QuestHandler implements QuestObserver, IEntity {
   /** A logger. */
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   private final Hero hero;
-  private final ArrayList<IQuestObserver> questObservers;
+  private final ArrayList<QuestObserver> questObservers;
   /** Current state of the statemachine. */
-  protected IQuestHandlerState currentState;
+  protected QuestHandlerState currentState;
   /** Idle state of the statemachine. */
   protected QuestHandlerIdleState idleState;
 
@@ -37,7 +37,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
    *
    * @return idlestate
    */
-  public IQuestHandlerState getIdleState() {
+  public QuestHandlerState getIdleState() {
     return idleState;
   }
 
@@ -55,7 +55,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
    *
    * @param questObserver The observer to register.
    */
-  public void register(IQuestObserver questObserver) {
+  public void register(QuestObserver questObserver) {
     if (!questObservers.contains(questObserver)) {
       questObservers.add(questObserver);
     }
@@ -66,13 +66,13 @@ public class QuestHandler implements IQuestObserver, IEntity {
    *
    * @param questObserver the observer to unregister.
    */
-  public void unregister(IQuestObserver questObserver) {
+  public void unregister(QuestObserver questObserver) {
     questObservers.remove(questObserver);
   }
 
   /** notify all registered questobservers about changes in currently activated quest. */
   private void notifyObservers() {
-    for (IQuestObserver questObserver : questObservers) {
+    for (QuestObserver questObserver : questObservers) {
       questObserver.update(this.currentQuest);
     }
   }
@@ -172,7 +172,7 @@ public class QuestHandler implements IQuestObserver, IEntity {
     }
   }
 
-  private void switchToState(IQuestHandlerState state) {
+  private void switchToState(QuestHandlerState state) {
     this.currentState.exit(this);
     this.currentState = state;
     this.currentState.enter(this);

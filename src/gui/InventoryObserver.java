@@ -2,7 +2,7 @@ package gui;
 
 import items.inventory.Inventory;
 
-/** Interface for a inventory observer */
+/** Interface for a inventory observer. */
 public interface InventoryObserver {
   /**
    * updates the observer and passes the inventory and a flag if the updated was created by the

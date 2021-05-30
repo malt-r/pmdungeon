@@ -5,7 +5,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IHUDElement;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 /**
- * The InvBackgroundIcon for the HUD
+ * The InvBackgroundIcon for the HUD.
  *
  * <p>Contains all textures, positions and texture manipulation logic
  */
@@ -32,7 +32,7 @@ public class InvBackgroundIcon implements IHUDElement {
   }
 
   /**
-   * Returns the position of the icon for display purposes
+   * Returns the position of the icon for display purposes.
    *
    * @return position of the icon
    */
@@ -42,7 +42,7 @@ public class InvBackgroundIcon implements IHUDElement {
   }
 
   /**
-   * Returns the texture of the icon for display purposes
+   * Returns the texture of the icon for display purposes.
    *
    * @return texture of the icon
    */
@@ -51,17 +51,17 @@ public class InvBackgroundIcon implements IHUDElement {
     return texture;
   }
 
-  /** Sets the default texture (seethrough) */
+  /** Sets the default texture (seethrough). */
   public void setDefaultTexture() {
     texture = defaultTexture;
   }
 
-  /** Sets the index/pointer texture */
+  /** Sets the index/pointer texture. */
   public void setPointerTexture() {
     texture = pointer;
   }
 
-  /** Sets the default background texture */
+  /** Sets the default background texture. */
   public void setDefaultBackgroundTexture() {
     texture = defaultBackground;
   }

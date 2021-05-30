@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input;
  * State in which user input is queried to handle a pending request for a new quest of the quest
  * handler.
  */
-public class QuestHandlerPendingRequestState implements IQuestHandlerState {
+public class QuestHandlerPendingRequestState implements QuestHandlerState {
 
   private final QuestGiver giver;
   private final Quest pendingQuest;
@@ -44,8 +44,8 @@ public class QuestHandlerPendingRequestState implements IQuestHandlerState {
    * @return the state of the quest
    */
   @Override
-  public IQuestHandlerState update(QuestHandler handler) {
-    IQuestHandlerState nextState = null;
+  public QuestHandlerState update(QuestHandler handler) {
+    QuestHandlerState nextState = null;
     if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
       giver.questWasAccepted(true);
       this.receivedInput = true;

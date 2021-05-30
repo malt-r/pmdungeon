@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /** Abstract base class of quests. */
-public abstract class Quest implements IObservableQuest {
+public abstract class Quest implements ObservableQuest {
   /** A logger. */
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  private final ArrayList<IQuestObserver> observers;
+  private final ArrayList<QuestObserver> observers;
 
   /** The reward to apply to a hero, if the quest goal is fulfilled. */
   protected QuestReward reward;
@@ -76,14 +76,14 @@ public abstract class Quest implements IObservableQuest {
   /** {@inheritDoc} */
   @Override
   public void notifyObservers() {
-    for (IQuestObserver observer : observers) {
+    for (QuestObserver observer : observers) {
       observer.update(this);
     }
   }
 
   /** {@inheritDoc} */
   @Override
-  public void register(IQuestObserver observer) {
+  public void register(QuestObserver observer) {
     if (!observers.contains(observer)) {
       observers.add(observer);
     }
@@ -91,7 +91,7 @@ public abstract class Quest implements IObservableQuest {
 
   /** {@inheritDoc} */
   @Override
-  public void unregister(IQuestObserver observer) {
+  public void unregister(QuestObserver observer) {
     observers.remove(observer);
   }
 

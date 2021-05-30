@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.HUD;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.TextStage;
 import main.Game;
-import quests.IQuestObserver;
+import quests.QuestObserver;
 import quests.Quest;
 
 /**
@@ -13,7 +13,7 @@ import quests.Quest;
  *
  * <p>Defines the GUI Elements for a quest overview.
  */
-public class QuestOverview implements IQuestObserver {
+public class QuestOverview implements QuestObserver {
   private final HUD hud;
   private final TextStage textStage;
   private final Label lbName;

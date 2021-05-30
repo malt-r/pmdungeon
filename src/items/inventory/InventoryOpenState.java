@@ -1,12 +1,14 @@
 package items.inventory;
 
-import gui.OpenStateObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
+import gui.OpenStateObserver;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+/**
+ * The open state for the inventory state machine.
+ */
 public abstract class InventoryOpenState implements InventoryControlState, ObservableOpenState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
   private final ArrayList<OpenStateObserver> observerList = new ArrayList<OpenStateObserver>();
@@ -106,7 +108,7 @@ public abstract class InventoryOpenState implements InventoryControlState, Obser
     }
   }
 
-  /** print the usage of this specific state */
+  /** print the usage of this specific state. */
   protected void printUsage() {
     mainLogger.info("Usage: Arrow Keys (Move Selection), L (Log Content), ESC (Exit)");
   }
@@ -118,14 +120,14 @@ public abstract class InventoryOpenState implements InventoryControlState, Obser
   /**
    * the current selector index.
    *
-   * @return
+   * @return The selector index.
    */
   public int getselectorIdx() {
     return selectorIdx;
   }
 
   /**
-   * Registers an observer
+   * Registers an observer.
    *
    * @param observer to be registered
    */
@@ -134,7 +136,7 @@ public abstract class InventoryOpenState implements InventoryControlState, Obser
   }
 
   /**
-   * Unregisters an observer
+   * Unregisters an observer.
    *
    * @param observer to be unregistered
    */
@@ -142,7 +144,7 @@ public abstract class InventoryOpenState implements InventoryControlState, Obser
     observerList.remove(observer);
   }
 
-  /** notifies all observers */
+  /** notifies all observers. */
   public void notifyObservers() {
     for (OpenStateObserver obs : observerList) {
       obs.update(this);

@@ -1,7 +1,7 @@
 package quests;
 
 /** Idle state of the state machine of a quest handler. */
-public class QuestHandlerIdleState implements IQuestHandlerState {
+public class QuestHandlerIdleState implements QuestHandlerState {
 
   /**
    * {@inheritDoc}

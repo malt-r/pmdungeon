@@ -1,10 +1,9 @@
 package progress.effect;
 
+import java.util.concurrent.Callable;
 import main.Actor;
 import stats.Attribute;
 import stats.Modifier;
-
-import java.util.concurrent.Callable;
 
 /**
  * Effect to increase the movement speed of an actor.
@@ -15,6 +14,11 @@ public class IncreaseMovementSpeedEffect extends PersistentEffect {
   private final Callable<Boolean> removalCheck;
   Modifier modifier;
 
+  /**
+   * Constructor.
+   *
+   * @param removalCheck Callable removal check.
+   */
   public IncreaseMovementSpeedEffect(Callable<Boolean> removalCheck) {
     this.removalCheck = removalCheck;
     this.modifier =

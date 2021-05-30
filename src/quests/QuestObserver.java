@@ -1,7 +1,7 @@
 package quests;
 
-/** Observer of quests */
-public interface IQuestObserver {
+/** Observer of quests. */
+public interface QuestObserver {
   /**
    * Will be called by the observable Quest, on which this observer is registered
    *

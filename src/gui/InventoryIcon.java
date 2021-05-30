@@ -5,7 +5,7 @@ import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IHUDElement;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 /**
- * The InventoryIcon for the HUD
+ * The InventoryIcon for the HUD.
  *
  * <p>Contains all textures, positions and texture manipulation logic
  */
@@ -29,7 +29,7 @@ public class InventoryIcon implements IHUDElement {
   }
 
   /**
-   * Returns the texture of the icon for display purposes
+   * Returns the texture of the icon for display purposes.
    *
    * @return texture of the icon
    */
@@ -39,7 +39,7 @@ public class InventoryIcon implements IHUDElement {
   }
 
   /**
-   * Returns the texture of the icon for display purposes
+   * Returns the texture of the icon for display purposes.
    *
    * @return texture of the icon
    */
@@ -49,7 +49,7 @@ public class InventoryIcon implements IHUDElement {
   }
 
   /**
-   * Sets the texture of the icon for display purposes
+   * Sets the texture of the icon for display purposes.
    *
    * @param texture which should be used for the icon
    */
@@ -57,7 +57,7 @@ public class InventoryIcon implements IHUDElement {
     this.texture = texture;
   }
 
-  /** Sets the default texture (seethrough) */
+  /** Sets the default texture (seethrough). */
   public void setDefaultTexture() {
     texture = defaultTexture;
   }

@@ -1,16 +1,15 @@
 package items.inventory;
 
-import gui.InventoryObserver;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import gui.InventoryObserver;
 import items.InventoryOpener;
 import items.Item;
 import items.ItemLogger;
-import main.Game;
-import main.Hero;
-
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import main.Game;
+import main.Hero;
 
 /**
  * Implements an inventory. Basically a wrapper around an ArrayList. Uses a statemachine for
@@ -19,7 +18,7 @@ import java.util.logging.Logger;
  * @param <T> Subclass of Item
  */
 public class Inventory<T extends Item> implements ObservableInventory {
-  /** Logger */
+  /** Logger. */
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
   // maximum capacity
   private final int capacity;
@@ -41,7 +40,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
   protected InventoryControlState currentState;
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param parent The parent of this inventory, used to get the position.
    * @param capacity The maximum capacity of the inventory.
@@ -64,7 +63,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
   }
 
   /**
-   * Returns the leavingDistanceThreshold
+   * Returns the leavingDistanceThreshold.
    *
    * @return the leavingDistanceThreshold
    */
@@ -129,6 +128,12 @@ public class Inventory<T extends Item> implements ObservableInventory {
     }
   }
 
+  /**
+   * Drop it like its hot.
+   *
+   * @param itemToDrop Item to drop.
+   * @return true is works.
+   */
   public boolean dropItem(Item itemToDrop) {
     try {
       var parentPos = this.parent.getPosition();
@@ -143,6 +148,12 @@ public class Inventory<T extends Item> implements ObservableInventory {
     return true;
   }
 
+  /**
+   * Drop it like its hot from index.
+   *
+   * @param idx The index.
+   * @return True if good.
+   */
   public boolean dropItemFromIdx(int idx) {
     Item item = null;
     try {
@@ -255,13 +266,13 @@ public class Inventory<T extends Item> implements ObservableInventory {
     return this.itemLogger;
   }
 
-  /** gets the current state of the state machine */
+  /** gets the current state of the state machine. */
   public InventoryControlState getCurrentState() {
     return currentState;
   }
 
   /**
-   * Registers an observer
+   * Registers an observer.
    *
    * @param observer to be registered
    */
@@ -271,7 +282,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
   }
 
   /**
-   * Unregisters an observer
+   * Unregisters an observer.
    *
    * @param observer to be unregistered
    */
@@ -289,7 +300,7 @@ public class Inventory<T extends Item> implements ObservableInventory {
     this.observersToRemove.clear();
   }
 
-  /** notifies all observers */
+  /** notifies all observers. */
   @Override
   public void notifyObservers() {
     for (InventoryObserver obs : observerList) {
