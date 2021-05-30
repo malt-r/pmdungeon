@@ -38,8 +38,5 @@ public class IncreaseMovementSpeedEffect extends PersistentEffect {
     @Override
     public void onRemoval(Actor target) {
         target.getStats().removeModifierFromAttribut(modifier);
-        if (target.getStats().getValue(Attribute.AttributeType.MOVEMENT_SPEED) > 0.14f) {
-            boolean bBreak = true;
-        }
     }
 }

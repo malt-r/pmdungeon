@@ -66,7 +66,6 @@ public class Attribute {
             return false;
         } else if (mod.getType() == Modifier.ModifierType.MULTIPLIER && !multipliers.contains(mod)) {
             multipliers.add(mod);
-            System.out.println("APPLY MODIFIER");
             recalculateEffectiveValue();
             return true;
         } else if (mod.getType() == Modifier.ModifierType.ADDITION && !adders.contains(mod)) {
