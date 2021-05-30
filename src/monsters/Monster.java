@@ -36,25 +36,10 @@ public abstract class Monster extends Actor {
     this.respawnDelay = 500;
 
     this.stats.addInPlace(Attribute.AttributeType.HEALTH, 100.f);
-    // combat-characteristics:
-    //health = 100.f;
     this.stats.addInPlace(Attribute.AttributeType.MAX_HEALTH, 100.f);
-    //maxHealth = 100.f;
-
     this.stats.addInPlace(Attribute.AttributeType.HIT_CHANCE, 0.6f);
-    //baseHitChance = 0.6f;
-    //hitChanceModifierWeapon= 1.f;
-    //hitChanceModifierScroll= 1.f;
-
     this.stats.addInPlace(Attribute.AttributeType.PHYSICAL_ATTACK_DAMAGE, 50.f);
-    //baseAttackDamage = 50;
-    //attackDamageModifierWeapon = 1.f;
-    //attackDamageModifierScroll = 1.f;
-
     this.stats.addInPlace(Attribute.AttributeType.EVASION_CHANCE, 0.15f);
-    //baseEvasionChance = 0.15f;
-    //evasionChanceModifierWeapon = 1.f;
-    //evasionChanceModifierScroll = 1.f;
   }
 
   /**
@@ -89,7 +74,6 @@ public abstract class Monster extends Actor {
    */
   @Override
   protected Point readMovementInput(){
-    //if(hasTarget()){return new Point(this.getPosition());}
     return this.currentMovementStrategy.Move(getPosition(),level);
   }
 
