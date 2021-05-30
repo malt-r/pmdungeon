@@ -1,6 +1,6 @@
 package traps;
 
-import main.ICombatable;
+import main.Combatable;
 
 /**
  * The base class for any HoleTrap.
@@ -40,9 +40,9 @@ public class HoleTrap extends Trap {
     this.draw(-1, -1);
     var nearEntities = game.getEntitiesInNeighborFields(this.getPosition());
     for (var entitiy : nearEntities) {
-      if (entitiy instanceof ICombatable) {
+      if (entitiy instanceof Combatable) {
         if (super.checkForIntersectionWithDrawable(entitiy)) {
-          ICombatable victim = (ICombatable) entitiy;
+          Combatable victim = (Combatable) entitiy;
           victim.dealDamage(Float.MAX_VALUE, null);
         }
       }

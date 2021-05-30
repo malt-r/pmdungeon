@@ -3,11 +3,11 @@ package items.inventory;
 import java.util.logging.Logger;
 
 /** The state of the closed inventory. */
-public class InventoryClosedState implements IInventoryControlState {
+public class InventoryClosedState implements InventoryControlState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   @Override
-  public IInventoryControlState handleInput(Inventory inventory) {
+  public InventoryControlState handleInput(Inventory inventory) {
     return null;
   }
 

@@ -1,6 +1,6 @@
 package items.potions;
 
-import items.IItemVisitor;
+import items.ItemVisitor;
 
 /**
  * Poison Potion.
@@ -56,7 +56,7 @@ public class PoisonPotion extends Potion {
    * @param visitor Visitor that visits the class
    */
   @Override
-  public void accept(IItemVisitor visitor) {
+  public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 }

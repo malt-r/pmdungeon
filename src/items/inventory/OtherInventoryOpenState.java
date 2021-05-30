@@ -2,7 +2,7 @@ package items.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import items.IInventoryOpener;
+import items.InventoryOpener;
 import items.Item;
 import java.util.logging.Logger;
 
@@ -20,7 +20,7 @@ public class OtherInventoryOpenState extends InventoryOpenState {
   }
 
   @Override
-  public IInventoryControlState handleInput(Inventory inventory) {
+  public InventoryControlState handleInput(Inventory inventory) {
     var nextState = super.handleInput(inventory);
 
     if (null == nextState && !lockInput) {
@@ -61,7 +61,7 @@ public class OtherInventoryOpenState extends InventoryOpenState {
 
   // transfer all items to inventory of opener
   private void takeAll(Inventory inventory) {
-    IInventoryOpener opener = inventory.getOpener();
+    InventoryOpener opener = inventory.getOpener();
     if (inventory.getCount() > opener.getNumFreeSlotsOfInventory()) {
       mainLogger.info("You can not take all items, not enough space");
     } else {

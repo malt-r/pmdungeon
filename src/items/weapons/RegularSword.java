@@ -1,6 +1,6 @@
 package items.weapons;
 
-import items.IItemVisitor;
+import items.ItemVisitor;
 import stats.Attribute;
 import stats.Modifier;
 
@@ -62,7 +62,7 @@ public class RegularSword extends Weapon {
    * @param visitor Visitor that visits the class
    */
   @Override
-  public void accept(IItemVisitor visitor) {
+  public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public abstract class InventoryOpenState implements IInventoryControlState, ObservableOpenState {
+public abstract class InventoryOpenState implements InventoryControlState, ObservableOpenState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
   private final ArrayList<OpenStateObserver> observerList = new ArrayList<OpenStateObserver>();
   // organize inventory as a pseudo-grid
@@ -25,8 +25,8 @@ public abstract class InventoryOpenState implements IInventoryControlState, Obse
   }
 
   @Override
-  public IInventoryControlState handleInput(Inventory inventory) {
-    IInventoryControlState nextState = null;
+  public InventoryControlState handleInput(Inventory inventory) {
+    InventoryControlState nextState = null;
 
     // prevent direct switch to selection on first update after opening
     if (!lockInput) {

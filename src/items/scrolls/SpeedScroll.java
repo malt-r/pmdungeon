@@ -1,6 +1,6 @@
 package items.scrolls;
 
-import items.IItemVisitor;
+import items.ItemVisitor;
 
 /**
  * Speed scroll.
@@ -57,7 +57,7 @@ public class SpeedScroll extends Scroll {
    * @param visitor Visitor that visits the class
    */
   @Override
-  public void accept(IItemVisitor visitor) {
+  public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 }

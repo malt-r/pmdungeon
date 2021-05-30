@@ -1,9 +1,9 @@
 package mock;
 
-import main.ICombatable;
+import main.Combatable;
 
 // is always dead
-public class MockCombatable implements ICombatable {
+public class MockCombatable implements Combatable {
   @Override
   public float getHealth() {
     return 50;
@@ -21,15 +21,15 @@ public class MockCombatable implements ICombatable {
   }
 
   @Override
-  public ICombatable getTarget() {
+  public Combatable getTarget() {
     return null;
   }
 
   @Override
-  public void setTarget(ICombatable target) {}
+  public void setTarget(Combatable target) {}
 
   @Override
-  public boolean isOtherFriendly(ICombatable other) {
+  public boolean isOtherFriendly(Combatable other) {
     return false;
   }
 

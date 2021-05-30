@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
-public class ICombatableTest {
+public class CombatableTest {
   Hero hero;
   MockMonster monster1;
   MockMonster monster2;

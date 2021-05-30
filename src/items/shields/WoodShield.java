@@ -1,6 +1,6 @@
 package items.shields;
 
-import items.IItemVisitor;
+import items.ItemVisitor;
 import stats.Attribute;
 import stats.Modifier;
 
@@ -50,7 +50,7 @@ public class WoodShield extends Shield {
    * @param visitor Visitor that visits the class
    */
   @Override
-  public void accept(IItemVisitor visitor) {
+  public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 }

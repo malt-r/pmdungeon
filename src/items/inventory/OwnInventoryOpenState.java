@@ -17,7 +17,7 @@ public class OwnInventoryOpenState extends InventoryOpenState {
   }
 
   @Override
-  public IInventoryControlState handleInput(Inventory inventory) {
+  public InventoryControlState handleInput(Inventory inventory) {
     var nextState = super.handleInput(inventory);
 
     if (null == nextState && !lockInput) {

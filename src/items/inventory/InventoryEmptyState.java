@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 
 import java.util.logging.Logger;
 
-public class InventoryEmptyState implements IInventoryControlState {
+public class InventoryEmptyState implements InventoryControlState {
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   @Override
@@ -14,8 +14,8 @@ public class InventoryEmptyState implements IInventoryControlState {
   }
 
   @Override
-  public IInventoryControlState handleInput(Inventory inventory) {
-    IInventoryControlState nextState = null;
+  public InventoryControlState handleInput(Inventory inventory) {
+    InventoryControlState nextState = null;
     if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
       nextState = new InventoryClosedState();
     }

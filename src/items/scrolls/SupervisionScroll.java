@@ -1,6 +1,6 @@
 package items.scrolls;
 
-import items.IItemVisitor;
+import items.ItemVisitor;
 
 /**
  * Supervision scroll.
@@ -46,7 +46,7 @@ public class SupervisionScroll extends Scroll {
    * @param visitor Visitor that visits the class
    */
   @Override
-  public void accept(IItemVisitor visitor) {
+  public void accept(ItemVisitor visitor) {
     visitor.visit(this);
   }
 }
