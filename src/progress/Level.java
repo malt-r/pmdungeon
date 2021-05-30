@@ -25,11 +25,13 @@ public class Level implements ObserveableLevel{
     private Runnable levelUpCallback;
 
     public boolean addAbility(Ability ability) {
-        if (!abilities.contains(ability)) {
-            abilities.add(ability);
-            return true;
+        for (var ab : abilities) {
+            if (ab.getClass() == ability.getClass()) {
+                return false;
+            }
         }
-        return false;
+        abilities.add(ability);
+        return true;
     }
 
     public void checkForAbilityActivation(Actor origin) {
