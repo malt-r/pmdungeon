@@ -106,7 +106,7 @@ public class DemonMonster extends Monster{
     }else{
       currentCombatStrategy = this.meleeCombatStrategy;
     }
-    if(pathToHero.getCount()<6){
+    if(pathToHero.getCount()<10){
       currentMovementStrategy = this.followHeroStrategy;
     }else{
       currentMovementStrategy = this.randomMovementStrategy;
