@@ -1,7 +1,6 @@
 package quests;
 
 import items.Item;
-
 import java.util.ArrayList;
 
 /** Rewards of a quest. Encapsulates list of items and amount of xp. */
@@ -11,7 +10,7 @@ public class QuestReward {
   private final String desc;
 
   /**
-   * constructor
+   * constructor.
    *
    * @param items itemlist to encapsulate
    * @param xp amount of xp to encapsulate
@@ -37,7 +36,7 @@ public class QuestReward {
   }
 
   /**
-   * Getter for the encapsulated item-list
+   * Getter for the encapsulated item-list.
    *
    * @return the encapsulated item list
    */

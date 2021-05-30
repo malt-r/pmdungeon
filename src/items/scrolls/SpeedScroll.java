@@ -23,7 +23,7 @@ public class SpeedScroll extends Scroll {
   }
 
   /**
-   * Returns the speedMultiplier value of the scroll which can be used for display purposes
+   * Returns the speedMultiplier value of the scroll which can be used for display purposes.
    *
    * @return attackbonus of the scroll
    */
@@ -32,7 +32,7 @@ public class SpeedScroll extends Scroll {
   }
 
   /**
-   * Returns the name of the scroll which can be used for display purposes
+   * Returns the name of the scroll which can be used for display purposes.
    *
    * @return Name of the scroll
    */
@@ -42,7 +42,7 @@ public class SpeedScroll extends Scroll {
   }
 
   /**
-   * Returns the deescription of the scroll which can be used for display purposes
+   * Returns the deescription of the scroll which can be used for display purposes.
    *
    * @return description of the scroll
    */

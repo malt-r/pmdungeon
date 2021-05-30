@@ -35,7 +35,7 @@ public class Staff extends Weapon {
   }
 
   /**
-   * Returns the name of the staff for display purposes
+   * Returns the name of the staff for display purposes.
    *
    * @return Name of the staff
    */
@@ -45,7 +45,7 @@ public class Staff extends Weapon {
   }
 
   /**
-   * description of the staff for display purposes
+   * description of the staff for display purposes.
    *
    * @return description of the staff
    */

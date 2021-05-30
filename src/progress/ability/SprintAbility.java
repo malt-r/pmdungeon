@@ -2,10 +2,10 @@ package progress.ability;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import java.util.concurrent.Callable;
 import main.Actor;
 import progress.effect.IncreaseMovementSpeedEffect;
 
-import java.util.concurrent.Callable;
 
 /**
  * Ability to increase the movement speed of the activating Actor.

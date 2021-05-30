@@ -1,9 +1,9 @@
 package util;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import java.util.ArrayList;
 import main.DrawableEntity;
 
-import java.util.ArrayList;
 
 /** Entry for the SpatialHashMap (stores the DrawableEntities). */
 public class SpatialHashMapEntry {
@@ -29,7 +29,7 @@ public class SpatialHashMapEntry {
   /**
    * Returns the key associated with this entry.
    *
-   * @return
+   * @return the key
    */
   public Point getKey() {
     return key;

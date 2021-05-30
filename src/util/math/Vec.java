@@ -10,7 +10,7 @@ public class Vec {
   private final float[] val = new float[2];
 
   /**
-   * Create a new Vec from a Point
+   * Create a new Vec from a Point.
    *
    * @param point The point to copy the values from.
    */
@@ -35,7 +35,7 @@ public class Vec {
    *
    * @return x
    */
-  public float x() {
+  public float getX() {
     return val[X];
   }
 
@@ -44,7 +44,7 @@ public class Vec {
    *
    * @return y
    */
-  public float y() {
+  public float getY() {
     return val[Y];
   }
 
@@ -55,7 +55,7 @@ public class Vec {
    * @return A new Vec with added values of this Vec and the other Vec.
    */
   public Vec add(Vec other) {
-    return new Vec(this.x() + other.x(), this.y() + other.y());
+    return new Vec(this.getX() + other.getX(), this.getY() + other.getY());
   }
 
   /**
@@ -65,7 +65,7 @@ public class Vec {
    * @return A new Vec with subtracted values of this Vec and the other Vec.
    */
   public Vec subtract(Vec other) {
-    return new Vec(this.x() - other.x(), this.y() - other.y());
+    return new Vec(this.getX() - other.getX(), this.getY() - other.getY());
   }
 
   /**
@@ -75,7 +75,7 @@ public class Vec {
    * @return A new Vec which's components are multiplied with s.
    */
   public Vec multiply(float s) {
-    return new Vec(this.x() * s, this.y() * s);
+    return new Vec(this.getX() * s, this.getY() * s);
   }
 
   /**
@@ -83,20 +83,20 @@ public class Vec {
    *
    * @param s The scalar value, must not be zero.
    * @return A new Vec which's components are divided by s.
-   * @throws ArithmeticException, if s is zero.
+   * @throws ArithmeticException if s is zero.
    */
   public Vec divide(float s) throws ArithmeticException {
     if (s == 0.0f) {
       throw new ArithmeticException("Divide by zero");
     }
-    return new Vec(this.x() / s, this.y() / s);
+    return new Vec(this.getX() / s, this.getY() / s);
   }
 
   /**
    * Scale this Vec to a given length.
    *
    * @param scale The scale.
-   * @return
+   * @return scale of the vector
    */
   public Vec scale(float scale) {
     float magnitude = this.magnitude();
@@ -115,7 +115,7 @@ public class Vec {
    * @return The magnitude of this Vec.
    */
   public float magnitude() {
-    return (float) Math.sqrt(Math.pow(this.x(), 2) + Math.pow(this.y(), 2));
+    return (float) Math.sqrt(Math.pow(this.getX(), 2) + Math.pow(this.getY(), 2));
   }
 
   /**
@@ -124,7 +124,7 @@ public class Vec {
    * @return A new Point with the values of this Vec.
    */
   public Point toPoint() {
-    return new Point(this.x(), this.y());
+    return new Point(this.getX(), this.getY());
   }
 
   /**
@@ -134,6 +134,6 @@ public class Vec {
    * @return The dot product.
    */
   public float dot(Vec other) {
-    return this.x() * other.x() + this.y() * other.y();
+    return this.getX() * other.getX() + this.getY() * other.getY();
   }
 }

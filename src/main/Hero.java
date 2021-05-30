@@ -128,8 +128,8 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     for (float i = 1.0f; i <= steps; i = i + 1.0f) {
       Vec stepVector = location.add(direction.multiply(i / (float) steps));
 
-      int x = (int) Math.floor(stepVector.x());
-      int y = (int) Math.floor(stepVector.y());
+      int x = (int) Math.floor(stepVector.getX());
+      int y = (int) Math.floor(stepVector.getY());
 
       if (game.getCurrentLevel().getTileTypeAt(x, y) == Tile.Type.WALL) {
         return false;

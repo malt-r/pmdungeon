@@ -31,7 +31,7 @@ public class RegularSword extends Weapon {
   }
 
   /**
-   * Returns the name of the sword for display purposes
+   * Returns the name of the sword for display purposes.
    *
    * @return Name of the swords
    */
@@ -41,7 +41,7 @@ public class RegularSword extends Weapon {
   }
 
   /**
-   * description of the sword for display purposes
+   * description of the sword for display purposes.
    *
    * @return description of the regular sword
    */

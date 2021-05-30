@@ -56,8 +56,8 @@ public class Stats {
   /**
    * Returns the specified attribute.
    *
-   * @param type
-   * @return
+   * @param type type of the attribute
+   * @return Attribute
    */
   public Attribute getAttribute(Attribute.AttributeType type) {
     return this.attributes.get(type);

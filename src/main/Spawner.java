@@ -7,6 +7,8 @@ import items.ItemType;
 import items.chests.Chest;
 import items.chests.ChestFactory;
 import items.chests.ChestType;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
@@ -15,8 +17,7 @@ import traps.Trap;
 import traps.TrapFactory;
 import traps.TrapType;
 
-import java.util.ArrayList;
-import java.util.logging.Logger;
+
 
 /**
  * Spawner class.
@@ -27,7 +28,7 @@ public class Spawner {
   private static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   /**
-   * Spawns all monsters and items present in the levelContent in the current game-
+   * Spawns all monsters and items present in the levelContent in the current game.
    *
    * @param levelContent content of a level
    * @param listToAdd to which list the entities should be added
@@ -57,7 +58,7 @@ public class Spawner {
     }
 
     for (var trapType : levelContent.traps) {
-      var trap = TrapFactory.CreateTrap(trapType);
+      var trap = TrapFactory.createTrap(trapType);
       trap.setLevel(Game.getInstance().getCurrentLevel());
       mainLogger.info("Trap " + trapType.toString() + " spawned");
       listToAdd.add(trap);
@@ -72,7 +73,7 @@ public class Spawner {
   }
 
   /**
-   * Spawns a monster of the specific type
+   * Spawns a monster of the specific type.
    *
    * @param monsterType of the monster that should be spawned
    * @return spawned monster
@@ -84,7 +85,7 @@ public class Spawner {
   }
 
   /**
-   * Spawns a monster of the specific type
+   * Spawns a monster of the specific type.
    *
    * @param itemType of the item that should be spawned
    * @return spawned item
@@ -96,7 +97,7 @@ public class Spawner {
   }
 
   /**
-   * Spawns a trap of the specific type
+   * Spawns a trap of the specific type.
    *
    * @param trapType of the trap that should be spawned
    * @return spawned trap
@@ -104,11 +105,11 @@ public class Spawner {
    */
   public static Trap spawnTrap(TrapType trapType) throws Exception {
     mainLogger.info("Trap " + trapType.toString() + " spawned");
-    return TrapFactory.CreateTrap(trapType);
+    return TrapFactory.createTrap(trapType);
   }
 
   /**
-   * Spawns a chest of the specific type
+   * Spawns a chest of the specific type.
    *
    * @param chestType of the chest that should be spawned
    * @return spawned chest

@@ -32,7 +32,7 @@ public class Spear extends Weapon {
   }
 
   /**
-   * Returns the name of the spear for display purposes
+   * Returns the name of the spear for display purposes.
    *
    * @return Name of the spear
    */
@@ -42,7 +42,7 @@ public class Spear extends Weapon {
   }
 
   /**
-   * description of the spear for display purposes
+   * description of the spear for display purposes.
    *
    * @return description of the spear
    */

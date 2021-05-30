@@ -1,14 +1,15 @@
 package util;
 
+import static util.math.Convenience.areFlooredPointsEqual;
+import static util.math.Convenience.getFlooredPoint;
+
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 import main.DrawableEntity;
 import main.IDrawableEntityObserver;
 
-import java.util.ArrayList;
-import java.util.logging.Logger;
 
-import static util.math.Convenience.areFlooredPointsEqual;
-import static util.math.Convenience.getFlooredPoint;
 
 /**
  * Hashmap implementation, which stores DrawableEntities with their positions as keys. Uses chaining
@@ -22,7 +23,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
   /** Logger. */
   protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  final float UPPER_LOADFACTOR_THRESHOLD = 0.8f;
+  final float upperLoadfactorThreshold = 0.8f;
 
   // buckets of the hashmap
   private final ArrayList<ArrayList<SpatialHashMapEntry>> buckets;
@@ -34,7 +35,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
   int filledBuckets;
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param targetSize The number of buckets, which should at least be contained in this hashmap.
    *     Will be set to next bigger prime.
@@ -49,7 +50,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
     this.filledBuckets = 0;
   }
 
-  /** return the number of filled buckets */
+  /** return the number of filled buckets. */
   public int getFilledBuckets() {
     return filledBuckets;
   }
@@ -67,7 +68,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
 
   /**
    * Print info about this hashmap (number of filled buckets, total bucket, loadfactor, length of
-   * longest collision length"
+   * longest collision length".
    */
   public void printStats() {
     mainLogger.info("Printing Spatial hashmap stats:");
@@ -87,7 +88,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
     int h = hash(key);
 
     float futureLoadFactor = (float) (this.filledBuckets + 1) / (float) this.buckets.size();
-    if (futureLoadFactor > UPPER_LOADFACTOR_THRESHOLD) {
+    if (futureLoadFactor > upperLoadfactorThreshold) {
       // TODO: grow
     }
 
@@ -172,7 +173,7 @@ public class SpatialHashMap implements IDrawableEntityObserver {
    *
    * @param lowerBound The lower bound of the range (lower bound for x and y coordinates).
    * @param upperBound The upper bound of the range (upper bound for x and y coordinates).
-   * @return
+   * @return array list of entities
    */
   public ArrayList<DrawableEntity> getInRange(Point lowerBound, Point upperBound) {
     ArrayList<DrawableEntity> returnList = new ArrayList<>();

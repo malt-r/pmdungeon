@@ -21,7 +21,7 @@ public class SupervisionScroll extends Scroll {
   }
 
   /**
-   * Returns the name of the scroll which can be used for display purposes
+   * Returns the name of the scroll which can be used for display purposes.
    *
    * @return Name of the scroll
    */
@@ -31,7 +31,7 @@ public class SupervisionScroll extends Scroll {
   }
 
   /**
-   * Returns the description of the potion which can be used for display purposes
+   * Returns the description of the potion which can be used for display purposes.
    *
    * @return description of the scroll
    */

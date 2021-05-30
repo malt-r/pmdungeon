@@ -25,7 +25,7 @@ public abstract class Weapon extends EquipableItem {
   }
 
   /**
-   * Reduces the condition of the weapon after a sucessfull hit
+   * Reduces the condition of the weapon after a sucessfull hit.
    *
    * @param reduce reduceamount which should be deducted from the weapon
    * @return returns if the weapon broke
@@ -36,7 +36,7 @@ public abstract class Weapon extends EquipableItem {
   }
 
   /**
-   * Returns the condition value of the shield which can be used for display purposes
+   * Returns the condition value of the shield which can be used for display purposes.
    *
    * @return condition of the weapon
    */

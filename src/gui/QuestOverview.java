@@ -34,7 +34,7 @@ public class QuestOverview implements IQuestObserver {
   }
 
   /**
-   * Displays information of the current quest with progress
+   * Displays information of the current quest with progress.
    *
    * @param quest which should be displayed
    */
@@ -47,7 +47,7 @@ public class QuestOverview implements IQuestObserver {
   }
 
   /**
-   * Displays a quest which has not be finished
+   * Displays a quest which has not be finished.
    *
    * @param quest which should be displayed
    */
@@ -59,7 +59,7 @@ public class QuestOverview implements IQuestObserver {
   }
 
   /**
-   * Display a finished quest
+   * Display a finished quest.
    *
    * @param quest which should be displayed
    */
@@ -77,7 +77,7 @@ public class QuestOverview implements IQuestObserver {
   }
 
   /**
-   * Updates the quest overview
+   * Updates the quest overview.
    *
    * @param quest the quest, which sends the update
    */

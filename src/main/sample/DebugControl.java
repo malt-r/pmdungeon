@@ -90,15 +90,15 @@ public class DebugControl {
       entityController.addEntity(chest1);
       chest1.setLevel(levelController.getDungeon());
 
-      var trapHole = TrapFactory.CreateTrap(TrapType.HOLE);
+      var trapHole = TrapFactory.createTrap(TrapType.HOLE);
       entityController.addEntity(trapHole);
       trapHole.setLevel(levelController.getDungeon());
 
-      var trapSpikes = TrapFactory.CreateTrap(TrapType.SPIKES);
+      var trapSpikes = TrapFactory.createTrap(TrapType.SPIKES);
       entityController.addEntity(trapSpikes);
       trapSpikes.setLevel(levelController.getDungeon());
 
-      var trapActivator = TrapFactory.CreateTrap(TrapType.ACTIVATOR);
+      var trapActivator = TrapFactory.createTrap(TrapType.ACTIVATOR);
       entityController.addEntity(trapActivator);
       trapActivator.setLevel(levelController.getDungeon());
 

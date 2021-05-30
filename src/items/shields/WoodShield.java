@@ -25,7 +25,7 @@ public class WoodShield extends Shield {
   }
 
   /**
-   * Returns the name of the shield which can be used for display purposes
+   * Returns the name of the shield which can be used for display purposes.
    *
    * @return Name of the shield
    */
@@ -35,7 +35,7 @@ public class WoodShield extends Shield {
   }
 
   /**
-   * Returns the deescription of the shield which can be used for display purposes
+   * Returns the deescription of the shield which can be used for display purposes.
    *
    * @return description of the potion
    */

@@ -489,9 +489,9 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         // set look direction
         if (hasTarget()) {
           lookAtTarget();
-        } else if (movementDelta.x() < 0) {
+        } else if (movementDelta.getX() < 0) {
           lookLeft = true;
-        } else if (movementDelta.x() > 0) {
+        } else if (movementDelta.getX() > 0) {
           lookLeft = false;
         }
 

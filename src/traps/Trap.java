@@ -1,11 +1,12 @@
 package traps;
 
+import static util.math.Convenience.checkForIntersection;
+
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.DrawableEntity;
 import util.math.Vec;
 
-import static util.math.Convenience.checkForIntersection;
 
 /**
  * The base class for any trap.

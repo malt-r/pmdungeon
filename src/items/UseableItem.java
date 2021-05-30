@@ -1,6 +1,6 @@
 package items;
 
-/** Abstract UseableItem base class which is the base class for every usaable item */
+/** Abstract UseableItem base class which is the base class for every usaable item. */
 public abstract class UseableItem extends Item {
 
   /**

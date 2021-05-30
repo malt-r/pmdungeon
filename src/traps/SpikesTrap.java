@@ -1,10 +1,10 @@
 package traps;
 
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
-import main.ICombatable;
-
 import java.util.Timer;
 import java.util.TimerTask;
+import main.ICombatable;
+
 
 /**
  * The base class for any SpikesTrap.
@@ -26,6 +26,7 @@ public class SpikesTrap extends Trap {
    *
    * <p>This constructor will instantiate the animations and read all required texture data.
    */
+
   public SpikesTrap() {
     super();
     nextFrameTimer = new Timer();
@@ -120,6 +121,8 @@ public class SpikesTrap extends Trap {
           spikesTrapState = SpikesTrapState.MIDDLE_SPIKES;
           currentAnimation = middleSpikesAnimation;
           animationRunsForward = !animationRunsForward;
+          break;
+        default:
           break;
       }
     }

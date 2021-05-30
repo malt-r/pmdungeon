@@ -2,7 +2,6 @@ package monsters.strategies.movement;
 
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
