@@ -118,9 +118,9 @@ public class DemonMonster extends Monster{
    * gets the damage value for combat
    * @return damage value of the actor
    */
-  //@Override
-  //public float getDamage() {
-  //  return this.currentCombatStrategy.getAttackValue() * this.attackDamageModifierWeapon * this.attackDamageModifierScroll;
-  //}
+  @Override
+  public float getDamage() {
+    return this.currentCombatStrategy.getAttackValue();
+  }
 
 }
