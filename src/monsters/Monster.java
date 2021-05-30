@@ -1,15 +1,10 @@
 package monsters;
 
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-<<<<<<< HEAD
-=======
 import main.Actor;
 import main.Combatable;
->>>>>>> refs/remotes/origin/mr/format
 import java.util.Timer;
 import java.util.TimerTask;
-import main.Actor;
-import main.ICombatable;
 import monsters.strategies.combat.CombatStrategy;
 import monsters.strategies.combat.MeleeStrategy;
 import monsters.strategies.movement.MovementStrategy;
