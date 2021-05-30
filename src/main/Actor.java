@@ -3,16 +3,17 @@ package main;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import progress.effect.OneShotEffect;
 import progress.effect.PersistentEffect;
+import stats.Stats;
 import util.math.Vec;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static util.math.Convenience.scaleDelta;
+import static stats.Attribute.*;
 
 /**
  * The controllable player character.
@@ -21,6 +22,7 @@ import static util.math.Convenience.scaleDelta;
  * </p>
  */
 public abstract class Actor extends DrawableEntity implements ICombatable {
+  private ICombatable target;
 
   /**
    * Constructor of the Actor class.
@@ -37,6 +39,38 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     this.persistentEffects = new ArrayList<>();
     this.effectsScheduledForRemoval = new ArrayList<>();
     this.generateAnimations();
+
+    this.stats.addInPlace(AttributeType.MOVEMENT_SPEED, 0.1f);
+    this.stats.addInPlace(AttributeType.HEALTH, 100.f);
+    this.stats.addInPlace(AttributeType.MAX_HEALTH, 100.f);
+    this.stats.addInPlace(AttributeType.HIT_CHANCE, 0.7f);
+    this.stats.addInPlace(AttributeType.PHYSICAL_ATTACK_DAMAGE, 50.f);
+    this.stats.addInPlace(AttributeType.EVASION_CHANCE, 0.15f);
+
+    //protected float movementSpeed = 0.1f;
+    //protected float movementSpeedMultiplier = 1.f;
+    //// TODO: temporary solution
+    //public void applyMovementSpeedMultiplier(float multiplier) {
+    //  this.movementSpeedMultiplier = multiplier;
+    //}
+
+    //// combat-characteristics:
+    ////TODO:acter should only have basic hit chance, attack damge, evasion change
+    ////since it is used for the monster as well which doesnt can upgrade it's skills
+    //protected float health = 100.f;
+    //protected float maxHealth = 100.f;
+
+    //protected float baseHitChance = 0.6f;
+    //protected float hitChanceModifierScroll = 1.f;
+    //protected float hitChanceModifierWeapon = 1.f;
+
+    //protected float baseAttackDamage = 50;
+    //protected float attackDamageModifierScroll = 1.f;
+    //protected float attackDamageModifierWeapon= 1.f;
+
+    //protected float baseEvasionChance = 0.15f;
+    //protected float evasionChanceModifierScroll = 1.f;
+    //protected float evasionChanceModifierWeapon = 1.f;
   }
 
   /**
@@ -113,31 +147,12 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   private final Timer hitTimer;
   protected long attackDelay = 1000;
   protected boolean canAttack;
-  protected float movementSpeed = 0.1f;
-  protected float movementSpeedMultiplier = 1.f;
-  private ICombatable target;
-  // TODO: temporary solution
-  public void applyMovementSpeedMultiplier(float multiplier) {
-    this.movementSpeedMultiplier = multiplier;
+
+  protected Stats stats = new Stats();
+
+  public Stats getStats() {
+    return stats;
   }
-
-  // combat-characteristics:
-  //TODO:acter should only have basic hit chance, attack damge, evasion change
-  //since it is used for the monster as well which doesnt can upgrade it's skills
-  protected float health = 100.f;
-  protected float maxHealth = 100.f;
-
-  protected float baseHitChance = 0.6f;
-  protected float hitChanceModifierScroll = 1.f;
-  protected float hitChanceModifierWeapon = 1.f;
-
-  protected float baseAttackDamage = 50;
-  protected float attackDamageModifierScroll = 1.f;
-  protected float attackDamageModifierWeapon= 1.f;
-
-  protected float baseEvasionChance = 0.15f;
-  protected float evasionChanceModifierScroll = 1.f;
-  protected float evasionChanceModifierWeapon = 1.f;
 
   /**
    *Gets the health of the actor
@@ -145,7 +160,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public float getHealth() {
-    return this.health;
+    //return this.health;
+    return this.stats.getValue(AttributeType.HEALTH);
   }
 
   /**
@@ -154,7 +170,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    */
   @Override
   public void setHealth(float health) {
-    this.health = health;
+      // TODO: is this a good idea?
+    this.stats.getAttribute(AttributeType.HEALTH).setEffectiveValue(health);
   }
 
   /**
@@ -208,21 +225,30 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
    * @return value of the hitchance
    */
   @Override
-  public float getHitChance() { return baseHitChance * hitChanceModifierWeapon * hitChanceModifierScroll; }
+  public float getHitChance() {
+    //return baseHitChance * hitChanceModifierWeapon * hitChanceModifierScroll;
+    return this.stats.getValue(AttributeType.HIT_CHANCE);
+  }
 
   /**
    * Gets the evasion rate of the actor
    * @return evasion rate of the actor
    */
   @Override
-  public float getEvasionChance() { return this.baseEvasionChance * evasionChanceModifierWeapon * evasionChanceModifierScroll; }
+  public float getEvasionChance() {
+    //return this.baseEvasionChance * evasionChanceModifierWeapon * evasionChanceModifierScroll;
+    return this.stats.getValue(AttributeType.EVASION_CHANCE);
+  }
 
   /**
    * gets the damage value for combat
    * @return damage value of the actor
    */
   @Override
-  public float getDamage() { return this.baseAttackDamage * this.attackDamageModifierWeapon * this.attackDamageModifierScroll; }
+  public float getDamage() {
+    //return this.baseAttackDamage * this.attackDamageModifierWeapon * this.attackDamageModifierScroll;
+    return this.stats.getValue(AttributeType.PHYSICAL_ATTACK_DAMAGE);
+  }
 
   protected boolean inRangeFunc(Point p){
     return new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < 1.0f;
@@ -278,9 +304,13 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   @Override
   public void heal(float amount) {
     //TODO: negative amount on poison?
-    this.health += amount;
-    if (this.health > maxHealth) {
-      this.health = maxHealth;
+    var healthAttr = this.stats.getAttribute(AttributeType.HEALTH);
+    var maxHealthAttr = this.stats.getAttribute(AttributeType.MAX_HEALTH);
+    var val = healthAttr.getEffectiveValue();
+    if (val + amount > maxHealthAttr.getEffectiveValue()) {
+      healthAttr.setEffectiveValue(maxHealthAttr.getEffectiveValue());
+    } else {
+      healthAttr.setEffectiveValue(healthAttr.getEffectiveValue() + amount);
     }
   }
 
@@ -536,8 +566,9 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   /**
    * Rests tje combat stats of the actor. E.g. after the actor died.
    */
-  protected void resetCombatStats() {
-    this.setHealth(maxHealth);
+  protected void resetStats() {
+    this.stats.clearModifiers();
+    //this.setHealth(this.stats.getValue(AttributeType.MAX_HEALTH));
     this.movementState = MovementState.CAN_MOVE;
     this.canAttack = true;
   }
@@ -548,14 +579,14 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   @Override
   public void setLevel(DungeonWorld level) {
     super.setLevel(level);
-    this.resetCombatStats();
+    this.resetStats();
   }
 
   private Vec calculateMovementDelta() {
     Point newPosition = readMovementInput();
     // calculate normalized delta of this.position and the calculated
     // new position to avoid increased diagonal movement speed
-    return scaleDelta(this.getPosition(), newPosition, movementSpeed * movementSpeedMultiplier);
+    return scaleDelta(this.getPosition(), newPosition, this.stats.getValue(AttributeType.MOVEMENT_SPEED));
   }
 
   /**
