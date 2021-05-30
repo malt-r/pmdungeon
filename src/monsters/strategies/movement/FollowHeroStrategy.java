@@ -3,13 +3,16 @@ package monsters.strategies.movement;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import main.Game;
+import util.math.Convenience;
 
-import static main.DrawableEntity.game;
-
+/**
+ * This Strategy follows a hero to a specific range.
+ */
 public class FollowHeroStrategy implements MovementStrategy{
-  public FollowHeroStrategy(){
-  }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Point Move(Point currentPosition, DungeonWorld level) {
 
@@ -24,14 +27,15 @@ public class FollowHeroStrategy implements MovementStrategy{
     var res = level.findPath(startTile,endTile);
 
 
-    if(res.getCount()>1 && res.getCount()<5){
+    if(res.getCount()>2){
     var resX = res.get(1).getX();
     var resY = res.get(1).getY();
-    if(Math.abs(startX-endX)+Math.abs(startY-endY)>1) {
-      return new Point(resX, resY);
-    }
+    return new Point(resX, resY);
     }
 
+    if(!Convenience.checkForIntersection(currentPosition,Game.getInstance().getHero().getPosition(),0.2f)){
+    return Game.getInstance().getHero().getPosition();
+    }
     return currentPosition;
   }
 }

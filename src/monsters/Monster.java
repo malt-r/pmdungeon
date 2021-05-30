@@ -58,11 +58,13 @@ public abstract class Monster extends Actor {
     super.update();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected boolean inRangeFunc(Point p){
     return this.currentCombatStrategy.RangeFunction(this.getPosition(),p);
   }
-
 
   /**
    * Monster shouldn't attack other monsters.

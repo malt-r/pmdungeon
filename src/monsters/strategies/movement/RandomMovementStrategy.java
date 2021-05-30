@@ -6,6 +6,9 @@ import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Movement Strategy for random movement.
+ */
 public class RandomMovementStrategy implements MovementStrategy{
 
   //Wether the direction of the moving monster should be updated
@@ -13,11 +16,20 @@ public class RandomMovementStrategy implements MovementStrategy{
   private final Timer updateDirectionStateTimer;
   //Saves the direction of the last movement
   private Integer directionState=0;
+  //Movementspeed
   protected float movementSpeed = 0.1f;
+
+  /**
+   * Constructor of the Random Movementstrategy.
+   */
   public RandomMovementStrategy(){
     updateDirectionStateTimer = new Timer();
     updateDirectionState=true;
   }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Point Move(Point currentPosition, DungeonWorld level) {
     var newPosition = new Point(currentPosition);

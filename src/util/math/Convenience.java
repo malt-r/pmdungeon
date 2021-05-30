@@ -48,7 +48,7 @@ public class Convenience {
     /**
      * Floor the components of a point.
      * @param toFloor The point of which the components are to be floored.
-     * @return
+     * @return Point toFloor in a floored verison.
      */
     static public Point getFlooredPoint(Point toFloor) {
         return new Point((float)Math.floor(toFloor.x), (float)Math.floor(toFloor.y));
@@ -111,10 +111,16 @@ public class Convenience {
         var diff = new Vec(drawable1.getPosition()).subtract(new Vec(drawable2.getPosition())).magnitude();
         return diff < maxDiff;
     }
+
+    /**
+     * Gets the tile which has the corosponding point in it.
+     * @param p Point to check
+     * @param level level which has the tiles
+     * @return Tile which has the given point.
+     */
     static public Tile convertPointToTile(Point p,DungeonWorld level){
         int x = (int) p.x;
         int y = (int) p.y;
         return level.getTileAt(x, y);
-
     }
 }

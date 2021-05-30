@@ -74,6 +74,9 @@ public class LizardMonster  extends Monster {
     hitAnimationRight = createAnimation(hitRightFrames, 1);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void update() {
     super.update();

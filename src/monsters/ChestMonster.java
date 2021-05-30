@@ -86,6 +86,9 @@ public class ChestMonster  extends Monster {
 
   }
 
+  /**
+   * Runs every frame and manages the switch between different strategies.
+   */
   @Override
   public void update(){
     var startTile = Convenience.convertPointToTile(getPosition(),level);
@@ -109,9 +112,6 @@ public class ChestMonster  extends Monster {
     if (!awake){
       currentAnimation=sleepAnimation;
     }
-
     super.update();
   }
-
-
 }
