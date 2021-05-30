@@ -3,22 +3,17 @@ package main;
 import GUI.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
-import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.Item;
 import items.chests.Chest;
-import items.inventory.*;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
-import progress.Level;
 import quests.QuestGiver;
 import quests.QuestHandler;
 import traps.*;
@@ -53,14 +48,30 @@ public class Game extends MainController {
     private int currentLevelIndex =0;
     private boolean drawTraps=false;
 
+    /**
+     * Gets every Entity at specific point
+     * @param p Point to check at
+     * @return List of all Entities at that point
+     */
     public ArrayList<DrawableEntity> getEntitiesAtPoint(Point p) {
         return this.spatialMap.getAt(p);
     }
 
+    /**
+     * Gets every Entity in specific coordinate range
+     * @param lowerBound Point of lower Bound
+     * @param upperBound Point of upper Bound
+     * @return List of all Entities in that coordinate range
+     */
     public ArrayList<DrawableEntity> getEntitiesInCoordRange(Point lowerBound, Point upperBound) {
         return this.spatialMap.getInRange(lowerBound, upperBound);
     }
 
+    /**
+     * Gets every Entity in neighbor fields
+     * @param centerPoint Point of center
+     * @return List of all Entities in neighbor fields
+     */
     public ArrayList<DrawableEntity> getEntitiesInNeighborFields(Point centerPoint) {
         var lowerBound = new Point((float)Math.floor(centerPoint.x) - 1, (float)Math.floor(centerPoint.y) - 1);
         var upperBound = new Point((float)Math.ceil(centerPoint.x) + 1, (float)Math.ceil(centerPoint.y) + 1);
@@ -93,7 +104,7 @@ public class Game extends MainController {
 
     /**
      * the game is a singleton instance which can be used everywhere in the game
-     * @return singelton instance of the game
+     * @return singleton instance of the game
      */
     public static Game getInstance(){
         if(Game.instance==null){
@@ -103,8 +114,8 @@ public class Game extends MainController {
     }
 
     /**
-     *
-     * @return
+     * Gets the current Questhandler
+     * @return current Questhandler
      */
     public QuestHandler getQuestHandler(){ return this.questHandler; }
 
@@ -112,16 +123,12 @@ public class Game extends MainController {
         return this.questDialog;
     }
 
-    public QuestOverview getQuestOverview() {
-        return this.questOverview;
-    }
-
-    //TODO - Maybe only temporary (who knows)
     /**
-     *
-     * @return
+     * Gets the hero
+     * @return current hero
      */
     public Hero getHero(){ return this.hero; }
+
     /**
      * Setup of the game world.
      * <p>
@@ -134,8 +141,6 @@ public class Game extends MainController {
         hero = new Hero();
         this.questHandler = new QuestHandler(hero);
         this.entityController.addEntity(this.questHandler);
-        // TODO: temporary solution, how to pass hero to quest?
-        //this.questHandler.requestForNewQuest(new KillMonstersQuest(this.hero));
 
         firstLevel = null;
         // the entityController will call hero.update each frame
@@ -144,7 +149,10 @@ public class Game extends MainController {
         // attach camera to hero
         camera.follow(hero);
 
+        setupGUI();
+    }
 
+    private void setupGUI() {
         questDialog = new QuestDialog(hud, textHUD);
         questOverview = new QuestOverview(hud, textHUD);
         inventoryOverview = new InventoryOverview(hud);
@@ -163,38 +171,11 @@ public class Game extends MainController {
                 if (entity instanceof DrawableEntity) {
                     this.spatialMap.insert((DrawableEntity)entity);
                 }
-//                if(entity instanceof Actor) {
-//                    ((Actor)entity).setLevel(levelController.getDungeon());
-//                }
-//                if(entity instanceof Item) {
-//                    ((Item)entity).setLevel(levelController.getDungeon());
-//                }
-//                if(entity instanceof Chest) {
-//                    ((Chest)entity).setLevel(levelController.getDungeon());
-//                }
-//                if(entity instanceof Trap) {
-//                    ((Trap)entity).setLevel(levelController.getDungeon());
-//                }
             }
             entitiesToAdd.clear();
         }
-
-        // TODO: this still needed?
-        //Y in German keyboard
-       // if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-       //     questDialog.show();
-       // }
-       // if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-       //     questDialog.hide();
-       // }
-
-       // if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-       //     questOverview.show();
-       // }
-       // if (Gdx.input.isKeyPressed(Input.Keys.V)) {
-       //     questOverview.hide();
-       // }
     }
+
     /**
      * Implements logic executed at the end of a frame.
      * <p>
@@ -204,44 +185,34 @@ public class Game extends MainController {
      */
     @Override
     protected void endFrame() {
-
-        // check, if current position of hero is on the trigger to load a new level
         if (levelController.checkForTrigger(hero.getPosition()) ) {
-            currentLevelIndex++;
-            entityController.removeAllFrom(Item.class);
-            entityController.removeAllFrom(Monster.class);
-            entityController.removeAllFrom(Trap.class);
-            entityController.removeAllFrom(Chest.class);
-            entityController.removeAllFrom(QuestGiver.class);
-            levelController.triggerNextStage();
-            spatialMap.clear();
-            mainLogger.info("Next stage loaded");
-
+            loadNextStage();
         }
 
-        // TODO: refactor
         if (hero.isDead()) {
-            mainLogger.info("GAME OVER");
-            hero.onGameOver();
-            this.questOverview.hide();
-            this.questDialog.hide();
-            try {
-                levelController.loadDungeon(firstLevel);
-                currentLevelIndex =0;
-                drawTraps=false;
-            } catch (InvocationTargetException ex) {
-                mainLogger.severe(ex.getMessage());
-            } catch (IllegalAccessException ex) {
-                mainLogger.severe(ex.getMessage());
-            }
-            var allEntities = entityController.getList();
-            for(var entity: allEntities){
-                if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
-                    entitiesToRemove.add(entity);
-                }
-            }
+            onGameOver();
         }
 
+        removeEntitiesFromList();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+            printHashMapStats();
+        }
+    }
+
+    private void loadNextStage() {
+        currentLevelIndex++;
+        entityController.removeAllFrom(Item.class);
+        entityController.removeAllFrom(Monster.class);
+        entityController.removeAllFrom(Trap.class);
+        entityController.removeAllFrom(Chest.class);
+        entityController.removeAllFrom(QuestGiver.class);
+        levelController.triggerNextStage();
+        spatialMap.clear();
+        mainLogger.info("Next stage loaded");
+    }
+
+    private void removeEntitiesFromList() {
         if (entitiesToRemove.size() > 0){
             for(IEntity entity : entitiesToRemove){
                 this.entityController.removeEntity(entity);
@@ -251,9 +222,31 @@ public class Game extends MainController {
             }
             entitiesToRemove.clear();
         }
+    }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
-            printHashMapStats();
+    private void onGameOver() {
+        mainLogger.info("GAME OVER");
+        hero.onGameOver();
+        this.questOverview.hide();
+        this.questDialog.hide();
+        reloadFirstLevel();
+        var allEntities = entityController.getList();
+        for(var entity: allEntities){
+            if(!(entity instanceof  Hero || entity instanceof QuestHandler)){
+                entitiesToRemove.add(entity);
+            }
+        }
+    }
+
+    private void reloadFirstLevel() {
+        try {
+            levelController.loadDungeon(firstLevel);
+            currentLevelIndex =0;
+            drawTraps=false;
+        } catch (InvocationTargetException ex) {
+            mainLogger.severe(ex.getMessage());
+        } catch (IllegalAccessException ex) {
+            mainLogger.severe(ex.getMessage());
         }
     }
 
@@ -331,6 +324,5 @@ public class Game extends MainController {
 
     private void printHashMapStats() {
         spatialMap.printStats();
-
     }
 }
