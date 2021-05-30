@@ -15,34 +15,33 @@ import java.util.ArrayList;
 
 /**
  * Factory for creation of monster
- * <p>
- *     Creates all types of monster that can appear in the game.
- * </p>
+ *
+ * <p>Creates all types of monster that can appear in the game.
  */
 public class ItemFactory {
 
   /**
-   *
-   * @param   itemType    Type of the item
-   * @throws  Exception   if itemType is not supported
-   * @return  A monster, of the specified type.
+   * @param itemType Type of the item
+   * @return A monster, of the specified type.
+   * @throws Exception if itemType is not supported
    */
-  public static Item CreateItem (ItemType itemType) throws Exception{
-    if(itemType == ItemType.SWORD_REGULAR)      return new RegularSword();
-    if(itemType == ItemType.SWORD_GOLD)       return new GoldenSword();
-    if(itemType == ItemType.POTION_HEAL)        return new HealthPotion();
-    if(itemType == ItemType.POTION_POISON)      return new PoisonPotion();
-    if(itemType == ItemType.SCROLL_ATTACK)      return new AttackScroll();
-    if(itemType == ItemType.SCROLL_SUPERVISION)  return new SupervisionScroll();
-    if(itemType == ItemType.SCROLL_SPEED)       return new SpeedScroll();
-    if(itemType == ItemType.SHIELD_WOOD)        return new WoodShield();
-    if(itemType == ItemType.SHIELD_EAGLE)       return new EagleShield();
-    if(itemType == ItemType.STAFF)              return new Staff();
+  public static Item CreateItem(ItemType itemType) throws Exception {
+    if (itemType == ItemType.SWORD_REGULAR) return new RegularSword();
+    if (itemType == ItemType.SWORD_GOLD) return new GoldenSword();
+    if (itemType == ItemType.POTION_HEAL) return new HealthPotion();
+    if (itemType == ItemType.POTION_POISON) return new PoisonPotion();
+    if (itemType == ItemType.SCROLL_ATTACK) return new AttackScroll();
+    if (itemType == ItemType.SCROLL_SUPERVISION) return new SupervisionScroll();
+    if (itemType == ItemType.SCROLL_SPEED) return new SpeedScroll();
+    if (itemType == ItemType.SHIELD_WOOD) return new WoodShield();
+    if (itemType == ItemType.SHIELD_EAGLE) return new EagleShield();
+    if (itemType == ItemType.STAFF) return new Staff();
     throw new Exception("ItemType no supported");
   }
 
   /**
    * Creates a list of random items
+   *
    * @param count amount of random items
    * @return a list of random items
    */

@@ -8,9 +8,8 @@ import traps.TrapType;
 
 /**
  * Holds information which monsters and items are present in a level.
- * <p>
- *   Contains entities that are present in the level
- * </p>
+ *
+ * <p>Contains entities that are present in the level
  */
 public class LevelContent {
   public MonsterType[] monsters;
@@ -18,17 +17,22 @@ public class LevelContent {
   public ChestType[] chests;
   public TrapType[] traps;
   public QuestGiverType[] questGivers;
+
   /**
    * Constructor of the LevelContent class.
-   * <p>
-   *  Instantiates A LevelContent instance
-   * </p>
+   *
+   * <p>Instantiates A LevelContent instance
    */
-  public LevelContent(MonsterType[] monsters, ItemType[] items, ChestType[] chestTypes, TrapType[] trapType, QuestGiverType[] questGiverType) {
-    this.monsters= monsters;
-    this.items=items;
-    this.chests= chestTypes;
-    this.traps= trapType;
+  public LevelContent(
+      MonsterType[] monsters,
+      ItemType[] items,
+      ChestType[] chestTypes,
+      TrapType[] trapType,
+      QuestGiverType[] questGiverType) {
+    this.monsters = monsters;
+    this.items = items;
+    this.chests = chestTypes;
+    this.traps = trapType;
     this.questGivers = questGiverType;
   }
 }

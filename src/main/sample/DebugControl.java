@@ -15,26 +15,24 @@ import traps.TrapType;
 import java.util.logging.Logger;
 
 public class DebugControl {
-  private final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+  private static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  public static void SpawnAll(EntityController entityController, LevelController levelController){
+  public static void SpawnAll(EntityController entityController, LevelController levelController) {
     Monster[] monsterArray = new Monster[5];
 
-    for(int i=0;i<monsterArray.length;i++){
+    for (int i = 0; i < monsterArray.length; i++) {
       MonsterType monsterType;
-      if(i%2==0){
+      if (i % 2 == 0) {
         monsterType = MonsterType.LIZARD;
-      }
-      else{
+      } else {
         monsterType = MonsterType.DEMON;
       }
-      try{
+      try {
         var mon = MonsterFactory.CreateMonster(monsterType);
-        monsterArray[i]= mon;
+        monsterArray[i] = mon;
         entityController.addEntity(mon);
         mainLogger.info("Monster(" + (mon.getClass().getName()) + ") created");
-      }
-      catch(Exception e){
+      } catch (Exception e) {
         mainLogger.severe(e.toString());
       }
     }
@@ -42,7 +40,6 @@ public class DebugControl {
     for (Monster monster : monsterArray) {
       monster.setLevel(levelController.getDungeon());
     }
-
 
     try {
       var sword = ItemFactory.CreateItem(ItemType.SWORD_REGULAR);
@@ -100,26 +97,15 @@ public class DebugControl {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
-  public void SpawnAllMonster(){
+  public void SpawnAllMonster() {}
 
-  }
+  public void SpawnAllScrolls() {}
 
-  public void SpawnAllScrolls(){
+  public void SpawnAllPotions() {}
 
-  }
+  public void SpawnAllWeapons() {}
 
-  public void SpawnAllPotions(){
-
-  }
-
-  public void SpawnAllWeapons(){
-
-  }
-
-  public void SpawnAllShields(){
-
-  }
+  public void SpawnAllShields() {}
 }

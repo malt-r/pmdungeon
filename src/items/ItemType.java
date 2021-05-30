@@ -1,11 +1,10 @@
 package items;
+
 /**
  * Definition of item types.
- * <p>
- *     Contains all types of items that can appear in the game.
- * </p>
+ *
+ * <p>Contains all types of items that can appear in the game.
  */
-
 public enum ItemType {
   POTION_HEAL,
   POTION_POISON,

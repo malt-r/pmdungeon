@@ -7,34 +7,49 @@ import main.Game;
 import progress.Level;
 
 public class LevelOverview implements LevelObserver {
-    private TextStage textHUD;
-    private Game game;
+  private final TextStage textHUD;
+  private final Game game;
 
-    private Label levelLabel;
+  private Label levelLabel;
 
-    public LevelOverview(TextStage textHUD){
-        this.textHUD = textHUD;
-        this.game = game.getInstance();
+  public LevelOverview(TextStage textHUD) {
+    this.textHUD = textHUD;
+    this.game = Game.getInstance();
 
-        levelLabelInit();
+    levelLabelInit();
 
-        game.getHero().getLevel().register(this);
-    }
+    game.getHero().getLevel().register(this);
+  }
 
-    private void levelLabelInit(){
-        levelLabel = textHUD.drawText(game.getHero().getLevel().getCurrentLevel() + "    " +
-                        game.getHero().getLevel().getCurrentXP() + "/" +
-                        game.getHero().getLevel().getXPForNextLevelTotal(),
-                "fonts/Pixeled.ttf", Color.YELLOW, 20,20,20,5,400);
-    }
+  private void levelLabelInit() {
+    levelLabel =
+        textHUD.drawText(
+            game.getHero().getLevel().getCurrentLevel()
+                + "    "
+                + game.getHero().getLevel().getCurrentXP()
+                + "/"
+                + game.getHero().getLevel().getXPForNextLevelTotal(),
+            "fonts/Pixeled.ttf",
+            Color.YELLOW,
+            20,
+            20,
+            20,
+            5,
+            400);
+  }
 
-    /**
-     * Function to update level display
-     * Gets called by Level.notifyObservers()
-     * @param level level object from which level the function got called
-     */
-    @Override
-    public void update(Level level) {
-        levelLabel.setText(level.getCurrentLevel() + " " + level.getCurrentXP() + "/" + level.getXPForNextLevelTotal());
-    }
+  /**
+   * Function to update level display Gets called by Level.notifyObservers()
+   *
+   * @param level level object from which level the function got called
+   */
+  @Override
+  public void update(Level level) {
+    levelLabel.setText(
+        level.getCurrentLevel()
+            + " "
+            + level.getCurrentXP()
+            + "/"
+            + level.getXPForNextLevelTotal());
+  }
 }

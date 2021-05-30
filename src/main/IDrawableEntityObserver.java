@@ -1,5 +1,5 @@
 package main;
 
 public interface IDrawableEntityObserver {
-    void update(DrawableEntity entity);
+  void update(DrawableEntity entity);
 }

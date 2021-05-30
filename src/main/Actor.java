@@ -8,27 +8,74 @@ import progress.effect.OneShotEffect;
 import progress.effect.PersistentEffect;
 import stats.Stats;
 import util.math.Vec;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static stats.Attribute.AttributeType;
 import static util.math.Convenience.scaleDelta;
-import static stats.Attribute.*;
 
 /**
  * The controllable player character.
- * <p>
- *     Contains all animations, the current position in the DungeonWorld and movement logic.
- * </p>
+ *
+ * <p>Contains all animations, the current position in the DungeonWorld and movement logic.
  */
 public abstract class Actor extends DrawableEntity implements ICombatable {
-  private ICombatable target;
+  private final Timer attackTimer;
+  private final Timer hitTimer;
+  /** Animation types */
+  protected Animation idleAnimationRight;
 
+  protected Animation idleAnimationLeft;
+  protected Animation runAnimationLeft;
+  protected Animation runAnimationRight;
+  protected Animation hitAnimationLeft;
+  protected Animation hitAnimationRight;
+  protected AnimationState animationState = AnimationState.IDLE;
+  /**
+   * The current MovementState of the actor.
+   *
+   * @see MovementState
+   */
+  protected MovementState movementState;
+  /** Defines whether the actor can be knocked back or not. */
+  protected boolean knockBackAble = false;
+  /** The target point for the current knock back. */
+  protected Point knockBackTargetPoint;
+  /**
+   * The speed for being knocked back. Gets added to the position of the actor every update, if it
+   * is being knocked back.
+   */
+  protected float knockBackSpeed = 0.3f;
+  /** The distance the actor should be knocked back. */
+  protected float knockBackDistance = 0.8f;
+
+  protected long attackDelay = 1000;
+  protected boolean canAttack;
+  protected Stats stats = new Stats();
+  /** The persistent effects, which are currently applied to this actor. */
+  protected ArrayList<PersistentEffect> persistentEffects;
+
+  // implementation of ICombatable
+  // -----------------------------------------------------------------------------------
+  /**
+   * The persistent effects, which are currently applied to this actor but are scheduled for
+   * removal.
+   */
+  protected ArrayList<PersistentEffect> effectsScheduledForRemoval;
+
+  private ICombatable target;
+  // currently only two looking directions are supported (left and right),
+  // therefore a boolean is sufficient to represent the
+  // looking direction
+  private boolean lookLeft;
   /**
    * Constructor of the Actor class.
-   * <p>
-   * This constructor will instantiate the animations and read all required texture data.
-   * </p>
+   *
+   * <p>This constructor will instantiate the animations and read all required texture data.
    */
   public Actor() {
     lookLeft = false;
@@ -49,88 +96,21 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * MovementState switches between different movement-characteristics
-   * of the actor.
-   * CAN_MOVE: the actor can move normally.
-   * IS_KNOCKED_BACK: the actor is currently being knocked back and can not be moved by input.
- */
-  protected enum MovementState {
-    CAN_MOVE,
-    IS_KNOCKED_BACK,
-    HIT,
-    SUSPENDED
-  }
-  /**
-   * Animation types
-   */
-  protected Animation idleAnimationRight;
-  protected Animation idleAnimationLeft;
-  protected Animation runAnimationLeft;
-  protected Animation runAnimationRight;
-  protected Animation hitAnimationLeft;
-  protected Animation hitAnimationRight;
-  private enum AnimationState {
-    IDLE,
-    RUN,
-    KNOCK_BACK,
-    HIT
-  }
-  protected AnimationState animationState = AnimationState.IDLE;
-
-  // currently only two looking directions are supported (left and right),
-  // therefore a boolean is sufficient to represent the
-  // looking direction
-  private boolean lookLeft;
-
-  /**
-   * The current MovementState of the actor.
-   * @see MovementState
-   */
-  protected MovementState movementState;
-
-  /**
-   * Defines whether the actor can be knocked back or not.
-   */
-  protected boolean knockBackAble = false;
-
-  /**
    * Gets the value of knockBackAble.
+   *
    * @return The value of knockBackAble.
    */
   protected boolean isKnockBackAble() {
     return knockBackAble;
   }
 
-  /**
-   * The target point for the current knock back.
-   */
-  protected Point knockBackTargetPoint;
-  /**
-   * The speed for being knocked back. Gets added to the position of the
-   * actor every update, if it is being knocked back.
-   */
-  protected float knockBackSpeed = 0.3f;
-
-  /**
-   * The distance the actor should be knocked back.
-   */
-  protected float knockBackDistance = 0.8f;
-
-  // implementation of ICombatable -----------------------------------------------------------------------------------
-
-  private final Timer attackTimer;
-  private final Timer hitTimer;
-  protected long attackDelay = 1000;
-  protected boolean canAttack;
-
-  protected Stats stats = new Stats();
-
   public Stats getStats() {
     return stats;
   }
 
   /**
-   *Gets the health of the actor
+   * Gets the health of the actor
+   *
    * @return health of the actor
    */
   @Override
@@ -140,6 +120,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * sets the health of the actor
+   *
    * @param health The new value for the health backing field.
    */
   @Override
@@ -149,6 +130,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * If the actor is passive
+   *
    * @return if the actor is passive
    */
   @Override
@@ -158,6 +140,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * if the actor has a target for combat
+   *
    * @return if the actor has a target
    */
   @Override
@@ -167,6 +150,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Returns of the actor has a target
+   *
    * @return if the acor ahs a target
    */
   @Override
@@ -176,6 +160,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Sets the target of the actor
+   *
    * @param target The ICombatable to cache as a target.
    */
   @Override
@@ -185,6 +170,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Returns of the other is friendly for combat
+   *
    * @param other The other ICombatable.
    * @return if the other is friendly
    */
@@ -195,6 +181,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Gets the Hitchance for combat
+   *
    * @return value of the hitchance
    */
   @Override
@@ -204,6 +191,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Gets the evasion rate of the actor
+   *
    * @return evasion rate of the actor
    */
   @Override
@@ -213,6 +201,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * gets the damage value for combat
+   *
    * @return damage value of the actor
    */
   @Override
@@ -220,12 +209,13 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     return this.stats.getValue(AttributeType.PHYSICAL_ATTACK_DAMAGE);
   }
 
-  protected boolean inRangeFunc(Point p){
+  protected boolean inRangeFunc(Point p) {
     return new Vec(this.getPosition()).subtract(new Vec(p)).magnitude() < 1.0f;
   }
 
   /**
    * Attack implementation for combat
+   *
    * @param other The ICombatable to attack.
    * @return if the attack was sucessfull
    */
@@ -234,18 +224,20 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     float damage = ICombatable.super.attack(other);
     // delay next attack by attackDelay ms
     this.canAttack = false;
-    TimerTask resetCanAttackTask = new TimerTask() {
-      @Override
-      public void run() {
-        canAttack = true;
-      }
-    };
+    TimerTask resetCanAttackTask =
+        new TimerTask() {
+          @Override
+          public void run() {
+            canAttack = true;
+          }
+        };
     attackTimer.schedule(resetCanAttackTask, attackDelay);
     return damage;
   }
 
   /**
    * Resolves if another attack is possible
+   *
    * @return an attack is possible
    */
   @Override
@@ -255,6 +247,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Deals damage to this actor
+   *
    * @param damage The amount to decrease the health by.
    * @param attacker The ICombatable which deals the damage.
    */
@@ -269,6 +262,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Heals the actor
+   *
    * @param amount The amount to increase the health value by.
    */
   @Override
@@ -284,12 +278,10 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     }
   }
 
-  /**
-   * Set this.lookLeft according to position of target.
-   */
+  /** Set this.lookLeft according to position of target. */
   protected void lookAtTarget() {
     if (this.target instanceof IDrawable) {
-      Point targetPosition = ((IDrawable)this.target).getPosition();
+      Point targetPosition = ((IDrawable) this.target).getPosition();
       if (this.getPosition().x > targetPosition.x) {
         lookLeft = true;
       } else if (this.getPosition().x < targetPosition.x) {
@@ -300,18 +292,10 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   // end ICombatable implementation ----------------------------------------------------------------
 
   // Abilitysystem implementation ------------------------------------------------------------------
-  /**
-   * The persistent effects, which are currently applied to this actor.
-   */
-  protected ArrayList<PersistentEffect> persistentEffects;
 
   /**
-   * The persistent effects, which are currently applied to this actor but are scheduled for removal.
-   */
-  protected ArrayList<PersistentEffect> effectsScheduledForRemoval;
-
-  /**
-   * Call the update-method of all stored persistent effects. Remove any persistent effects, which are scheduled for removal.
+   * Call the update-method of all stored persistent effects. Remove any persistent effects, which
+   * are scheduled for removal.
    */
   protected void updatePersistentEffects() {
     for (PersistentEffect effect : persistentEffects) {
@@ -327,7 +311,9 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Schedule persistent effect for removal from this actor. Will be removed in updatePersistentEffects
+   * Schedule persistent effect for removal from this actor. Will be removed in
+   * updatePersistentEffects
+   *
    * @param effect The effect to remove.
    */
   public void scheduleForRemoval(PersistentEffect effect) {
@@ -339,6 +325,7 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
 
   /**
    * Apply a one-shot effect to this actor.
+   *
    * @param effect The effect to apply.
    */
   public void applyOneShotEffect(OneShotEffect effect) {
@@ -346,8 +333,9 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Apply persistent effect to this actor. Passed effect will be stored in this.persistentEffects and updated on
-   * update of the Actor.
+   * Apply persistent effect to this actor. Passed effect will be stored in this.persistentEffects
+   * and updated on update of the Actor.
+   *
    * @param effect The effect to apply.
    */
   public void applyPersistentEffect(PersistentEffect effect) {
@@ -358,39 +346,43 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     }
   }
 
-  // end Abilitysystem implementation --------------------------------------------------------------
-
   /**
    * Starts a knock back and calculates the knockBackTargetPoint.
-   * @param other The attacker, which caused the knock back. Used to calculate the destination
-   *              in which the knock back should be performed (the opposite of the difference vector
-   *              of this.position and other.position). Should implement IDrawable.
+   *
+   * @param other The attacker, which caused the knock back. Used to calculate the destination in
+   *     which the knock back should be performed (the opposite of the difference vector of
+   *     this.position and other.position). Should implement IDrawable.
    */
   protected void initiateKnockBack(ICombatable other) {
     if (other instanceof IDrawable) {
-      var attackerPosition = ((IDrawable)other).getPosition();
+      var attackerPosition = ((IDrawable) other).getPosition();
       initiateKnockBackFromPoint(attackerPosition, knockBackDistance);
     }
   }
 
   /**
    * Starts a knock and calculates the knockBackTargetPoint.
-   * @param point The point, from which the knock back is initiated. Used to calculate the destination
-   *              in which the knock back should be performed.
+   *
+   * @param point The point, from which the knock back is initiated. Used to calculate the
+   *     destination in which the knock back should be performed.
    */
-  // TODO: this should use a falloff function so that the knockback-distance gets smaller dependent of the distance from the point
+  // TODO: this should use a falloff function so that the knockback-distance gets smaller dependent
+  // of the distance from the point
   public void initiateKnockBackFromPoint(Point point, float knockBackDistance) {
     var diff = scaleDelta(this.getPosition(), point, knockBackDistance);
     this.knockBackTargetPoint = (new Vec(this.getPosition())).subtract(diff).toPoint();
     this.movementState = MovementState.IS_KNOCKED_BACK;
   }
 
+  // end Abilitysystem implementation --------------------------------------------------------------
+
   /**
-   * Calculate the target point for the knock back in this frame (should be called in update).
-   * Ends the knock back, if the magnitude of the difference vector is less than the
-   * knockBackSpeed (otherwise the actor may overshoot the knockBackTargetPoint, which can lead
-   * to oscillation around the knockBackTargetPoint).
-   * Ends the knock back, if the calculated target point lies in a tile, which is not accessible.
+   * Calculate the target point for the knock back in this frame (should be called in update). Ends
+   * the knock back, if the magnitude of the difference vector is less than the knockBackSpeed
+   * (otherwise the actor may overshoot the knockBackTargetPoint, which can lead to oscillation
+   * around the knockBackTargetPoint). Ends the knock back, if the calculated target point lies in a
+   * tile, which is not accessible.
+   *
    * @return The target point for a knock back in the current frame.
    */
   protected Point calculateKnockBackTarget() {
@@ -402,7 +394,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
       movementState = MovementState.CAN_MOVE;
       return this.getPosition();
     } else {
-      var normalizedDiff = scaleDelta(this.getPosition(), this.knockBackTargetPoint, knockBackSpeed);
+      var normalizedDiff =
+          scaleDelta(this.getPosition(), this.knockBackTargetPoint, knockBackSpeed);
       var targetPoint = positionVec.add(normalizedDiff).toPoint();
 
       if (!level.isTileAccessible(targetPoint)) {
@@ -414,44 +407,43 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     }
   }
 
-  /**
-   * Generates the animations of the actor
-   */
+  /** Generates the animations of the actor */
   @Override
-  protected void generateAnimations(){
-    String[] idleLeftFrames = new String[]{
-            "tileset/default/default_anim.png",
-    };
+  protected void generateAnimations() {
+    String[] idleLeftFrames =
+        new String[] {
+          "tileset/default/default_anim.png",
+        };
     idleAnimationLeft = createAnimation(idleLeftFrames, 6);
 
-    String[] idleRightFrames = new String[]{
-            "tileset/default/default_anim.png",
-    };
+    String[] idleRightFrames =
+        new String[] {
+          "tileset/default/default_anim.png",
+        };
     idleAnimationRight = createAnimation(idleRightFrames, 6);
 
-    String[] runLeftFrames = new String[]{
-            "tileset/default/default_anim.png",
-    };
+    String[] runLeftFrames =
+        new String[] {
+          "tileset/default/default_anim.png",
+        };
     runAnimationLeft = createAnimation(runLeftFrames, 4);
 
-    String[] runRightFrames = new String[]{
-            "tileset/default/default_anim.png",
-    };
+    String[] runRightFrames =
+        new String[] {
+          "tileset/default/default_anim.png",
+        };
     runAnimationRight = createAnimation(runRightFrames, 4);
 
-    String[] hitLeftFrames = new String[]{
-            "tileset/default/default_anim.png"
-    };
+    String[] hitLeftFrames = new String[] {"tileset/default/default_anim.png"};
     hitAnimationLeft = createAnimation(hitLeftFrames, 1);
 
-    String[] hitRightFrames = new String[]{
-            "tileset/default/default_anim.png"
-    };
+    String[] hitRightFrames = new String[] {"tileset/default/default_anim.png"};
     hitAnimationRight = createAnimation(hitRightFrames, 1);
   }
 
   /**
    * Sets the current animation
+   *
    * @param animationState animation state which the actor is currently in
    */
   private void setCurrentAnimation(AnimationState animationState) {
@@ -470,7 +462,8 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
   }
 
   /**
-   * Called each frame, handles movement and the switching to and back from the running animation state.
+   * Called each frame, handles movement and the switching to and back from the running animation
+   * state.
    */
   @Override
   public void update() {
@@ -495,19 +488,19 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         // set look direction
         if (hasTarget()) {
           lookAtTarget();
-        } else if(movementDelta.x()<0){
-          lookLeft=true;
-        }
-        else if(movementDelta.x()>0){
-          lookLeft=false;
+        } else if (movementDelta.x() < 0) {
+          lookLeft = true;
+        } else if (movementDelta.x() > 0) {
+          lookLeft = false;
         }
 
-        BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder = (p1, p2) -> Game.getInstance().getEntitiesInCoordRange(p1, p2);
+        BiFunction<Point, Point, ArrayList<DrawableEntity>> entityFinder =
+            (p1, p2) -> Game.getInstance().getEntitiesInCoordRange(p1, p2);
         Function<Point, Boolean> inRange = (p) -> inRangeFunc(p);
 
         attackTargetIfReachable(this.getPosition(), inRange, entityFinder);
 
-        if (readPickupInput()){
+        if (readPickupInput()) {
           handleItemPicking();
         }
         break;
@@ -517,12 +510,13 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
         break;
       case HIT:
         animationState = AnimationState.HIT;
-        TimerTask resetMovementState = new TimerTask() {
-          @Override
-          public void run() {
-            movementState = MovementState.CAN_MOVE;
-          }
-        };
+        TimerTask resetMovementState =
+            new TimerTask() {
+              @Override
+              public void run() {
+                movementState = MovementState.CAN_MOVE;
+              }
+            };
         hitTimer.schedule(resetMovementState, 300);
         break;
       case SUSPENDED:
@@ -532,18 +526,14 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     this.draw();
   }
 
-  /**
-   * Rests tje combat stats of the actor. E.g. after the actor died.
-   */
+  /** Rests tje combat stats of the actor. E.g. after the actor died. */
   protected void resetStats() {
     this.stats.clearModifiers();
     this.movementState = MovementState.CAN_MOVE;
     this.canAttack = true;
   }
 
-  /**
-   * Set reference to DungeonWorld and spawn player at random position in the level.
-   */
+  /** Set reference to DungeonWorld and spawn player at random position in the level. */
   @Override
   public void setLevel(DungeonWorld level) {
     super.setLevel(level);
@@ -554,24 +544,46 @@ public abstract class Actor extends DrawableEntity implements ICombatable {
     Point newPosition = readMovementInput();
     // calculate normalized delta of this.position and the calculated
     // new position to avoid increased diagonal movement speed
-    return scaleDelta(this.getPosition(), newPosition, this.stats.getValue(AttributeType.MOVEMENT_SPEED));
+    return scaleDelta(
+        this.getPosition(), newPosition, this.stats.getValue(AttributeType.MOVEMENT_SPEED));
   }
 
   /**
-   * abstract method which has to be overwritten in the sub classes
-   * this makes it possible to control an actor autoamticly or via key presisng
+   * abstract method which has to be overwritten in the sub classes this makes it possible to
+   * control an actor autoamticly or via key presisng
+   *
    * @return returns the new point where the actor should be moved
    */
   protected abstract Point readMovementInput();
 
   /**
    * Has to be overwritten for the hero, monsters do this automaticly
+   *
    * @return if pickup input has been read
    */
-  protected boolean readPickupInput() { return false; }
+  protected boolean readPickupInput() {
+    return false;
+  }
+
+  /** Handles Item picking of the actor */
+  protected void handleItemPicking() {}
 
   /**
-   * Handles Item picking of the actor
+   * MovementState switches between different movement-characteristics of the actor. CAN_MOVE: the
+   * actor can move normally. IS_KNOCKED_BACK: the actor is currently being knocked back and can not
+   * be moved by input.
    */
-  protected void handleItemPicking(){}
+  protected enum MovementState {
+    CAN_MOVE,
+    IS_KNOCKED_BACK,
+    HIT,
+    SUSPENDED
+  }
+
+  private enum AnimationState {
+    IDLE,
+    RUN,
+    KNOCK_BACK,
+    HIT
+  }
 }

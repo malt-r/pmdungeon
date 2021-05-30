@@ -1,4 +1,5 @@
 Letztes Praktikum aufholen:
+
 - [x] Mit Kisten interagieren (MR)
 - [ ] ~~Interaktion mit Taschen (MR)~~
 - [ ] Spawning von Items & Monstern verbessern (DE)
@@ -9,8 +10,8 @@ Letztes Praktikum aufholen:
 - [ ] Haben die Items genug Informationen, um sie zu verwenden? (TL/DE)
 - [ ] Moonwalking Bug bei Angriff durch fehlendes Zuruecksetzen von Target (TL)
 
-
 Diese Praktikum HUD:
+
 - [ ] HUD: Mindestens Lebenspunkte, Inventar (evtl. togglebar), Inhalt von Schatztruhen (sobald geöffnet) (TL)
 - [x] Erfahrung und Skills: (MR)
     - [x] XP bei Besiegen von Monstern

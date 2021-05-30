@@ -11,14 +11,13 @@ import stats.Modifier;
 
 import java.util.logging.Logger;
 
-/**
- * Itemlogger class for logging information about items
- */
+/** Itemlogger class for logging information about items */
 public class ItemLogger implements IItemVisitor {
-  protected final static Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+  protected static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
   /**
    * visits a generic weapon
+   *
    * @param weapon weapon which should be visited
    */
   @Override
@@ -34,11 +33,17 @@ public class ItemLogger implements IItemVisitor {
   }
 
   private void printModifier(Modifier mod) {
-      mainLogger.info("affected stat: " + mod.getTypeOfEffectedAttribute().name() + mod.getType().name() + " val: " + mod.getValue());
+    mainLogger.info(
+        "affected stat: "
+            + mod.getTypeOfEffectedAttribute().name()
+            + mod.getType().name()
+            + " val: "
+            + mod.getValue());
   }
 
   /**
    * Visits a generic shield
+   *
    * @param shield weapon which should be visited
    */
   @Override
@@ -49,37 +54,51 @@ public class ItemLogger implements IItemVisitor {
 
   /**
    * visits a Poisonpotion
+   *
    * @param potion weapon which should be visited
    */
   @Override
-  public void visit(PoisonPotion potion) { mainLogger.info("Poison Potion, Damage:" + String.valueOf(potion.getDamageValue()));}
+  public void visit(PoisonPotion potion) {
+    mainLogger.info("Poison Potion, Damage:" + potion.getDamageValue());
+  }
 
   /**
    * visits a heath potion
+   *
    * @param potion weapon which should be visited
    */
   @Override
-  public void visit(HealthPotion potion) { mainLogger.info("Healthy Potion, Healvalue: "+ String.valueOf(potion.getHealValue()));
+  public void visit(HealthPotion potion) {
+    mainLogger.info("Healthy Potion, Healvalue: " + potion.getHealValue());
   }
 
   /**
    * visits an attack scroll
+   *
    * @param scroll weapon which should be visited
    */
   @Override
-  public void visit(AttackScroll scroll) { mainLogger.info("Attack Scroll, Bonus:" + String.valueOf(scroll.getAttackBonus())); }
+  public void visit(AttackScroll scroll) {
+    mainLogger.info("Attack Scroll, Bonus:" + scroll.getAttackBonus());
+  }
 
   /**
    * visits a speedscroll
+   *
    * @param scroll scroll which should be visited
    */
   @Override
-  public void visit(SpeedScroll scroll) { mainLogger.info("SpeedScroll, Multiplier: " +String.valueOf(scroll.getSpeedMultiplier())); }
+  public void visit(SpeedScroll scroll) {
+    mainLogger.info("SpeedScroll, Multiplier: " + scroll.getSpeedMultiplier());
+  }
 
   /**
    * visits a supervision scroll
+   *
    * @param scroll
    */
   @Override
-  public void visit(SupervisionScroll scroll) { mainLogger.info("SupervisionScroll"); }
+  public void visit(SupervisionScroll scroll) {
+    mainLogger.info("SupervisionScroll");
+  }
 }

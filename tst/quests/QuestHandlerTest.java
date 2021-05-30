@@ -1,4 +1,3 @@
 package quests;
 
-public class QuestHandlerTest {
-}
+public class QuestHandlerTest {}

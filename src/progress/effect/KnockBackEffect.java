@@ -5,18 +5,19 @@ import main.Actor;
 
 /**
  * One-shot effect to initiate a knock back of an actor.
+ *
  * @author malte
  */
 public class KnockBackEffect extends OneShotEffect {
-    float magnitude = 3.f;
-    Point originPoint;
+  float magnitude = 3.f;
+  Point originPoint;
 
-    public KnockBackEffect(Point originPoint) {
-        this.originPoint = originPoint;
-    }
+  public KnockBackEffect(Point originPoint) {
+    this.originPoint = originPoint;
+  }
 
-    @Override
-    public void applyTo(Actor target) {
-        target.initiateKnockBackFromPoint(originPoint, magnitude);
-    }
+  @Override
+  public void applyTo(Actor target) {
+    target.initiateKnockBackFromPoint(originPoint, magnitude);
+  }
 }
