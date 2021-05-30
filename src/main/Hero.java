@@ -57,7 +57,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     public Weapon getRightHandSlot() { return rightHandSlot; }
     private float itemAddDamage = 0.0f;
     private float itemAddDefence = 0.0f;
-    // TODO: this should be packaged in an unified handler of stats and modifiers
     private float bonusHealth = 0.0f;
     private float bonusDamage = 0.0f;
     protected int killCount = 0;
@@ -187,9 +186,6 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
 
             mainLogger.info("Current XP: " + level.getCurrentXP());
             mainLogger.info("XP to next Level: " + level.getXPForNextLevelLeft());
-            //if (levelIncrease) {
-            //    applyLevelUp();
-            //}
 
             RandomHealOnKill();
 
@@ -232,7 +228,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
     }
 
-    private void ToggleGodMode() {
+    private void toggleGodMode() {
         this.invincible = !this.invincible;
 
         if (this.invincible) {
@@ -253,27 +249,11 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
     public Hero() {
         super();
         this.stats.addInPlace(AttributeType.MOVEMENT_SPEED, 0.13f);
-        //movementSpeed=0.13f;
-        // combat-characteristics:
         this.stats.addInPlace(AttributeType.HEALTH, 200.f);
-        //health = 200.f;
         this.stats.addInPlace(AttributeType.MAX_HEALTH, 200.f);
-        //maxHealth = 200.f;
-
         this.stats.addInPlace(AttributeType.HIT_CHANCE, 0.7f);
-        //baseHitChance = 0.6f;
-        //hitChanceModifierWeapon = 1.f;
-        //hitChanceModifierScroll = 1.f;
-
         this.stats.addInPlace(AttributeType.PHYSICAL_ATTACK_DAMAGE, 50.f);
-        //baseAttackDamage = 50;
-        //attackDamageModifierWeapon = 1.f;
-        //attackDamageModifierScroll = 1.f;
-
         this.stats.addInPlace(AttributeType.EVASION_CHANCE, 0.15f);
-        //baseEvasionChance = 0.15f;
-        //evasionChanceModifierWeapon = 1.f;
-        //evasionChanceModifierScroll = 1.f;
 
         knockBackAble = true;
 
@@ -362,7 +342,7 @@ public class Hero extends Actor implements items.IInventoryOpener, ObservableHer
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
-            ToggleGodMode();
+            toggleGodMode();
         }
     }
 
