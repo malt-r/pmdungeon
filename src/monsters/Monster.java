@@ -53,7 +53,7 @@ public abstract class Monster extends Actor {
   /** {@inheritDoc} */
   @Override
   protected boolean inRangeFunc(Point p) {
-    return this.currentCombatStrategy.RangeFunction(this.getPosition(), p);
+    return this.currentCombatStrategy.rangeFunction(this.getPosition(), p);
   }
 
   /**

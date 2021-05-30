@@ -7,7 +7,7 @@ import util.math.Vec;
 public class MeleeStrategy implements CombatStrategy {
   /** {@inheritDoc} */
   @Override
-  public boolean RangeFunction(Point position, Point target) {
+  public boolean rangeFunction(Point position, Point target) {
     return new Vec(position).subtract(new Vec(target)).magnitude() < 1f;
   }
 

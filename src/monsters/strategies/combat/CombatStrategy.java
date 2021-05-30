@@ -11,7 +11,7 @@ public interface CombatStrategy {
    * @param target target position
    * @return if the target point is in range.
    */
-  boolean RangeFunction(Point position, Point target);
+  boolean rangeFunction(Point position, Point target);
 
   /**
    * Gets the Attackvalue of this strategy.

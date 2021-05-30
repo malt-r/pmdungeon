@@ -7,6 +7,9 @@ import java.util.Locale;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
+/**
+ * Formatter for the logger.
+ */
 public class DungeonFormatter extends Formatter {
 
   @Override

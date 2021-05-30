@@ -8,7 +8,7 @@ public class RangedcombatStrategy implements CombatStrategy {
 
   /** {@inheritDoc} */
   @Override
-  public boolean RangeFunction(Point position, Point target) {
+  public boolean rangeFunction(Point position, Point target) {
     return new Vec(position).subtract(new Vec(target)).magnitude() < 5f;
   }
 

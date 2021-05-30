@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import de.fhbielefeld.pmdungeon.vorgaben.graphic.HUD;
 import items.Item;

@@ -1,6 +1,6 @@
 package main;
 
-import GUI.HeroObserver;
+import gui.HeroObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;

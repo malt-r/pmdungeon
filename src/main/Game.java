@@ -1,14 +1,21 @@
 package main;
 
-import GUI.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import de.fhbielefeld.pmdungeon.vorgaben.dungeonCreator.DungeonWorld;
 import de.fhbielefeld.pmdungeon.vorgaben.game.Controller.MainController;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
+import gui.HeartOverview;
+import gui.InventoryOverview;
+import gui.LevelOverview;
+import gui.QuestDialog;
+import gui.QuestOverview;
 import items.Item;
 import items.chests.Chest;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 import main.sample.DebugControl;
 import monsters.Monster;
 import monsters.MonsterType;
@@ -16,10 +23,6 @@ import quests.QuestGiver;
 import quests.QuestHandler;
 import traps.Trap;
 import util.SpatialHashMap;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  * The main game class.
@@ -45,7 +48,7 @@ public class Game extends MainController {
   private boolean drawTraps = false;
 
   /**
-   * the game is a singleton instance which can be used everywhere in the game
+   * the game is a singleton instance which can be used everywhere in the game.
    *
    * @return singleton instance of the game
    */
@@ -61,7 +64,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Gets every Entity at specific point
+   * Gets every Entity at specific point.
    *
    * @param p Point to check at
    * @return List of all Entities at that point
@@ -71,7 +74,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Gets every Entity in specific coordinate range
+   * Gets every Entity in specific coordinate range.
    *
    * @param lowerBound Point of lower Bound
    * @param upperBound Point of upper Bound
@@ -82,7 +85,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Gets every Entity in neighbor fields
+   * Gets every Entity in neighbor fields.
    *
    * @param centerPoint Point of center
    * @return List of all Entities in neighbor fields
@@ -96,7 +99,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Gets the current level where the hero is
+   * Gets the current level where the hero is.
    *
    * @return current level of the game
    */
@@ -105,7 +108,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Hero can see traps if a special potion/scroll has been used
+   * Hero can see traps if a special potion/scroll has been used.
    *
    * @return if traps are drawn
    */
@@ -114,7 +117,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Hero can see traps if a special potion/scroll has been used
+   * Hero can see traps if a special potion/scroll has been used.
    *
    * @param value that determines of traps are drawn
    */
@@ -123,7 +126,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Gets the current Questhandler
+   * Gets the current Questhandler.
    *
    * @return current Questhandler
    */
@@ -136,7 +139,7 @@ public class Game extends MainController {
   }
 
   /**
-   * Gets the hero
+   * Gets the hero.
    *
    * @return current hero
    */
@@ -163,10 +166,10 @@ public class Game extends MainController {
     // attach camera to hero
     camera.follow(hero);
 
-    setupGUI();
+    setupGui();
   }
 
-  private void setupGUI() {
+  private void setupGui() {
     questDialog = new QuestDialog(hud, textHUD);
     questOverview = new QuestOverview(hud, textHUD);
     inventoryOverview = new InventoryOverview(hud);
@@ -315,11 +318,11 @@ public class Game extends MainController {
 
   /** Spawns all monsters and items at once which are present in the game. */
   public void test_SpawnAllItemsAndMonster() {
-    DebugControl.SpawnAll(entityController, levelController);
+    DebugControl.spawnAll(entityController, levelController);
   }
 
   /**
-   * Spawns a monster in the game
+   * Spawns a monster in the game.
    *
    * @param monsterType type of the monster
    * @param position position of the monster

@@ -1,6 +1,6 @@
 package main;
 
-import GUI.HeroObserver;
+import gui.HeroObserver;
 
 public interface ObservableHero {
   void register(HeroObserver observer);

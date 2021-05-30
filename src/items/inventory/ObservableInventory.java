@@ -1,6 +1,6 @@
 package items.inventory;
 
-import GUI.InventoryObserver;
+import gui.InventoryObserver;
 
 public interface ObservableInventory {
   void register(InventoryObserver observer);

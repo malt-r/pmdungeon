@@ -6,18 +6,26 @@ import items.ItemFactory;
 import items.ItemType;
 import items.chests.ChestFactory;
 import items.chests.ChestType;
+import java.util.logging.Logger;
 import monsters.Monster;
 import monsters.MonsterFactory;
 import monsters.MonsterType;
 import traps.TrapFactory;
 import traps.TrapType;
 
-import java.util.logging.Logger;
-
+/**
+ * The Debug control.
+ */
 public class DebugControl {
   private static final Logger mainLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  public static void SpawnAll(EntityController entityController, LevelController levelController) {
+  /**
+   * Spawn all.
+   *
+   * @param entityController the entity controller.
+   * @param levelController The level controller.
+   */
+  public static void spawnAll(EntityController entityController, LevelController levelController) {
     Monster[] monsterArray = new Monster[5];
 
     for (int i = 0; i < monsterArray.length; i++) {
@@ -98,14 +106,4 @@ public class DebugControl {
       e.printStackTrace();
     }
   }
-
-  public void SpawnAllMonster() {}
-
-  public void SpawnAllScrolls() {}
-
-  public void SpawnAllPotions() {}
-
-  public void SpawnAllWeapons() {}
-
-  public void SpawnAllShields() {}
 }

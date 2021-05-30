@@ -1,6 +1,6 @@
 package progress;
 
-import GUI.LevelObserver;
+import gui.LevelObserver;
 
 public interface ObserveableLevel {
   void register(LevelObserver observer);

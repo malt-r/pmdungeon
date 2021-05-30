@@ -1,6 +1,6 @@
 package items.inventory;
 
-import GUI.OpenStateObserver;
+import gui.OpenStateObserver;
 
 public interface ObservableOpenState {
   void register(OpenStateObserver observer);

@@ -11,17 +11,17 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class CollectItemsQuestTest {
+public class collectItemsQuestTest {
   Hero hero;
   ArrayList<Item> mockItems;
-  CollectItemsQuest quest;
+  collectItemsQuest quest;
 
   @Before
   public void setup() {
     hero = new MockHero();
     mockItems = new ArrayList<Item>();
     mockItems.add(new MockItem());
-    quest = new CollectItemsQuest(hero, mockItems, 2);
+    quest = new collectItemsQuest(hero, mockItems, 2);
   }
 
   @Test

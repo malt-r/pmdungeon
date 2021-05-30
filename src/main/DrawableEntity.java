@@ -6,7 +6,6 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.Animation;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IAnimatable;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IEntity;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +40,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
     this.position = new Point(0, 0);
   }
 
-  /** Generates the animations of the actor */
+  /** Generates the animations of the actor. */
   protected void generateAnimations() {
     String[] defaultFrame =
         new String[] {
@@ -51,6 +50,8 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
   }
 
   /**
+   * Creates an animation from textures.
+   *
    * @param texturePaths array of textures that should be added to the animation
    * @param frameTime time between two textures
    * @return Animation containing the textures from texturePat
@@ -129,7 +130,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
     setPosition(new Point(level.getRandomPointInDungeon()));
   }
 
-  /** Will be called to notify observers about state change */
+  /** Will be called to notify observers about state change. */
   private void notifyDrawableEntityObservers() {
     for (var observer : observers) {
       observer.update(this);
@@ -161,7 +162,7 @@ public abstract class DrawableEntity implements IAnimatable, IEntity {
 
   /**
    * Effectively remove the observers from notification list, which were scheduled for removal since
-   * last call
+   * last call.
    */
   protected void removeObservers() {
     for (var observer : observerToRemove) {

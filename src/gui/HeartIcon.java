@@ -1,11 +1,11 @@
-package GUI;
+package gui;
 
 import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IHUDElement;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 /**
- * The HeartIcon for the HUD
+ * The HeartIcon for the HUD.
  *
  * <p>Contains all textures, positions and texture manipulation logic
  */
@@ -31,7 +31,7 @@ public class HeartIcon implements IHUDElement {
   }
 
   /**
-   * Sets the state of the heart Icon
+   * Sets the state of the heart Icon.
    *
    * @param state state which should be set
    */
@@ -52,7 +52,7 @@ public class HeartIcon implements IHUDElement {
   }
 
   /**
-   * returns the position of the hearth for display purposes
+   * returns the position of the hearth for display purposes.
    *
    * @return position of the heartIcon
    */
@@ -62,7 +62,7 @@ public class HeartIcon implements IHUDElement {
   }
 
   /**
-   * gets the texture of the heartIcon for display purposes
+   * gets the texture of the heartIcon for display purposes.
    *
    * @return texture of the hearthicon
    */
@@ -71,7 +71,7 @@ public class HeartIcon implements IHUDElement {
     return texture;
   }
 
-  /** Sets the default texture (seethrough) */
+  /** Sets the default texture (seethrough). */
   public void setDefaultTexture() {
     texture = defaultTexture;
   }

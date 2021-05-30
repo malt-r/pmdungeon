@@ -22,7 +22,7 @@ public class HealthPotion extends Potion {
   }
 
   /**
-   * Returns the heal value of the potion which can be used for display purposes
+   * Returns the heal value of the potion which can be used for display purposes.
    *
    * @return healvalue of the potion
    */
@@ -31,7 +31,7 @@ public class HealthPotion extends Potion {
   }
 
   /**
-   * Returns the name of the potion which can be used for display purposes
+   * Returns the name of the potion which can be used for display purposes.
    *
    * @return Name of the potion
    */
@@ -41,7 +41,7 @@ public class HealthPotion extends Potion {
   }
 
   /**
-   * Returns the deescription of the potion which can be used for display purposes
+   * Returns the deescription of the potion which can be used for display purposes.
    *
    * @return description of the potion
    */

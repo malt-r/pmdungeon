@@ -1,8 +1,7 @@
 package items;
 
-import stats.Modifier;
-
 import java.util.ArrayList;
+import stats.Modifier;
 
 /**
  * Abstract Base class for equioable items.
@@ -22,13 +21,12 @@ public abstract class EquipableItem extends Item {
     super();
   }
 
+  /**
+   * Gets the modifiers.
+   *
+   * @return The modifiers.
+   */
   public ArrayList<Modifier> getModifiers() {
     return modifiers;
   }
-
-  /**
-   * Defines if an item in the inventory ist stackable
-   *
-   * @return Returns if an item is stackable
-   */
 }

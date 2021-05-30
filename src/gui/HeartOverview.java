@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -7,16 +7,25 @@ import de.fhbielefeld.pmdungeon.vorgaben.graphic.TextStage;
 import main.Game;
 import main.Hero;
 
+/**
+ * Overview for hearts.
+ */
 public class HeartOverview implements HeroObserver {
   private final HUD hud;
-  private final TextStage textHUD;
+  private final TextStage textHud;
   private final HeartIcon[] hearts = new HeartIcon[10];
   private final Game game;
   private Label heartLabel;
 
-  public HeartOverview(HUD hud, TextStage textHUD) {
+  /**
+   * Constructor.
+   *
+   * @param hud Hud.
+   * @param textHud textHud.
+   */
+  public HeartOverview(HUD hud, TextStage textHud) {
     this.hud = hud;
-    this.textHUD = textHUD;
+    this.textHud = textHud;
     this.game = Game.getInstance();
 
     heartsInit();
@@ -35,7 +44,7 @@ public class HeartOverview implements HeroObserver {
   }
 
   private void heartLabelInit() {
-    heartLabel = textHUD.drawText("", "fonts/Pixeled.ttf", Color.RED, 20, 20, 20, 50, 445);
+    heartLabel = textHud.drawText("", "fonts/Pixeled.ttf", Color.RED, 20, 20, 20, 50, 445);
   }
 
   @Override
@@ -43,7 +52,7 @@ public class HeartOverview implements HeroObserver {
     heartCalc();
   }
 
-  /** Calculates and sets the heart display */
+  /** Calculates and sets the heart display. */
   private void heartCalc() {
     float health = game.getHero().getHealth();
     int heartHalves = (int) Math.ceil(health / 10);

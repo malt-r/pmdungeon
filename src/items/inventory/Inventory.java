@@ -1,6 +1,6 @@
 package items.inventory;
 
-import GUI.InventoryObserver;
+import gui.InventoryObserver;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IDrawable;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 import items.IInventoryOpener;

@@ -108,7 +108,7 @@ public class DemonMonster extends Monster {
   }
 
   /**
-   * gets the damage value for combat
+   * gets the damage value for combat.
    *
    * @return damage value of the actor
    */

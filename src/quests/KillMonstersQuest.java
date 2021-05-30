@@ -1,6 +1,6 @@
 package quests;
 
-import GUI.HeroObserver;
+import gui.HeroObserver;
 import items.Item;
 import items.ItemFactory;
 import main.Hero;

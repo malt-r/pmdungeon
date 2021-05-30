@@ -1,6 +1,6 @@
 package progress;
 
-import GUI.LevelObserver;
+import gui.LevelObserver;
 import main.Actor;
 import progress.ability.Ability;
 

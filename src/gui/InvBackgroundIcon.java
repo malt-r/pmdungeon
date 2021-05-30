@@ -1,37 +1,40 @@
-package GUI;
+package gui;
 
 import com.badlogic.gdx.graphics.Texture;
 import de.fhbielefeld.pmdungeon.vorgaben.interfaces.IHUDElement;
 import de.fhbielefeld.pmdungeon.vorgaben.tools.Point;
 
 /**
- * The InventoryIcon for the HUD
+ * The InvBackgroundIcon for the HUD
  *
  * <p>Contains all textures, positions and texture manipulation logic
  */
-public class InventoryIcon implements IHUDElement {
+public class InvBackgroundIcon implements IHUDElement {
 
   private final Point position;
   private final Texture defaultTexture = new Texture("tileset/default/default_anim_seethrough.png");
+  private final Texture pointer = new Texture("tileset/default/inv_pointer.png");
+  private final Texture defaultBackground = new Texture("textures/dungeon/floor/floor_1.png");
   private Texture texture;
 
   /**
-   * Constructor of InventoryIcon class.
+   * Constructor of InvBackgroundIcon class.
    *
-   * <p>This constructor will instantiate a new InventoryIcon, sets ist default texture and position
+   * <p>This constructor will instantiate a new InvBackgroundIcon, sets ist default texture and
+   * position
    *
    * @param index of inventory slot
    * @param height of position
    */
-  public InventoryIcon(int index, float height) {
+  public InvBackgroundIcon(int index, float height) {
     position = new Point((float) index * 0.5f, height);
     texture = defaultTexture;
   }
 
   /**
-   * Returns the texture of the icon for display purposes
+   * Returns the position of the icon for display purposes
    *
-   * @return texture of the icon
+   * @return position of the icon
    */
   @Override
   public Point getPosition() {
@@ -48,17 +51,18 @@ public class InventoryIcon implements IHUDElement {
     return texture;
   }
 
-  /**
-   * Sets the texture of the icon for display purposes
-   *
-   * @param texture which should be used for the icon
-   */
-  public void setTexture(Texture texture) {
-    this.texture = texture;
-  }
-
   /** Sets the default texture (seethrough) */
   public void setDefaultTexture() {
     texture = defaultTexture;
+  }
+
+  /** Sets the index/pointer texture */
+  public void setPointerTexture() {
+    texture = pointer;
+  }
+
+  /** Sets the default background texture */
+  public void setDefaultBackgroundTexture() {
+    texture = defaultBackground;
   }
 }

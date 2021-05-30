@@ -1,6 +1,6 @@
 package items.inventory;
 
-import GUI.OpenStateObserver;
+import gui.OpenStateObserver;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 

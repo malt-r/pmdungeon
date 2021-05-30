@@ -24,7 +24,7 @@ public class QuestGiver extends DrawableEntity {
     var questIndex = dice.nextInt(3);
     switch (questIndex) {
       case 0:
-        quest = new CollectItemsQuest(game.getHero());
+        quest = new collectItemsQuest(game.getHero());
         break;
       case 1:
         quest = new KillMonstersQuest(game.getHero());
