@@ -7,6 +7,8 @@ import items.scrolls.SpeedScroll;
 import items.scrolls.SupervisionScroll;
 import items.shields.Shield;
 import items.weapons.Weapon;
+import stats.Modifier;
+
 import java.util.logging.Logger;
 
 /**
@@ -20,14 +22,30 @@ public class ItemLogger implements IItemVisitor {
    * @param weapon weapon which should be visited
    */
   @Override
-  public void visit(Weapon weapon) { mainLogger.info("A weapon, Attackmulpiplier: "+String.valueOf(weapon.getAttackDamageModifier())); }
+  public void visit(Weapon weapon) {
+    mainLogger.info("A weapon");
+    printModifiers(weapon);
+  }
+
+  private void printModifiers(EquipableItem item) {
+    for (var mod : item.modifiers) {
+      printModifier(mod);
+    }
+  }
+
+  private void printModifier(Modifier mod) {
+      mainLogger.info("affected stat: " + mod.getTypeOfEffectedAttribute().name() + mod.getType().name() + " val: " + mod.getValue());
+  }
 
   /**
    * Visits a generic shield
    * @param shield weapon which should be visited
    */
   @Override
-  public void visit(Shield shield) { mainLogger.info("A shield, Defensevalue:"+ String.valueOf(shield.getDefenseValue()));}
+  public void visit(Shield shield) {
+    mainLogger.info("A shield");
+    printModifiers(shield);
+  }
 
   /**
    * visits a Poisonpotion
