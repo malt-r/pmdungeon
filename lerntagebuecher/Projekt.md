@@ -52,12 +52,10 @@ definieren (Helden heilen, das Level nach Items durchsuchen, im Kampf helfen).
 
 # Technik #
 
-## Roboterbegleiter ##
-
 Für die Realisierung des Roboterbegleiters lassen sich drei Teilaspekte
 definieren.
 
-### Ingame-Texteditor ###
+## Ingame-Texteditor ##
 
 Der Spieler muss in der Lage sein, innerhalb des Spiels ein Programm zu
 schreiben. Hierfür soll mithilfe von Swing ein rudimentärer Texteditor
@@ -65,7 +63,7 @@ implementiert werden, welcher bspw. das bereitgestellte Textfeld nutzt. Über
 einige Buttons kann das Programm gespeichert oder ein bereits gespeichertes
 Programm geladen werden.
 
-### Parser, Interpreter, formale Grammatik ###
+## Parser, Interpreter, formale Grammatik ##
 
 Für die Skriptsprache muss eine formale Grammatik definiert werden. Das
 geschriebene Programm muss anschließend geparst und interpretiert werden. Der
@@ -85,7 +83,7 @@ hierdurch Komplexität eingespart.
 Zur Interpretation des Programms (also das Ausführen der Operationen, welche mit einem Token
 verknüpft sind) kann das Visitor-Pattern verwendet werden.
 
-### Sandbox ###
+## Standardbibliothek ##
 
 Der Skriptsprache muss eine gewisse "Standardbibliothek" an Funktionen zur
 Verfügung stehen, über welche Informationen über die Spielwelt abgefragt werden
@@ -101,15 +99,31 @@ Spielwelt zugegriffen werden kann.
 
 # Mögliche Probleme #
 
-## Roboterbegleiter ##
+## GUI ##
 
-### Parser, Interpreter, formale Grammatik ###
+Der Spieler soll in der Lage sein, Programme zu speichern und so über die Dauer
+eines Spieldurchlaufs hinaus verwenden können. In welcher Form genau dieses
+Speichern und Laden ablaufen soll, ist noch nicht geklärt und ist mit einiger
+Komplexität verbunden.
 
-Insbesondere die Verwendung der Sandbox-Funktionen mit den korrekten Parametern
-könnte kompizierter werden, da keine statische Typprüfung durch den Interpreter
+Des Weiteren soll immer nur eine Instanz des Ingame-Texteditors geöffnet werden
+können. Dies setzt ein gewisses Maß an Synchronisierung voraus.
+
+## Parser, Interpreter, formale Grammatik ##
+
+Insbesondere die Verwendung der Standradbibliotheksfunktionen mit den korrekten Parametern
+könnte kompliziert werden, da keine statische Typprüfung durch den Interpreter
 selbst stattfindet. Des weiteren stellt auch die Generierung von
 aussagekräftigen Fehlermeldungen eine Herausforderung dar. Die Schwere der Nichterfüllung
 von dieser Herausforderung könnte dadurch abgeschwächt werden, dass der Spieler
 nur sehr einfache Programme erstellen darf, welche bspw. einem Zeichenlimit
 unterliegen, sodass die Programme relativ übersichtlich bleiben und Fehler noch
 einfach nachvollzogen werden können.
+
+## Standardbibliothek ##
+
+Die Funktionen der Standardbibliothek sollten im Idealfall nur aus bereits
+bestehenden Methoden zusammengesetzt werden und möglichst wenig Änderungen an
+der bestehenden Codebasis voraussetzen. Inwiefern dies tatsächlich erreichbar ist, ist noch
+nicht 100%ig absehbar.
+
