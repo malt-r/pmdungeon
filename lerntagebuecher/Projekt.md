@@ -111,7 +111,7 @@ können. Dies setzt ein gewisses Maß an Synchronisierung voraus.
 
 ## Parser, Interpreter, formale Grammatik ##
 
-Insbesondere die Verwendung der Standradbibliotheksfunktionen mit den korrekten Parametern
+Insbesondere die Verwendung der Standardbibliotheksfunktionen mit den korrekten Parametern
 könnte kompliziert werden, da keine statische Typprüfung durch den Interpreter
 selbst stattfindet. Des weiteren stellt auch die Generierung von
 aussagekräftigen Fehlermeldungen eine Herausforderung dar. Die Schwere der Nichterfüllung
